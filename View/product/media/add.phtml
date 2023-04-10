@@ -1,0 +1,54 @@
+<?php
+$pro = $this->getCollection();
+$medias = $pro[1];
+$productId = $pro[0];
+
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+</head>
+<body>
+	<form action="<?php echo $this->getUrl('product_media','save',array('product_id' =>  $productId));?>" method="post" enctype="multipart/form-data">
+		<div>
+			<div>
+				<h2>ADD MEDIA</h2>
+			</div>
+			<div>
+				<a href="<?php echo $this->getUrl('product_media','grid',array('product_id' =>  $productId));?>">cancel</a>
+				<button  type="submit" name="submit" value="save" >save</button>
+			</div>
+		</div>
+
+		<table>
+			<tr>
+				<td>name</td>
+				<td><input type="text" name="name"></td>
+			</tr>
+			<tr>
+				<td>status</td>
+				<td>
+					<?php
+					$statuses = ['1'=>'active','2'=>'inactive'];
+					?>
+					<select name="status">
+						<option>select status</option>
+						<?php foreach ($statuses as $key => $value): ?>
+							<option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+						<?php endforeach ?>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>image</td>
+				<td><input type="file" name="image"></td>
+			</tr>
+		</table>
+	</form>
+
+</body>
+</html>

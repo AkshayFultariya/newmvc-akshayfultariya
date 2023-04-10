@@ -1,0 +1,55 @@
+<?php
+
+$category = $this->getCollection();
+$pathCategories = $category->getParentCategories();
+
+?>
+	<form action="<?php echo $this->getUrl('category','save',['category_id' => $category->category_id]);?>" method="post">
+		<div class="content9">
+			<div class="add19">
+                EDIT CATEGORY
+			</div>
+			<div class="add29">
+				<a type="button" class="btn btn-primary" href="<?php echo $this->getUrl('category','grid',[],true);?>" class="add39">Cancel</a>
+				<button type="submit" class="add39">Save</button>				
+			</div>
+		</div>
+		<div class="head9">
+			CATEGORY INFORMATION
+		</div>
+		<table class="table table-dark table-striped-columns">
+			<tr>
+					<td>Parent Category</td>
+					<td>
+						<select name="category[parent_id]">
+							<?php foreach ($pathCategories as $category_id => $path):?>
+							<?php $selected = ($category_id == $category->parent_id) ? 'selected' : '' ?>
+								<option value="<?php echo $category_id ?>" <?php echo $selected ?>><?php echo $category->getPathCategories($category_id) ?></option>
+							<?php endforeach; ?>
+						</select>
+					</td>
+				</tr>
+				<tr>
+				<td>name</td>
+				 <td><input type="text" name="category[name]" value="<?php echo $category->name;?>" class="addi9"></td>
+			</tr>
+			<tr>
+				<td>description</td>
+				 <td><input type="text" name="category[description]" value="<?php echo $category->description;?>" class="addi9"></td>
+			</tr>
+
+			<tr>
+		<td>Status</td>
+		<td>
+		<select name="category[status]">
+			<?php foreach ($category->getResource()->getStatusOptions() as $key => $value):?>
+			<?php $selected = ($key == $category->getstatus()) ? 'selected' : '';?>
+			<option value="<?php echo $key ?>"<?php echo $selected; ?>><?php echo $value;?></option>
+			<?php endforeach;?>
+		</select>
+	</td>
+		<!-- <td><input type="text" name="category[status]" value="<?php echo $category->status ?>"></td> -->
+	</tr>
+	
+		</table>
+	</form>

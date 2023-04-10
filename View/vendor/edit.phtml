@@ -1,0 +1,86 @@
+<?php
+$v = $this->getCollection();
+$vendor = $v[0];
+$address = $v[1];
+
+?>
+	<form action="<?php echo $this->getUrl('vendor','save');?>" method="post">
+		<div class="content9">
+			<div>
+			EDIT VENDOR
+		</div>
+		<div class="add29">
+			<a class="btn btn-primary" href="<?php echo $this->getUrl('vendor','grid',[],true);?>" class="add39">
+				Cancel
+			</a>
+			<button type="submit" class="add39">save</button>
+		</div>
+	</div>
+	<div class="head9">
+		VENDOR INFORMATION
+	</div>
+	<table class="table table-dark table-striped-columns">
+		<tr>
+			<td>first_name</td>
+			<td><input type="text" name="vendor[first_name]" value="<?php echo $vendor->first_name;?>" class="addi9"></td>
+		</tr>
+		<tr>
+			<td>last_name</td>
+			<td><input type="text" name="vendor[last_name]" value="<?php echo $vendor->last_name;?>" class="addi9"></td>
+		</tr>
+		<tr>
+			<td>email</td>
+			<td><input type="text" name="vendor[email]" value="<?php echo $vendor->email;?>" class="addi9"></td>
+		</tr>
+		<tr>
+			<td>gender</td>
+			<td><input type="text" name="vendor[gender]" value="<?php echo $vendor->gender;?>" class="addi9"></td>
+		</tr>
+		<tr>
+			<td>mobile</td>
+			<td><input type="text" name="vendor[mobile]" value="<?php echo $vendor->mobile;?>" class="addi9"></td>
+		</tr>
+			<tr>
+		<td>Status</td>
+		<td>
+		<select name="vendor[status]">
+			<?php foreach ($vendor->getResource()->getStatusOptions() as $key => $value):?>
+			<?php $selected = ($key == $vendor->getstatus()) ? 'selected' : '';?>
+			<option value="<?php echo $key ?>"<?php echo $selected; ?>><?php echo $value;?></option>
+			<?php endforeach;?>
+		</select>
+	</td>
+	</tr>		
+	<tr>
+			<td>company</td>
+			<td><input type="text" name="vendor[company]" value="<?php echo $vendor->company;?>" class="addi9"></td>
+		</tr>
+	</table>
+
+	<div class="head9">
+		ADDRESS INFORMATION
+	</div>
+	<table class="table table-hover">
+		<tr>
+			<td>address</td>
+			<td><input type="text" name="address[address]" value="<?php echo $address->address;?>"  class="addi9" ></td>
+		</tr>
+		<tr>
+			<td>city</td>
+			<td><input type="text" name="address[city]" value="<?php echo $address->city;?>" class="addi9"></td>
+		</tr>
+		<tr>
+			<td>state</td>
+			<td><input type="text" name="address[state]" value="<?php echo $address->state;?>" class="addi9"></td>
+		</tr>
+		<tr>
+			<td>country</td>
+			<td><input type="text" name="address[country]" value="<?php echo $address->country;?>" class="addi9"></td>
+		</tr>
+		<tr>
+			<td>zip_code</td>
+			<td><input type="text" name="address[zip_code]" value="<?php echo $address->zip_code;?>" class="addi9"></td>
+		</tr>
+	
+	</table>
+	</form>

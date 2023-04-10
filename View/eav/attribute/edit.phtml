@@ -1,0 +1,135 @@
+<?php
+$attribute = $this->getCollection();
+
+?>
+
+	<form action="<?php echo $this->getUrl('eav_attribute','save');?>" method="post">
+		<div class="content9">
+			<div class="add19">
+				EDIT Attribute
+			</div>
+			<div class="add29">
+				<a 
+			type="button" class="btn btn-primary"	href="<?php echo $this->getUrl('eav_attribute','grid',[],true);?>" class="add39">Cancel</a>
+				<button type="submit" name="submit" value="save" class="add39">Save</button>			
+			</div>
+		</div>
+	<div class="head9">
+		Attribute INFORMATION
+	</div> 
+	<table class="table table-dark table-striped-columns">
+		<tr>
+			<td>code</td>
+			<td><input type="text" name="attribute[code]" value="<?php echo $attribute->code; ?>" class="addi9"></td>
+		</tr>
+		<tr>
+			<td>input_type</td>
+			<td><select name="attribute[input_type]" onchange="changeInputType(this)" id="selectInputType">
+				<option value="textbox">Text Box</option>
+				<option value="textarea"> textarea</option>
+				<option value="select">select</option>
+				<option value="multiselect">multi select</option>
+				<option value="radio" selected>radio</option>
+				<option value="checkbox">check Box</option>
+			</td>
+		</tr>
+		<tr>
+			<td>backend_type</td>
+			<td><select name="attribute[backend_type]">
+				<option value="int">int</option>
+				<option value="varchar"> varchar</option>
+				<option value="decimal">decimal</option>
+				<option value="datetime">datetime</option>
+				<option value="text">text</option>
+			</td>
+		</tr>
+		<tr>
+			<td>name</td>
+			<td><input type="text" name="attribute[name]" value=" <?php echo $attribute->name; ?>" class="addi9"></td>
+		</tr>
+		<td>status</td>
+		<td>
+		<select name="attribute[status]">
+			<?php foreach ($attribute->getResource()->getStatusOptions() as $key => $value):?>
+			<?php $selected = ($key == $attribute->getstatus()) ? 'selected' : '';?>
+			<option value="<?php echo $key ?>"<?php echo $selected; ?>><?php echo $value;?></option>
+			<?php endforeach;?>
+		</select>
+		</td>
+		</td>
+		<tr>
+			<td>backend_model</td>
+			<td><input type="text" name="attribute[backend_model]" value=" <?php echo $attribute->backend_model; ?>" class="addi9"></td>
+		</tr>
+					
+
+	</table>
+
+	<div style="border: 1px solid red;  display: none;" id="inputTypeOptionDiv">
+		
+		<table border="1">
+			<thead>
+			<tr>
+				<th>&nbsp;</th>
+				<th><input type="button" name="add" value="ADD" id="addOption"></th>
+			</tr>
+			</thead>
+			<tbody id="inputTypeOptionTable">
+			<tr>
+				<td><input type="text" name="option[]"></td>
+				<td><input type="button" name="remove" value="REMOVE1" class="removeOption"></td>
+			</tr>
+			<tr>
+				<td><input type="text" name="option[]"></td>
+				<td><input type="button" name="remove" value="REMOVE2" class="removeOption"></td>
+			</tr>
+			<tr>
+				<td><input type="text" name="option[]"></td>
+				<td><input type="button" name="remove" value="REMOVE3" class="removeOption"></td>
+			</tr>
+			<tr>
+				<td><input type="text" name="option[]"></td>
+				<td><input type="button" name="remove" value="REMOVE4" class="removeOption"></td>
+			</tr>
+		</tbody>
+		</table>
+	</div>
+	</form>
+		<table style="display: none;" >
+			<tbody id="inputTypeOptionDefault">
+			<tr>
+				<td><input type="text" name="option[]"></td>
+				<td><input type="button" name="remove" value="REMOVE1" class="removeOption"></td>
+			</tr>
+			</tbody>
+		</table>
+	<!-- </div> -->
+
+	<script type="text/javascript">
+
+		$(".removeOption").click(function(){
+			console.log($(this).parent().parent().remove());
+		})
+
+		$("#addOption").click(function(){
+			$('#inputTypeOptionTable').prepend($('#inputTypeOptionDefault').html());
+			// console.log($('#inputTypeOptionDefault').html());
+		})
+
+		$('#selectInputType').change(function()
+		{
+			var inputType = $(this);
+			// alert(inputType.val());
+			if (inputType.val()== 'select'|| inputType.val()== 'multiselect'|| inputType.val()== 'radio'|| inputType.val()== 'checkbox') {
+				$('#inputTypeOptionDiv').show();
+			}
+			else{
+				$('#inputTypeOptionDiv').hide();
+			}
+		});
+
+		$(document).ready(function(){
+		$('#selectInputType').trigger('change');
+	})
+
+	</script>

@@ -1,0 +1,56 @@
+<?php
+
+$salesmans = $this->getCollection()->getData();
+
+?>
+
+	<?php require_once 'View/html/header.phtml';?>
+	<div class="title9">
+		<div class="main9">
+			MANAGE SALESMAN
+		</div>
+		<div class="main99">
+			<a type="button" class="btn btn-primary" href="<?php echo $this->getUrl('salesman','add');?>" class="main999">ADD SALESMAN</a>			
+		</div>		
+	</div>
+	<table class="table table-dark table-striped-columns">
+		<tr>
+			<td>salesman_id</td>
+			<td>first_name</td>
+			<td>last_name</td>
+			<td>email</td>
+			<td>gender</td>
+			<td>mobile</td>
+			<td>status</td>
+			<td>company</td>
+			<td>created_at</td>
+			<td>updated_at</td>
+			<td>price</td>
+			<td>EDIT</td>
+			<td>DELETE</td>
+		</tr>
+		<?php if (!$salesmans):?>
+		<tr>
+			<td>No records available.</td>
+		</tr>
+		<?php else:?>
+		<?php foreach ($salesmans as $salesman): ?>
+			<tr>
+				<td><?php echo $salesman->salesman_id ?></td> 
+				<td><?php echo $salesman->first_name ?></td> 
+				<td><?php echo $salesman->last_name ?></td> 
+				<td><?php echo $salesman->email ?></td> 
+				<td><?php echo $salesman->gender ?></td> 
+				<td><?php echo $salesman->mobile ?></td> 
+				<td><?php echo $salesman->status ?></td> 
+				<td><?php echo $salesman->company ?></td> 
+				<td><?php echo $salesman->created_at ?></td> 
+				<td><?php echo $salesman->updated_at ?></td>
+				<td><a href="?c=salesman_price&a=grid&salesman_id=<?php echo $salesman->salesman_id;?>">PRICE</td>
+				<td><a href="<?php echo $this->getUrl('salesman','edit',array('salesman_id' =>  $salesman->salesman_id));?>">EDIT</td> 
+				<td><a href="<?php echo $this->getUrl('salesman','delete',array('salesman_id' =>  $salesman->salesman_id));?>">DELETE</td> 
+	        </tr>
+
+	    <?php endforeach ?>
+	    <?php endif;?>
+	</table>
