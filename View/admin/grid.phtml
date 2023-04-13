@@ -45,8 +45,8 @@ $admins = $this->getCollection()->getData();
 				<td><?php echo $admin->getStatusText($admin->status );?></td>
 				<td><?php echo $admin->created_at;?></td>
 				<td><?php echo $admin->updated_at;?></td>
-				<td><a href="<?php echo $this->getUrl('admin','edit',['id'=>$admin->admin_id])?>">Edit</a></td>
-				<td><a href="<?php echo $this->getUrl('admin','delete',['id'=>$admin->admin_id])?>">Delete</a></td>
+				<td><a href="<?php echo $this->getUrl('admin','edit',['admin_id'=>$admin->admin_id])?>">Edit</a></td>
+				<td><a href="<?php echo $this->getUrl('admin','delete',['admin_id'=>$admin->admin_id])?>">Delete</a></td>
 			</tr>
 		<?php endforeach; ?>
 	<?php endif;?>

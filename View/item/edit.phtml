@@ -1,0 +1,35 @@
+<?php
+
+$item = $this->getCollection();
+
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+</head>
+<body>
+	<form action="<?php echo $this->getUrl('item','save');?>" method = "post">
+		<button type="submit" name="submit" value="save" class="add39">Save</button>			
+
+
+		<tr>
+			<td>sku</td>
+			<td><input type="text" name="item[name]" value="<?php echo $item->sku;?>" class="addi9"></td>
+		</tr>
+		<td>Status</td>
+		<td>
+		<select name="item[status]">
+			<?php foreach ($item->getResource()->getStatusOptions() as $key => $value):?>
+			<?php $selected = ($key == $item->getstatus()) ? 'selected' : '';?>
+			<option value="<?php echo $key ?>"<?php echo $selected; ?>><?php echo $value;?></option>
+			<?php endforeach;?>
+		</select>
+	</td>
+</form>
+
+</body>
+</html>

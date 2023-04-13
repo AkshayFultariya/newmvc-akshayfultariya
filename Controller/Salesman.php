@@ -26,9 +26,12 @@ class Controller_Salesman extends Controller_Core_Action
 	        	$this->getMessage()->getSession()->start();
 
 	        	$layout = $this->getLayout();
-				$add = $layout->createBlock('Salesman_Edit');
-				$layout->getChild('content')->addChild('content',$add);
+				$salesman = Ccc::getModel('Salesman');
+				$address = Ccc::getModel('Salesman_Address');
+	        	$edit = $layout->createBlock('Salesman_Edit')->setData(['salesman'=>$salesman,'address'=>$address]);
+				$layout->getChild('content')->addChild('edit',$edit);
 				$layout->render();
+				// $layout->render();
 			} catch (Exception $e) {
 				
 			}
@@ -39,12 +42,24 @@ class Controller_Salesman extends Controller_Core_Action
 
 		try {
 				$this->getMessage()->getSession()->start();
+			$salesmanId = (int) Ccc::getModel('Core_Request')->getParam('salesman_id');
+			if (!$salesmanId) {
+				throw new Exception("Invalid Id", 1);
+				
+			}
+			$layout = $this->getLayout();
+			$salesman = Ccc::getModel('Salesman')->load($salesmanId);
+			if (!$salesman) {
+				throw new Exception("Invalid Id", 1);
+			}
+			$address = Ccc::getModel('Salesman_Address')->load($salesmanId);
+			if (!$address) {
+				throw new Exception("Invalid Id", 1);
+			}
+			$edit = $layout->createBlock('Salesman_Edit')->setData(['salesman'=>$salesman,'address' => $address]);
 
-				$layout = $this->getLayout();
-				$edit = $layout->createBlock('Salesman_Edit');
-
-				$layout->getChild('content')->addChild('content',$edit);
-				$layout->render();
+			$layout->getChild('content')->addChild('edit',$edit);
+			$layout->render();
 				
 			} catch (Exception $e) {
 				 $this->getMessage()->addMessage('data not showed',Model_Core_Message :: FAILURE);
@@ -56,56 +71,62 @@ class Controller_Salesman extends Controller_Core_Action
 	public function saveAction()
 		{
 			try {
-	       		$this->getMessage()->getSession()->start();
-
-				if (!$this->getRequest()->isPost()) {
-					// echo "111";
-					throw new Exception("Invalid request.", 1);
-				}
-
-				$postData = $this->getRequest()->getpost('salesman');
-				if (!$postData) {
-					throw new Exception("Invalid data posted.", 1);
-				}
-				$postDataAddress = $this->getRequest()->getpost('address');
-				if (!$postDataAddress) {
-					throw new Exception("Invalid data posted.", 1);
-				}
-				// print_r($postData);
-
-
-				if ($id = (int)$this->getRequest()->getParam('salesman_id')) {
-					$salesman = Ccc::getModel('Salesman')->load($id);
-					$salesmanAddress = Ccc::getModel('Salesman_Address')->load($id);
-
-					if (!$salesman) {
-						throw new Exception("Invalid id.", 1);
-					}
-				$salesman->updated_at = date("Y-m-d H:i:s");
-				}
-				else{
-					$salesman = Ccc::getModel('Salesman');
-					$salesmanAddress = Ccc::getModel('Salesman_Address');
-					$salesman->created_at = date("Y-m-d H:i:s");
-				}
-				$salesman->setData($postData);
-				if (!$salesman->save()) {
-					throw new Exception("Unable to save salesman.", 1);
-				}
-				$salesmanAddress->setData($postDataAddress);
-				if (!$salesmanAddress->save()) {
-					throw new Exception("Unable to save salesman.", 1);
-				}
-
-			    $this->getMessage()->addMessage('Salesman updeted sucessfully.',Model_Core_Message :: SUCCESS);
-
-
-			} catch (Exception $e) {
-			    $this->getMessage()->addMessage('Invalid.',Model_Core_Message :: FAILURE);
-				
+	       		Ccc::getModel('Core_Session')->start();
+			if (!Ccc::getModel('Core_Request')->isPost()) {
+				throw new Exception("Invalid request.", 1);
 			}
-			$this->redirect('salesman','grid',null,true);
+			
+			$salesmanPost = Ccc::getModel('Core_Request')->getPost('salesman');
+			// print_r($salesmanPost);
+			// die();
+			if (!$salesmanPost) {
+				throw new Exception("Data not found.", 1);
+			}
+
+			if ($id = (int) Ccc::getModel('Core_Request')->getParam('salesman_id')) {
+				$salesman = Ccc::getModel('salesman')->load($id);
+				if (!$salesman) {
+					throw new Exception("Data not found.", 1);
+				}
+				$salesman->updated_at = date('Y-m-d h-i-sA');
+			} else {
+				$salesman = Ccc::getModel('salesman');
+				$salesman->created_at = date('Y-m-d h-i-sA');
+			}
+
+			$salesman->setData($salesmanPost);
+			if (!$salesman->save()) {
+				throw new Exception("salesman data not saved.", 1);
+			}
+			else{
+				$addressPost = Ccc::getModel('Core_Request')->getPost('address');
+				if (!$addressPost) {
+					throw new Exception("Data not found.", 1);
+				}
+
+				if ($id = (int) Ccc::getModel('Core_Request')->getParam('salesman_id')) {
+					$address = Ccc::getModel('salesman_Address')->load($id);
+					if (!$address) {
+						throw new Exception("Data not found.", 1);
+					}
+					$address->address_id = $salesman->salesman_id;
+				} else {
+					$address = Ccc::getModel('salesman_Address');
+					$address->salesman_id = $salesman->salesman_id;
+				}
+
+				$address->setData($addressPost);
+				if (!$address->save()) {
+					throw new Exception("salesman data not saved.", 1);
+				}
+			}
+			$this->getMessage()->addMessage('salesman data saved Successfully.');
+		} catch (Exception $e) {
+			$this->getMessage()->addMessage($e->getMessage(), Model_Core_Message::FAILURE);
 		}
+		
+		$this->redirect('salesman', 'grid', [], true);
+	}
 
 	public function deleteAction()
 	{
@@ -116,14 +137,17 @@ class Controller_Salesman extends Controller_Core_Action
 				
 			}
 			$salesman = Ccc::getModel('Salesman')->load($id);
-
-			if (!$salesman) {
+			if (!$salesman->delete()) {
+				throw new Exception("Error Processing Request", 1);
+			}
+			$address = Ccc::getModel('Salesman_Address')->load($id);
+			if (!$address->delete()) {
 				throw new Exception("Error Processing Request", 1);
 			}
 
-			$salesman->delete();
 
-			$this->getMessage()->addMessage('Salesman updeted sucessfully.',Model_Core_Message :: SUCCESS);
+
+			$this->getMessage()->addMessage('Salesman deleted sucessfully.',Model_Core_Message :: SUCCESS);
 			}catch(Exception $e){
 				$this->getMessage()->addMessage('salesman not deleted.',Model_Core_Message :: FAILURE);
 			}

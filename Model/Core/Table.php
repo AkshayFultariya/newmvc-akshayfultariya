@@ -210,6 +210,7 @@ class Model_Core_Table
 		if (!array_key_exists($this->getPrimaryKey(), $this->data)) {
 			$id = $this->getResource()->insert($this->data);
 			if ($id) {
+
 				$this->load($id);
 				return $this;
 			}

@@ -26,8 +26,6 @@ class Block_Salesman_Price__Edit extends Block_Core_Template
 		$address = Ccc::getModel('Salesman_Address');
 		$s = [$salesman,$address];
 		return $s;
-
-		// $this->setTemplate('product/edit.phtml')->setData(['product' => $product]);
 	}
 	
 }

@@ -1,5 +1,6 @@
 <?php
 $attribute = $this->getCollection();
+$attributeOptions = $this->getAttributeOption();
 
 ?>
 
@@ -18,6 +19,11 @@ $attribute = $this->getCollection();
 		Attribute INFORMATION
 	</div> 
 	<table class="table table-dark table-striped-columns">
+		<tr>
+			<td>Entity Type Id</td>
+			<td><input type="text" name="attribute[entity_type_id]" value="<?php echo $attribute->entity_type_id; ?>" class="addi9"></td>
+		</tr>
+
 		<tr>
 			<td>code</td>
 			<td><input type="text" name="attribute[code]" value="<?php echo $attribute->code; ?>" class="addi9"></td>
@@ -75,22 +81,25 @@ $attribute = $this->getCollection();
 			</tr>
 			</thead>
 			<tbody id="inputTypeOptionTable">
+				<?php  foreach ($attributeOptions as $attributeOption) :?>
+					
 			<tr>
-				<td><input type="text" name="option[]"></td>
+				<td><input type="text" name="option[exits][<?php echo $attributeOption->option_id; ?>]" value ="<?php echo $attributeOption->name;?>"/></td>
 				<td><input type="button" name="remove" value="REMOVE1" class="removeOption"></td>
 			</tr>
-			<tr>
-				<td><input type="text" name="option[]"></td>
+				<?php endforeach; ?>
+			<!-- <tr>
+				<td><input type="text" name="option[exits]"></td>
 				<td><input type="button" name="remove" value="REMOVE2" class="removeOption"></td>
 			</tr>
 			<tr>
-				<td><input type="text" name="option[]"></td>
+				<td><input type="text" name="option[exits]"></td>
 				<td><input type="button" name="remove" value="REMOVE3" class="removeOption"></td>
 			</tr>
 			<tr>
-				<td><input type="text" name="option[]"></td>
+				<td><input type="text" name="option[exits]"></td>
 				<td><input type="button" name="remove" value="REMOVE4" class="removeOption"></td>
-			</tr>
+			</tr> -->
 		</tbody>
 		</table>
 	</div>
@@ -98,7 +107,7 @@ $attribute = $this->getCollection();
 		<table style="display: none;" >
 			<tbody id="inputTypeOptionDefault">
 			<tr>
-				<td><input type="text" name="option[]"></td>
+				<td><input type="text" name="option[new][]"></td>
 				<td><input type="button" name="remove" value="REMOVE1" class="removeOption"></td>
 			</tr>
 			</tbody>

@@ -2,7 +2,18 @@
 
 $cur = $this->getCollection();
 $customer = $cur[0];
-$address = $cur[1];
+// echo "<pre>";
+// print_r($customer);
+// die();
+$billingAddress = $cur[1];
+// echo "<pre>";
+// print_r($a[0]['address']);
+$a =$billingAddress->getData();
+// $billingAdd = $a[0];
+// die();
+$shippingAddress = $cur[2];
+$z =$shippingAddress->getData();
+// $shippingAdd = $z[0];
 
 ?>
 	<form action="<?php echo $this->getUrl('customer','save');?>" method="post">
@@ -49,33 +60,62 @@ $address = $cur[1];
 			<?php endforeach;?>
 		</select>
 	</td>
-		<!-- <td><input type="text" name="admin[status]" value="<?php echo $admin->status ?>"></td> -->
+		
 	</tr>
 		</table>
-		<div class="head9">
-		ADDRESS INFORMATION
-	</div>
+		<div class="head9" id="billindDiv">
+		BILLING ADDRESS INFORMATION
 	<table class="table table-hover">
 		<tr>
 			<td>address</td>
-			<td><input type="text" name="address[address]"  class="addi9" value="<?php echo $address->address;?>"></td>
+			<td><input type="text" name="billingAddress[address]"  class="addi9" value="<?php echo $billingAdd['address'];?>"></td>
 		</tr>
 		<tr>
 			<td>city</td>
-			<td><input type="text" name="address[city]"  class="addi9" value="<?php echo $address->city;?>"></td>
+			<td><input type="text" name="billingAddress[city]"  class="addi9" value="<?php echo $billingAdd['city'];?>"></td>
 		</tr>
 		<tr>
 			<td>state</td>
-			<td><input type="text" name="address[state]"  class="addi9" value="<?php echo $address->state;?>"></td>
+			<td><input type="text" name="billingAddress[state]"  class="addi9" value="<?php echo $billingAdd['state'];?>"></td>
 		</tr>
 		<tr>
 			<td>country</td>
-			<td><input type="text" name="address[country]"  class="addi9" value="<?php echo $address->country;?>"></td>
+			<td><input type="text" name="billingAddress[country]"  class="addi9" value="<?php echo $billingAdd['country'];?>"></td>
 		</tr>
 		<tr>
 			<td>zip_code</td>
-			<td><input type="text" name="address[zip_code]"  class="addi9" value="<?php echo $address->zip_code;?>"></td>
+			<td><input type="text" name="billingAddress[zip_code]"  class="addi9" value="<?php echo $billingAdd['zip_code'];?>"></td>
+		</tr>
+	</div>
+	
+	</table>
+
+
+	<div class="head9" id="ShippingDiv">
+		SHIPPING ADDRESS INFORMATION
+	<table class="table table-hover">
+		<tr>
+			<td>address</td>
+			<td><input type="text" name="shippingAddress[address]"  class="addi9" value="<?php echo $shippingAdd['address'];?>"></td>
+		</tr>
+		<tr>
+			<td>city</td>
+			<td><input type="text" name="shippingAddress[city]"  class="addi9" value="<?php echo $shippingAdd['city'];?>"></td>
+		</tr>
+		<tr>
+			<td>state</td>
+			<td><input type="text" name="shippingAddress[state]"  class="addi9" value="<?php echo $shippingAdd['state'];?>"></td>
+		</tr>
+		<tr>
+			<td>country</td>
+			<td><input type="text" name="shippingAddress[country]"  class="addi9" value="<?php echo $shippingAdd['country'];?>"></td>
+		</tr>
+		<tr>
+			<td>zip_code</td>
+			<td><input type="text" name="shippingAddress[zip_code]"  class="addi9" value="<?php echo $shippingAdd['zip_code'];?>"></td>
 		</tr>
 	
 	</table>
+	</div>
+
 	</form>

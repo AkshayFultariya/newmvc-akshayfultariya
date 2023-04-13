@@ -23,9 +23,11 @@ class Controller_Admin extends Controller_Core_Action
 	{
 		try{
 			$this->getMessage()->getSession()->start();
-		    $layout = $this->getLayout();
-			$add = $layout->createBlock('Admin_Edit');
-			$layout->getChild('content')->addChild('content',$add);
+
+			$layout = $this->getLayout();
+			$admin = Ccc::getModel('admin');
+        	$edit = $layout->createBlock('Admin_Edit')->setData(['admin'=>$admin]);
+			$layout->getChild('content')->addChild('edit',$edit);
 			$layout->render();
 		
 	}
@@ -38,14 +40,25 @@ class Controller_Admin extends Controller_Core_Action
 	{
 		try{
 			$this->getMessage()->getSession()->start();
+			$adminId = (int) Ccc::getModel('Core_Request')->getParam('id');
+			if (!$adminId) {
+				throw new Exception("Invalid Id", 1);
+				
+			}
 			$layout = $this->getLayout();
-			$edit = $layout->createBlock('Admin_Edit');
-			$layout->getChild('content')->addChild('content',$edit);
+			$admin = Ccc::getModel('Admin')->load($adminId);
+			if (!$admin) {
+				throw new Exception("Invalid Id", 1);
+				
+			}
+			$edit = $layout->createBlock('Admin_Edit')->setData(['admin'=>$admin]);
+
+			$layout->getChild('content')->addChild('edit',$edit);
 			$layout->render();
 		
 	}
 		catch (Exception $e) {
-			
+			$this->getMessage()->addMessage('Admin not showed.',Model_Core_Message :: FAILURE);
 		}
 		
 			

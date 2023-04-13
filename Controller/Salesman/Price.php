@@ -143,7 +143,7 @@ class Controller_Salesman_Price extends Controller_Core_Action
 			$productId = $this->getrequest()->getParam('product_id');
 
 			$conditions['salesman_id'] = $salesmanId;
-			$conditions['product_id'] = $productid;
+			$conditions['product_id'] = $productId;
 
 			$result = $this->getSalesmanPriceModel()->delete($conditions);
 
@@ -159,7 +159,7 @@ class Controller_Salesman_Price extends Controller_Core_Action
 		}
 		
 
-		$this->redirect($this->getUrl('salesman_price','grid',['salesman_id' => $salesmanId],true));
+		$this->redirect('salesman_price','grid',['salesman_id' => $salesmanId],true);
 
 	}
 }
