@@ -2,6 +2,8 @@
 
 class Controller_Product extends Controller_Core_Action
 {
+
+
 	public function gridAction()
 	{
 		try {
@@ -24,8 +26,9 @@ class Controller_Product extends Controller_Core_Action
         	$this->getMessage()->getSession()->start();
 
 			$layout = $this->getLayout();
-        	$add = $layout->createBlock('Product_Edit');
-			$layout->getChild('content')->addChild('content',$add);
+			$product = Ccc::getModel('Product');
+        	$edit = $layout->createBlock('Product_Edit')->setData(['product'=>$product]);
+			$layout->getChild('content')->addChild('edit',$edit);
 			$layout->render();
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Product not showed.',Model_Core_Message :: FAILURE);
@@ -37,11 +40,20 @@ class Controller_Product extends Controller_Core_Action
 	{
 		try {
 	        $this->getMessage()->getSession()->start();
-
+			$productId = (int) Ccc::getModel('Core_Request')->getParam('id');
+			if (!$productId) {
+				throw new Exception("Invalid Id", 1);
+				
+			}
 			$layout = $this->getLayout();
-			$edit = $layout->createBlock('Product_Edit');
+			$product = Ccc::getModel('Product')->load($productId);
+			if (!$product) {
+				throw new Exception("Invalid Id", 1);
+				
+			}
+			$edit = $layout->createBlock('Product_Edit')->setData(['product'=>$product]);
 
-			$layout->getChild('content')->addChild('content',$edit);
+			$layout->getChild('content')->addChild('edit',$edit);
 			$layout->render();
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Product not showed.',Model_Core_Message :: FAILURE);
@@ -67,7 +79,7 @@ class Controller_Product extends Controller_Core_Action
 				throw new Exception("Invalid data posted.", 1);
 			}
 
-			if ($id = (int)$this->getRequest()->getParam('product_id')) {
+			if ($id = (int)$this->getRequest()->getParam('id')) {
 				$product = Ccc::getModel('Product')->load($id);
 
 				if (!$product) {
@@ -98,7 +110,7 @@ class Controller_Product extends Controller_Core_Action
 	{
 		try {
 			$this->getMessage()->getSession()->start();
-			if (!($id = (int) $this->getRequest()->getParam('product_id'))) {
+			if (!($id = (int) $this->getRequest()->getParam('id'))) {
 			throw new Exception("Error Processing Request", 1);
 			
 		}

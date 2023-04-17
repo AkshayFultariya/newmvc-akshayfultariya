@@ -1,6 +1,6 @@
 <?php
 
-$attributes = $this->getCollection()->getData();
+$attributes = $this->getCollection();
 
 ?>
 
@@ -33,7 +33,7 @@ $attributes = $this->getCollection()->getData();
                  <td>No records available.</td>
               </tr>
            <?php else:?>
-   	      <?php foreach ($attributes as $attribute): ?>
+   	      <?php foreach ($attributes->getData() as $attribute): ?>
             <tr>
             	<td><?php echo $attribute->attribute_id?></td>
             	<td><?php echo $attribute->entity_id?></td>
@@ -43,7 +43,7 @@ $attributes = $this->getCollection()->getData();
                 <td><?php echo $attribute->getStatusText($attribute->status );?></td>
             	<td><?php echo $attribute->backend_model?></td>
             	<td><?php echo $attribute->input_type?></td>
-                <td><a href="  <?php echo $this->getUrl('eav_attribute','add',array('attribute_id' =>  $attribute->attribute_id));?>">EDIT</td>
+                <td><a href="  <?php echo $this->getUrl('eav_attribute','edit',array('attribute_id' =>  $attribute->attribute_id));?>">EDIT</td>
             	<td><a href="<?php echo $this->getUrl('eav_attribute','delete',array('attribute_id' =>  $attribute->attribute_id));?>">DELETE</td>
             </tr>
    	     	

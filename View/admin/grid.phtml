@@ -1,6 +1,6 @@
 <?php
 
-$admins = $this->getCollection()->getData();
+$admins = $this->getCollection();
 
 ?>
 <!DOCTYPE html>
@@ -37,7 +37,7 @@ $admins = $this->getCollection()->getData();
 			<td>No records available.</td>
 		</tr>
 	<?php else:?>
-		<?php foreach($admins as $admin):?>
+		<?php foreach($admins->getData() as $admin):?>
 			<tr>
 				<td><?php echo $admin->admin_id;?></td>
 				<td><?php echo $admin->email;?></td>
@@ -45,8 +45,8 @@ $admins = $this->getCollection()->getData();
 				<td><?php echo $admin->getStatusText($admin->status );?></td>
 				<td><?php echo $admin->created_at;?></td>
 				<td><?php echo $admin->updated_at;?></td>
-				<td><a href="<?php echo $this->getUrl('admin','edit',['id'=>$admin->admin_id])?>">Edit</a></td>
-				<td><a href="<?php echo $this->getUrl('admin','delete',['id'=>$admin->admin_id])?>">Delete</a></td>
+				<td><a href="<?php echo $this->getUrl('admin','edit',['admin_id'=>$admin->admin_id])?>">Edit</a></td>
+				<td><a href="<?php echo $this->getUrl('admin','delete',['admin_id'=>$admin->admin_id])?>">Delete</a></td>
 			</tr>
 		<?php endforeach; ?>
 	<?php endif;?>

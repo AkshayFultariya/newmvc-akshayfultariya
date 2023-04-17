@@ -25,9 +25,9 @@ class Controller_Payment extends Controller_Core_Action
         	$this->getMessage()->getSession()->start();
 
 			$layout = $this->getLayout();
-			$add = $layout->createBlock('Payment_Edit');
-
-			$layout->getChild('content')->addChild('content',$add);
+			$payment = Ccc::getModel('payment');
+        	$edit = $layout->createBlock('Payment_Edit')->setData(['payment'=>$payment]);
+			$layout->getChild('content')->addChild('edit',$edit);
 			$layout->render();
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Payment not showed.',Model_Core_Message :: FAILURE);
@@ -39,12 +39,20 @@ class Controller_Payment extends Controller_Core_Action
 	{
 		try {
 	        $this->getMessage()->getSession()->start();
-
+			$paymentId = (int) Ccc::getModel('Core_Request')->getParam('id');
+			if (!$paymentId) {
+				throw new Exception("Invalid Id", 1);
+				
+			}
 			$layout = $this->getLayout();
-			$edit = $layout->createBlock('Payment_Edit');
+			$payment = Ccc::getModel('Payment')->load($paymentId);
+			if (!$payment) {
+				throw new Exception("Invalid Id", 1);
+				
+			}
+			$edit = $layout->createBlock('Payment_Edit')->setData(['payment'=>$payment]);
 
-
-			$layout->getChild('content')->addChild('content',$edit);
+			$layout->getChild('content')->addChild('edit',$edit);
 			$layout->render();
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Payment not showed.',Model_Core_Message :: FAILURE);
@@ -68,7 +76,7 @@ class Controller_Payment extends Controller_Core_Action
 				throw new Exception("Invalid data posted.", 1);
 			}
 
-			if ($id = (int)$this->getRequest()->getParam('payment_method_id')) {
+			if ($id = (int)$this->getRequest()->getParam('id')) {
 				$payment = Ccc::getModel('Payment')->load($id);
 
 				if (!$payment) {
@@ -99,7 +107,7 @@ class Controller_Payment extends Controller_Core_Action
 	{
 		try {
 			$this->getMessage()->getSession()->start();
-			if (!($id = (int) $this->getRequest()->getParam('payment_method_id'))) {
+			if (!($id = (int) $this->getRequest()->getParam('id'))) {
 			throw new Exception("Error Processing Request", 1);
 			
 			}

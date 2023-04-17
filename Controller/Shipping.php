@@ -25,8 +25,9 @@ class Controller_Shipping extends Controller_Core_Action
         	$this->getMessage()->getSession()->start();
 
 			$layout = $this->getLayout();
-        	$add = $layout->createBlock('Shipping_Edit');
-			$layout->getChild('content')->addChild('content',$add);
+			$shipping = Ccc::getModel('Shipping');
+        	$edit = $layout->createBlock('Shipping_Edit')->setData(['shipping'=>$shipping]);
+			$layout->getChild('content')->addChild('edit',$edit);
 			$layout->render();
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Shipping not showed.',Model_Core_Message :: FAILURE);
@@ -38,11 +39,20 @@ class Controller_Shipping extends Controller_Core_Action
 	{
 		try {
 	        $this->getMessage()->getSession()->start();
-
+			$shippingId = (int) Ccc::getModel('Core_Request')->getParam('id');
+			if (!$shippingId) {
+				throw new Exception("Invalid Id", 1);
+				
+			}
 			$layout = $this->getLayout();
-			$edit = $layout->createBlock('Shipping_Edit');
+			$shipping = Ccc::getModel('shipping')->load($shippingId);
+			if (!$shipping) {
+				throw new Exception("Invalid Id", 1);
+				
+			}
+			$edit = $layout->createBlock('shipping_Edit')->setData(['shipping'=>$shipping]);
 
-			$layout->getChild('content')->addChild('content',$edit);
+			$layout->getChild('content')->addChild('edit',$edit);
 			$layout->render();
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Shipping not showed.',Model_Core_Message :: FAILURE);
@@ -69,7 +79,7 @@ class Controller_Shipping extends Controller_Core_Action
 
 				throw new Exception("Invalid data posted.", 1);
 			}
-			if ($id = (int)$this->getRequest()->getParam('shipping_id')) {
+			if ($id = (int)$this->getRequest()->getParam('id')) {
 				$shipping = Ccc::getModel('Shipping')->load($id);
 
 				if (!$shipping) {
@@ -105,7 +115,7 @@ class Controller_Shipping extends Controller_Core_Action
 		{
 		try {
 			$this->getMessage()->getSession()->start();
-			if (!($id = (int) $this->getRequest()->getParam('shipping_id'))) {
+			if (!($id = (int) $this->getRequest()->getParam('id'))) {
 			throw new Exception("Error Processing Request", 1);
 			
 		}

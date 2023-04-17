@@ -1,0 +1,50 @@
+<?php
+
+$item = $this->getRow();
+$attributes = $this->getAttributes();
+// print_r($attributes);
+// die();
+
+
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+</head>
+<body>
+	<form action="<?php echo $this->getUrl('item','save');?>" method = "post">
+		<button type="submit" name="submit" value="save" class="add39">Save</button>			
+
+
+		<tr>
+			<td>sku</td>
+			<td><input type="text" name="item[sku]" value="<?php echo $item->sku;?>" class="addi9"></td>
+		</tr>
+		<tr>
+		<td>Status</td>
+		<td>
+		<select name="item[status]">
+			<?php foreach ($item->getResource()->getStatusOptions() as $key => $value):?>
+			<?php $selected = ($key == $item->getstatus()) ? 'selected' : '';?>
+			<option value="<?php echo $key ?>"<?php echo $selected; ?>><?php echo $value;?></option>
+			<?php endforeach;?>
+		</select>
+	</td>
+	</tr>
+	<?php foreach ($attributes as $key => $attribute): ?>
+		<tr>
+			<td><?php echo $attribute->name;?></td>
+			<td>
+				<?php $this->getLayout()->createBlock('Eav_Attribute_Inputtype')->setAttributes($attribute)->setRow($item)->render(); ?>
+			</td>
+		</tr>
+	<?php endforeach;?>
+
+</form>
+
+</body>
+</html>

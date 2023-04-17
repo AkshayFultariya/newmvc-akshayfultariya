@@ -26,6 +26,21 @@ class Model_Eav_Attribute extends Model_Core_Table
 		$this->setResourceClass('Model_Eav_Attribute_Resource');
 		$this->setCollectionClass('Model_Eav_Attribute_Collection');
 	}
+
+   public function getEntityType()
+   {
+      $sql = "SELECT `entity_type_id`,`name` FROM `entity_type`";
+      return $this->getResource()->getAdapter()->fetchPairs($sql);
+   }
+
+   public function getOption()
+   {
+      $sql = "SELECT * FROM `eav_attribute_option` WHERE `attribute_id` = '{$this->getId()}'";
+      // print_r($sql);
+      // die();
+      $options = Ccc::getModel('Eav_Attribute_Option')->fetchAll($sql);
+      return $options;
+   }
 }
 
 ?>

@@ -58,7 +58,6 @@ class Model_Core_Table_Resource
 		if ($query) {
 		return $this->getAdapter()->fetchRow($query);	
 		}
-
 		throw new Exception("Error Processing Request", 1);
 		
 	}

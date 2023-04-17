@@ -1,18 +1,29 @@
-<?php 
+<?php
+
 class Controller_Product_Media extends Controller_Core_Action
 {
+
 	public function gridAction()
 	{
 		try {
 			Ccc::getModel('Core_Session')->start();
+			$productId = Ccc::getModel('Core_Request')->getParam('id');
+			if (!$productId) {
+				throw new Exception("Id not found", 1);
+			}
+			Ccc::register('product_id',$productId);
+
 			$layout = $this->getLayout();
 			$grid = $layout->createBlock('Product_Media_Grid');
 			$medias = $grid->getMedias();
-			$layout->getChild('content')->addChild('grid', $grid);
+			if ($medias) {
+			$medias = $grid->getMedias()->getData();
+			}
+			$layout->getChild('content')->addChild('grid',$grid);
 			$layout->render();
-			
+
 		} catch (Exception $e) {
-			$this->getMessage()->addMessage($e->getMessage(), Model_Core_Message::FAILURE);			
+			$this->getMessage()->addMessage($e->getMessage(), Model_Core_Message::FAILURE);
 		}
 	}
 
@@ -20,16 +31,20 @@ class Controller_Product_Media extends Controller_Core_Action
 	{
 		try {
 			Ccc::getModel('Core_Session')->start();
+			$productId = Ccc::getModel('Core_Request')->getParam('id');
+			Ccc::register('product_id',$productId);
+			$media = Ccc::getModel('Product_Media');
 			$layout = $this->getLayout();
-			$edit = $layout->createBlock('Product_Media_Edit');
-			$layout->getChild('content')->addChild('edit', $edit);
+			$add = $layout->createBlock('Product_Media_Edit')->setData(['product_id'=>$productId,'media'=>$media]);
+			// $add = new Block_Product_Media_Edit();
+			$layout->getChild('content')->addChild('add',$add);
 			$layout->render();
 
 		} catch (Exception $e) {
-			$this->getMessage()->addMessage($e->getMessage(), Model_Core_Message::FAILURE);			
+			$this->getMessage()->addMessage($e->getMessage(), Model_Core_Message::FAILURE);
 		}
-	}
-
+	}	
+	
 	public function saveAction()
 	{
 		try {
@@ -38,7 +53,7 @@ class Controller_Product_Media extends Controller_Core_Action
 				throw new Exception("Invalid Request", 1);
 			}
 
-			$productId = Ccc::getModel('Core_Request')->getParam('product_id');
+			$productId = Ccc::getModel('Core_Request')->getParam('id');
 			if (!$productId) {
 				throw new Exception("ID not found.", 1);
 			}
@@ -47,19 +62,21 @@ class Controller_Product_Media extends Controller_Core_Action
 			if (array_key_exists('submit', $mediaPostData)) {
 
 				$productMedia = Ccc::getModel('Core_Request')->getPost();
-				$smallId = $productMedia['small'];
-				$thumbnailId = $productMedia['thumbnail'];
 				$baseId = $productMedia['base'];
+				$thumbnailId = $productMedia['thumbnail'];
+				$smallId = $productMedia['small'];
 				$galleryId = $productMedia['gallery'];
 
 				$mediaIds['base'] = 0;
-				$mediaIds['small'] = 0;
 				$mediaIds['thumbnail'] = 0;
+				$mediaIds['small'] = 0;
 				$mediaIds['gallery'] = 0;
 
 				$mediaPost = Ccc::getModel('Product_Media');
-				$sql = "SELECT `media_id` FROM `product_media` WHERE `product_id` = {$productId}";
-				$id = $mediaPost->fetchAll($sql);
+				$sql = "SELECT `media_id` FROM `media` WHERE `product_id` = {$productId}";
+				$id = $mediaPost->fetchAll($sql)->getData();
+				// print_r($id);
+				// die();
 
 				foreach($id as $key => $value)
 				{	
@@ -76,18 +93,25 @@ class Controller_Product_Media extends Controller_Core_Action
 						$this->getMessage()->addMessage('Product media saved Successfully.');
 					}
 				}
+				$base['base'] = 1;
+				$base['media_id'] = $baseId;
+				// $postData = $this->getRequest()->getpost('product');
+				$i = Ccc::getModel('Product')->load($productId);
+				$i->base_id = $base['media_id'];
+				$i->save();
 
-				$small['small'] = 1;
-				$small['media_id'] = $smallId;
-				$mediaPost->setData($small);
+				$mediaPost->setData($base);
 				$productMedia = $mediaPost->save();
-				$mediaPost->removeData();			
+				$mediaPost->removeData();
 				if ($productMedia) {
 					$this->getMessage()->addMessage('Product media saved Successfully.');
 				}
-
 				$thumbnail['thumbnail'] = 1;
 				$thumbnail['media_id'] = $thumbnailId;
+				// $i = Ccc::getModel('Product');
+				$i->thumbnail_id = $thumbnail['media_id'];
+				$i->save();
+				// $i->setData($thumbnail);
 				$mediaPost->setData($thumbnail);
 				$productMedia = $mediaPost->save();
 				$mediaPost->removeData();
@@ -95,14 +119,22 @@ class Controller_Product_Media extends Controller_Core_Action
 					$this->getMessage()->addMessage('Product media saved Successfully.');
 				}
 
-				$base['base'] = 1;
-				$base['media_id'] = $baseId;
-				$mediaPost->setData($base);
+				$small['small'] = 1;
+				$small['media_id'] = $smallId;
+				// $i = Ccc::getModel('Product');
+				$i->small_id = $small['media_id'];
+				$i->save();
+				// print_r($i);
+				// die();
+				// $i->setData($postData);
+				$mediaPost->setData($small);
 				$productMedia = $mediaPost->save();
-				$mediaPost->removeData();
+				$mediaPost->removeData();			
 				if ($productMedia) {
 					$this->getMessage()->addMessage('Product media saved Successfully.');
 				}
+
+
 
 				$gallery['gallery'] = 1;
 				foreach ($galleryId as $key => $value) {
@@ -116,10 +148,10 @@ class Controller_Product_Media extends Controller_Core_Action
 					$this->getMessage()->addMessage('Product media saved Successfully.');
 				}
 				
-			} else {
+			}  else {
 				$mediaPost = Ccc::getModel('Product_Media');
 				$mediaPost->setData($mediaPostData['media']);
-				$mediaPost->create_at = date('Y-m-d h-i-sA');
+				$mediaPost->created_at = date('Y-m-d h-i-sA');
 				$mediaPost->product_id = $productId;
 
 				$result = $mediaPost->save();
@@ -148,20 +180,21 @@ class Controller_Product_Media extends Controller_Core_Action
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage($e->getMessage(), Model_Core_Message::FAILURE);			
 		}
-		$this->redirect('product_media', 'grid', ['product_id' => $productId], true);
+		$this->redirect('product_media','grid', null);
 
 	}
+
 
 	public function deleteAction()
 	{
 		try {
 			Ccc::getModel('Core_Session')->start();
-			$productId = Ccc::getModel('Core_Request')->getParam('product_id');
+			$productId = Ccc::getModel('Core_Request')->getParam('id');
 			if (!$productId) {
 				throw new Exception("ID not found.", 1);
 			}
 
-			$mediaId = Ccc::getModel('Core_Request')->getParam('media_id');
+			$mediaId = Ccc::getModel('Core_Request')->getParam('id');
 			if (!$mediaId) {
 				throw new Exception("ID not found.", 1);
 			}
@@ -175,10 +208,16 @@ class Controller_Product_Media extends Controller_Core_Action
 			} else {
 				$this->getMessage()->addMessage('data deleted.');
 			}
+			
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage($e->getMessage(), Model_Core_Message::FAILURE);
 		}
+		
+		$this->redirect('product_media','grid', ['product_id' => $productId, 'media_id' => null]);
 
-		$this->redirect('product_media', grid, ['product_id' => $productId], true);
 	}
+
 }
+
+
+?>

@@ -33,7 +33,7 @@ $categorys = $this->getCollection()->getData();
     			<td><?php echo $category->category_id ?></td>
     			<td><?php echo $category->getPathCategories($category->category_id); ?></td>
     			<td> <?php echo $category->description ?></td>
-               <td><?php echo $category->getStatusText($category->status );?></td>
+                <td><?php echo $category->getStatusText($category->status );?></td>
     			<td> <?php echo $category->created_at ?></td>
     			<td> <?php echo $category->updated_at ?></td>
     			<td><a href="<?php echo $this->getUrl('category','edit',array('category_id' =>  $category->category_id));?>">EDIT</td>

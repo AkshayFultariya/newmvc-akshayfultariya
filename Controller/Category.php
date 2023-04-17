@@ -20,10 +20,12 @@ class Controller_Category extends Controller_Core_Action
 	public function addAction()
 	{
 		try {
-			Ccc::getModel('Core_Session')->start();
-        	$layout = $this->getLayout();
-			$add = $layout->createBlock('Category_Edit');
-			$layout->getChild('content')->addChild('content',$add);
+			$this->getMessage()->getSession()->start();
+
+			$layout = $this->getLayout();
+			$category = Ccc::getModel('Category');
+        	$edit = $layout->createBlock('Category_Edit')->setData(['category'=>$category]);
+			$layout->getChild('content')->addChild('edit',$edit);
 			$layout->render();
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('data not showed',Model_Core_Message :: FAILURE);
@@ -33,11 +35,21 @@ class Controller_Category extends Controller_Core_Action
 	public function editAction()
 	{
 		try {
-			Ccc::getModel('Core_Session')->start();
+			$this->getMessage()->getSession()->start();
+			$categoryId = (int) Ccc::getModel('Core_Request')->getParam('id');
+			if (!$categoryId) {
+				throw new Exception("Invalid Id", 1);
+				
+			}
 			$layout = $this->getLayout();
-			$edit = $layout->createBlock('Category_Edit');
+			$category = Ccc::getModel('Category')->load($categoryId);
+			if (!$category) {
+				throw new Exception("Invalid Id", 1);
+				
+			}
+			$edit = $layout->createBlock('Category_Edit')->setData(['category'=>$category]);
 
-			$layout->getChild('content')->addChild('content',$edit);
+			$layout->getChild('content')->addChild('edit',$edit);
 			$layout->render();
 
 		} catch (Exception $e) {
@@ -58,7 +70,7 @@ class Controller_Category extends Controller_Core_Action
 				throw new Exception("Data not found.", 1);
 			}
 
-			if ($id = (int) Ccc::getModel('Core_Request')->getParam('category_id')) {
+			if ($id = (int) Ccc::getModel('Core_Request')->getParam('id')) {
 				$category = Ccc::getModel('Category')->load($id);
 				if (!$category) {
 					throw new Exception("Data not found.", 1);
@@ -90,7 +102,7 @@ class Controller_Category extends Controller_Core_Action
 	{
 		try {
 			Ccc::getModel('Core_Session')->start();
-			$categoryId = Ccc::getModel('Core_Request')->getParam('category_id');
+			$categoryId = Ccc::getModel('Core_Request')->getParam('id');
 			if (!$categoryId) {
 				throw new Exception("ID not found.", 1);
 			}

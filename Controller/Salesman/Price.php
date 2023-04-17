@@ -67,7 +67,7 @@ class Controller_Salesman_Price extends Controller_Core_Action
 	{
     	$this->getMessage()->getSession()->start();
 
-		// $salesmanId = $this->getRequest()->getParam('salesman_id');
+		// $salesmanId = $this->getRequest()->getParam('id');
 		// // $this->setSalesmanPriceId($salesmanId);
 
 		// $sql = "SELECT * FROM `salesman` ORDER BY `first_name` ASC";
@@ -92,7 +92,7 @@ class Controller_Salesman_Price extends Controller_Core_Action
 		try {
         	$this->getMessage()->getSession()->start();
 
-			$salesmanId = $this->getRequest()->getParam('salesman_id');
+			$salesmanId = $this->getRequest()->getParam('id');
 			$salesmanPricePost = $this->getRequest()->getPost('s_price');
 
 			foreach ($salesmanPricePost as $productId => $salesmanPrice) {
@@ -128,7 +128,7 @@ class Controller_Salesman_Price extends Controller_Core_Action
 			
 		}
 		
-			$this->redirect('salesman','grid',['salesman_id' =>$salesmanId],true);
+			$this->redirect('salesman','grid',[],true);
 		
 		// die();
 	}
@@ -139,11 +139,11 @@ class Controller_Salesman_Price extends Controller_Core_Action
 		try {
 	        $this->getMessage()->getSession()->start();
 
-			$salesmanId = $this->getrequest()->getParam('salesman_id');
+			$salesmanId = $this->getrequest()->getParam('id');
 			$productId = $this->getrequest()->getParam('product_id');
 
 			$conditions['salesman_id'] = $salesmanId;
-			$conditions['product_id'] = $productid;
+			$conditions['product_id'] = $productId;
 
 			$result = $this->getSalesmanPriceModel()->delete($conditions);
 
@@ -159,7 +159,7 @@ class Controller_Salesman_Price extends Controller_Core_Action
 		}
 		
 
-		$this->redirect($this->getUrl('salesman_price','grid',['salesman_id' => $salesmanId],true));
+		$this->redirect('salesman_price','grid',['id' => $salesmanId],true);
 
 	}
 }

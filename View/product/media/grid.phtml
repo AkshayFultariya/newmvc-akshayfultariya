@@ -1,64 +1,75 @@
-<?php
+<?php  
 
 $medias = $this->getMedias();
-$productId = $medias[1];
-$medias = $medias[0];
 
+// echo "<pre>";
 // print_r($medias);
 // die();
-// $productId = $this->productId;
 
 ?>
 
-
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title></title>
-	<link rel="stylesheet" type="text/css" href="Skin/CSS/cgrid.css">
-</head>
-<body>
-	<?php require_once 'View/html/message.phtml';?>
-
-	<form action="<?php echo $this->getUrl('product_media','save',array('product_id' =>  $productId));?>" method="post">
-		<div>
-			<h1>media information</h1>
+<form action="<?php echo $this->getUrl('product_media','save'); ?>" method="POST">
+<div class="d-flex align-items-center justify-content-sm-between">
+		<p class="fw-bolder fs-4">Media info</p>
+		<div class="m-2 mx-2"><a class="btn btn-dark pull-right" href="<?php echo $this->getUrl('product_media','add', []);?>">add</a></div>
+			<button class="btn btn-dark ms-5" name="submit" value="update">Update</button>
+			<div class="m-2 mx-2"><a class="btn btn-dark pull-right" href="<?php echo $this->getUrl('product','grid', [], true);?>">cancel</a></div>
 		</div>
-		<div>
-			<a href="<?php echo $this->getUrl('product_media','add',array('product_id' =>  $productId));?>">ADD MEDIA</a>
-			<button name="submit" value="update">update</button>
-			<a href="?c=product&a=grid">cancel</a>
-		</div>
-		<div>
-			<table>
-			    <tr>
-			    	<td>media_id</td>
-			    	<td>product_id</td>
-			    	<td>image</td>
-			    	<td>base</td>
-			    	<td>thumbnail</td>
-			    	<td>small</td>
-			    	<td>gallary</td>
-			    	<td>DELETE</td>
-			    </tr>
-
-			    <?php foreach($medias->getData() as $media): ?>
-			    	<tr>
-			    		<td><?php echo $media->media_id; ?></td>
-			    		<td><?php echo $productId; ?></td>
-			    		<td><img src="View/product/media/upload/<?php echo $media->image;?>" width="100px" height="70px"></td>
-			    		<td><input type="radio" name="base" value="<?php echo $media->media_id;?>" <?php if($media->base != '0'){echo "checked";} ?>></td>
-			    		<td><input type="radio" name="thumbnail" value="<?php echo $media->media_id;?>" <?php if($media->thumbnail != '0'){echo "checked";} ?>></td>
-			    		<td><input type="radio" name="small" value="<?php echo $media->media_id;?>" <?php if($media->small != '0'){echo "checked";} ?>></td>
-			    		<td><input type="checkbox" name="gallery[]" value="<?php echo $media->media_id;?>" <?php if($media->gallery != '0'){echo "checked";} ?>></td>
-			    		<td><a href="?c=product_media&a=delete&media_id=<?php echo $media->media_id;?>&product_id=<?php echo $media->product_id;?>">DELETE</a></td>
-			    	</tr>
-			    	
-			    <?php endforeach; ?>
-			</table>
-	    </div>
-  </form>
+<table class="table table-striped">
+	<tr>
+		<th>Media_id</th>
+		<th>Product_id</th>
+		<th>Name</th>
+		<th>Status</th>
+		<th>Image</th>
+		<th>Base</th>
+		<th>Thumbnail</th>
+		<th>Small</th>
+		<th>Gallery</th>
+		<th>Delete</th>
+	</tr>
+	<?php
+	if (!$medias) {
+		echo "No media available";
+	}
+	else {
+		
+?>
+	<?php foreach($medias->getData() as $media): ?>
+	<tr>
+		<td><?php echo $media->media_id ; ?></td>
+		<td><?php echo $media->product_id ; ?></td>
+		<td><?php echo $media->name ; ?></td>
+		<td><?php echo $media->getStatusText($media->status); ?>
+		</td>
+		<td><img src="View/product/media/upload/<?php echo $media->image ; ?>" height= "100" width="100"></td>
+		<td><input type="radio" name="base" value="<?php echo $media->media_id ;?>"
+			<?php if ($media->base != '0') {
+				echo "checked";
+			}
+		 	?>></td>
+		<td><input type="radio" name="thumbnail" value="<?php echo $media->media_id ;?>"
+			<?php if ($media->thumbnail != '0') {
+				echo "checked";
+			}
+		 	?>></td>
+		<td><input type="radio" name="small" value="<?php echo $media->media_id ;?>"
+			<?php if ($media->small != '0') {
+				echo "checked";
+			}
+		 	?>></td>
+		<td><input type="checkbox" name="gallery[]" value="<?php echo $media->media_id ;?>"
+			<?php if ($media->gallery != '0') {
+				echo "checked";
+			}
+		 	?>></td>
+		<td><a href="<?php echo $this->getUrl('product_media','delete', ['id' => $media->product_id, 'media_id' => $media->media_id], true); ?>">delete</a></td>
+		
+	</tr>
+	<?php endforeach;
+}
+	?>
+</table>
+</form>
 </body>
 </html>

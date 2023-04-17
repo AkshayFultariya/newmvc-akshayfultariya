@@ -6,31 +6,18 @@ class Block_Salesman_Edit extends Block_Core_Template
 	{
 		parent::__construct();
 		$this->setTemplate('salesman/edit.phtml');
-		// $this->getAddress();
-		
 	}
 	
 
 	public function getCollection()
 	{
-			if ($id = (int)Ccc::getModel('Core_Request')->getParam('salesman_id')) {
-			$salesman = Ccc::getModel('Salesman')->load($id);
-
-			$query = "SELECT * FROM `salesman_address` WHERE `salesman_id` = {$id}";
-			$address = Ccc::getModel('Salesman_Address')->load($id);
-			$s = [$salesman,$address];
-			return $s;
-		}
-		else{
-		$salesman = Ccc::getModel('salesman');
-		$address = Ccc::getModel('Salesman_Address');
-		$s = [$salesman,$address];
-		return $s;
-
-		// $this->setTemplate('product/edit.phtml')->setData(['product' => $product]);
+		$salesman = $this->getData('salesman');
+		$address = $this->getData('address');
+		$final = [$salesman,$address];
+		return $final;
 	}
 	
 }
-}
+
 
 ?>

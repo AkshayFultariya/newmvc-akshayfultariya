@@ -8,22 +8,14 @@ class Block_category_Edit extends Block_Core_Template
 		$this->setTemplate('category/edit.phtml');
 		
 	}
-	
 
 	public function getCollection()
 	{
-			if ($id = (int)Ccc::getModel('Core_Request')->getParam('category_id')) {
-			$category = Ccc::getModel('Category')->load($id);
+			$category = $this->getData('category');
 			return $category;
-		}
-		else{
-		$category = Ccc::getModel('Category');
-		return $category;
-
-		// $this->setTemplate('category/edit.phtml')->setData(['category' => $category]);
 	}
 	
 }
-}
+
 
 ?>

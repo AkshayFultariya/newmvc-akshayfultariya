@@ -2,8 +2,6 @@
 
 class Model_Customer_Address extends Model_Core_Table{
 
-   
-   // const STATUS_DEFAULT= 1;
 
    public function __construct()
    {
