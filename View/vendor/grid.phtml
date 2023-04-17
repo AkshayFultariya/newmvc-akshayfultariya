@@ -1,0 +1,55 @@
+<!-- <?php
+
+$vendors = $this->getCollection()->getData();
+
+?>
+
+	<?php require_once 'View/html/header.phtml';?>
+	<div class="title9">
+		<div class="main9">
+			MANAGE VENDOR
+		</div>
+		<div class="main99">
+			<a type="button" class="btn btn-primary" href="<?php echo $this->getUrl('vendor','add');?>" class="main999">ADD VENDOR</a>
+		</div>
+		</div>
+		<table class="table table-dark table-striped-columns">
+			<tr>
+				<td>vendor_id</td>
+				<td>first_name</td>
+				<td>last_name</td>
+				<td>email</td>
+				<td>gender</td>
+				<td>mobile</td>
+				<td>status</td>
+				<td>company</td>
+				<td>created_at</td>
+				<td>updated_at</td>
+				<td>EDIT</td>
+				<td>DELETE</td>
+			</tr>
+			<?php if (!$vendors):?>
+			<tr>
+				<td>No records available.</td>
+			</tr>
+			<?php else:?>
+				<?php foreach ($vendors as $vendor):?>
+			<tr>
+
+				<td><?php echo $vendor->vendor_id?></td>
+				<td><?php echo $vendor->first_name?></td>
+				<td><?php echo $vendor->last_name?></td>
+				<td><?php echo $vendor->email?></td>
+				<td><?php echo $vendor->gender?></td>
+				<td><?php echo $vendor->mobile?></td>
+				<td><?php echo $vendor->getStatusText($vendor->status );?></td>
+				<td><?php echo $vendor->company?></td>
+				<td><?php echo $vendor->created_at?></td>
+				<td><?php echo $vendor->updated_at?></td>
+				<td><a href=" <?php echo $this->getUrl('vendor','edit',array('vendor_id' =>  $vendor->vendor_id));?>">EDIT</td>
+				<td><a href="<?php echo $this->getUrl('vendor','delete',array('vendor_id' =>  $vendor->vendor_id));?>">DELETE</td>
+			</tr>
+             <?php endforeach; ?>
+			 <?php endif;?>
+		</table>
+ -->

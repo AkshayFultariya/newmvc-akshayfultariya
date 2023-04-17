@@ -1,0 +1,42 @@
+table{
+	border: 1px solid black;
+	width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+td{
+	border: 1px solid black;
+    border-collapse: collapse;
+}
+tr{
+    border-collapse: collapse;
+}
+.content9{
+	display: flex;
+	margin: 20px;
+}
+.add19{
+	font-weight: bold;
+	font-size: 25px;
+}
+.add29{
+	font-size: 25px;
+	margin-left: 850px;
+}
+.add39{
+    text-decoration: none;
+	border: 1px solid black;
+    padding: 10px;
+    font-size: 20px;
+    background-color: lightblue;
+    color: black;
+}
+.head9{
+	font-size: 20px;
+	margin-left: 20px;
+	margin-bottom: 10px;
+}
+.addi9{
+	width: 99%;
+	border: none;
+}

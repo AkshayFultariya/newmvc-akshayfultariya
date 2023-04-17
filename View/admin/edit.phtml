@@ -1,0 +1,31 @@
+<?php
+
+$admin = $this->getCollection();
+?>
+<form method="post" action="<?php echo $this->getUrl('admin','save')?>">
+<table width="100%" border="1px">
+	<tr>
+		<td>Email</td>
+		<td><input type="text" name="admin[email]" value="<?php echo $admin->email ?>"></td>
+	</tr>
+	<tr>
+		<td>Password</td>
+		<td><input type="text" name="admin[password]" value="<?php echo $admin->password ?>"></td>
+	</tr>
+	<tr>
+		<td>Status</td>
+		<td>
+		<select name="admin[status]">
+			<?php foreach ($admin->getResource()->getStatusOptions() as $key => $value):?>
+			<?php $selected = ($key == $admin->getstatus()) ? 'selected' : '';?>
+			<option value="<?php echo $key ?>"<?php echo $selected; ?>><?php echo $value;?></option>
+			<?php endforeach;?>
+		</select>
+	</td>
+		<!-- <td><input type="text" name="admin[status]" value="<?php echo $admin->status ?>"></td> -->
+	</tr>
+	<tr>
+		<td><input type="submit" name="submit" value="Save"></td>
+	</tr>
+</table>
+</form>
