@@ -104,7 +104,12 @@ class Block_Core_Grid extends Block_Core_Template
 
 	public function getMediaUrl($row,$key)
 	{
-		return $this->getUrl('product_media',$key,array('id' =>  $row->getId()),true);
+		return $this->getUrl('product_media',$key,array('id' =>  $row->getId()));
+	}
+
+	public function getPriceUrl($row,$key)
+	{
+		return $this->getUrl('salesman_price',$key,array('id' =>  $row->getId()));
 	}
 
 	public function getColumnValue($row,$key)

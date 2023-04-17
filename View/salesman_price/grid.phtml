@@ -60,7 +60,7 @@ $salesmanPrices = $s[2];
 			<td><?php echo $salesman_price->cost ?></td>
 			<td><?php echo $salesman_price->price ?></td>
 			<td><input type="number" name="s_price[<?php echo $salesman_price->product_id;?>]" value = "<?php echo $salesman_price->salesman_price?>" ></td>
-			<td><a href="<?php echo $this->getUrl('salesman_price', 'delete', ['salesman_id' => $salesmanId, 'product_id' => $salesman_price->product_id])?>">delete</a>
+			<td><a href="<?php echo $this->getUrl('salesman_price', 'delete', ['id' => $salesmanId, 'product_id' => $salesman_price->product_id])?>">delete</a>
 			</td>
 			
 		</tr>

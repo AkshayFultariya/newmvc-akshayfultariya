@@ -1,6 +1,10 @@
 <?php
 
-$item = $this->getCollection();
+$item = $this->getRow();
+$attributes = $this->getAttributes();
+// print_r($attributes);
+// die();
+
 
 ?>
 
@@ -18,8 +22,9 @@ $item = $this->getCollection();
 
 		<tr>
 			<td>sku</td>
-			<td><input type="text" name="item[name]" value="<?php echo $item->sku;?>" class="addi9"></td>
+			<td><input type="text" name="item[sku]" value="<?php echo $item->sku;?>" class="addi9"></td>
 		</tr>
+		<tr>
 		<td>Status</td>
 		<td>
 		<select name="item[status]">
@@ -29,6 +34,16 @@ $item = $this->getCollection();
 			<?php endforeach;?>
 		</select>
 	</td>
+	</tr>
+	<?php foreach ($attributes as $key => $attribute): ?>
+		<tr>
+			<td><?php echo $attribute->name;?></td>
+			<td>
+				<?php $this->getLayout()->createBlock('Eav_Attribute_Inputtype')->setAttributes($attribute)->setRow($item)->render(); ?>
+			</td>
+		</tr>
+	<?php endforeach;?>
+
 </form>
 
 </body>

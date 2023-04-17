@@ -9,7 +9,7 @@ class Block_Salesman_Price_Grid extends Block_Core_Template
 	}
 	public function getCollection()
 	{
-		$salesmanId = (int)Ccc::getModel('Core_Request')->getParam('salesman_id');
+		$salesmanId = (int)Ccc::getModel('Core_Request')->getParam('id');
 
 		$sql = "SELECT * FROM `salesman` ORDER BY `first_name` ASC";
 		$salesmen = Ccc::getModel('Salesman_Price')->fetchAll($sql);

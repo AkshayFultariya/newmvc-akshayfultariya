@@ -5,7 +5,7 @@ class Controller_Customer extends Controller_Core_Action
 
 	public function testAction()
 	{
-		$data = Ccc::getModel('Customer')->getShippingId();
+		$data = Ccc::getModel('Customer')->getBillingId();
 		print_r($data);
 
 
@@ -35,8 +35,8 @@ class Controller_Customer extends Controller_Core_Action
 
         	$layout = $this->getLayout();
 			$customer = Ccc::getModel('Customer');
-			$billingAddress = Ccc::getModel('Customer');
-			$shippingAddress = Ccc::getModel('Customer');
+			$billingAddress = Ccc::getModel('Customer_Address');
+			$shippingAddress = Ccc::getModel('Customer_Address');
         	$edit = $layout->createBlock('Customer_Edit')->setData(['customer'=>$customer,'billingAddress'=>$billingAddress,'shippingAddress' =>$shippingAddress]);
 			$layout->getChild('content')->addChild('edit',$edit);
 			$layout->render();
@@ -51,6 +51,7 @@ class Controller_Customer extends Controller_Core_Action
 		try {
 			$this->getMessage()->getSession()->start();
 			$customerId = (int) Ccc::getModel('Core_Request')->getParam('id');
+			// die();
 			if (!$customerId) {
 				throw new Exception("Invalid Id", 1);
 				
@@ -59,11 +60,12 @@ class Controller_Customer extends Controller_Core_Action
 			$customer = Ccc::getModel('Customer')->load($customerId);
 			if (!$customer) {
 				throw new Exception("Invalid Id", 1);
+			// print_r($customerId);
 			}
-			$billingAddress = Ccc::getModel('Customer')->getBillingAddress();
-			$shippingAddress = Ccc::getModel('Customer')->getShippingAddress();
-			// print_r($billingAddress);
+			$billingAddress = Ccc::getModel('Customer_Address')->load($customerId);
+			
 			// die();
+			$shippingAddress = Ccc::getModel('Customer_Address')->load($customerId);
 			if (!$billingAddress) {
 				throw new Exception("Invalid Id", 1);
 			}
@@ -82,14 +84,63 @@ class Controller_Customer extends Controller_Core_Action
 		
 	}
 
-	public function saveAction()
+	public function saveShippingAddress($customer)
 	{
-		try {
-       		Ccc::getModel('Core_Session')->start();
-			if (!Ccc::getModel('Core_Request')->isPost()) {
-				throw new Exception("Invalid request.", 1);
-			}
-			
+		// if ($this->getRequest()->getPost()) {
+		// 	// code...
+		// }
+
+		$shippingPostData = $this->getRequest()->getPost('shippingAddress');
+
+		// print_r($shippingPostData);
+// die();
+		if (!$shippingPostData) {
+			throw new Exception("Error Processing Request", 1);
+		}
+		$shippingAddress = $customer->getShippingAddress();
+		if (!$shippingAddress) {
+			$shippingAddress = Ccc::getModel('Customer_Address');
+			$shippingAddress->customer_id = $customer->customer_id;
+		}
+
+		$shippingAddress->setData($shippingPostData);
+			// die();
+		// print_r($shippingAddress->save());
+		// die();
+		if (!$shippingAddress->save()) {
+			throw new Exception("Error Processing Request", 1);
+		}
+		return $shippingAddress;
+	}
+
+	public function saveBillingAddress($customer)
+	{
+		// if ($this->getRequest()->getPost()) {
+		// 	// code...
+		// }
+
+		$billingPostData = $this->getRequest()->getPost('billingAddress');
+
+		if (!$billingPostData) {
+			throw new Exception("Error Processing Request", 1);
+		}
+		$billingAddress = $customer->getBillingAddress();
+// die();
+		if (!$billingAddress) {
+			$billingAddress = Ccc::getModel('Customer_Address');
+			$billingAddress->customer_id = $customer->customer_id;
+		}
+
+		$billingAddress->setData($billingPostData);
+
+		if (!$billingAddress->save()) {
+			throw new Exception("Error Processing Request", 1);
+		}
+		return $billingAddress;
+	}
+
+	public function saveCustomer()
+	{
 			$customerPost = Ccc::getModel('Core_Request')->getPost('customer');
 			// print_r($customerPost);
 			// die();
@@ -105,9 +156,7 @@ class Controller_Customer extends Controller_Core_Action
 				$customer->updated_at = date('Y-m-d h-i-sA');
 			} else {
 				$customer = Ccc::getModel('customer');
-			// 	print_r($customer);
 				$customer->created_at = date('Y-m-d h-i-sA');
-					
 			}
 
 			$customer->setData($customerPost);
@@ -115,67 +164,38 @@ class Controller_Customer extends Controller_Core_Action
 				throw new Exception("customer data not saved.", 1);
 			}
 			else{
-					// die();
-				$addressPostBilling = Ccc::getModel('Core_Request')->getPost('billingAddress');
-				if (!$addressPostBilling) {
-					throw new Exception("Data not found.", 1);
-				}
-				if ($id = (int) Ccc::getModel('Core_Request')->getParam('id')) {
-					$addressBilling = Ccc::getModel('customer')->getBillingAddress();
-					// print_r($addressBilling);
-			        // die();  
-					if (!$addressBilling) {
-						throw new Exception("Data not found.", 1);
-					}
-					$addressBilling->address_id = $customer->customer_id;
-				} else {
-					$addressBilling = Ccc::getModel('customer_Address');
-					$addressBilling->customer_id = $customer->customer_id;
-				}
-				$addressPostShipping= Ccc::getModel('Core_Request')->getPost('shippingAddress');
-				if (!$addressPostShipping) {
-					throw new Exception("Data not found.", 1);
-				}
-
-				$addressBilling->setData($addressPostBilling);
-
-				// print_r($addressBilling->save());
-				// 	echo "<br>";
-				// 	die();
-				$billingSave = $addressBilling->save();
-				// print_r($billingSave->address_id);
-				// var_dump($billingSave);
-				// die();
-				if (!$billingSave) {
-					throw new Exception("customer data not saved.", 1);
-				}
-
-				if ($id = (int) Ccc::getModel('Core_Request')->getParam('id')) {
-					$addressShipping = Ccc::getModel('customer')->getShippingAddress();
-					if (!$addressShipping) {
-						throw new Exception("Data not found.", 1);
-					}
-					$addressShipping->address_id = $customer->customer_id;
-				} else {
-					$addressShipping = Ccc::getModel('customer_Address');
-					$addressShipping->customer_id = $customer->customer_id;
-					}
-
-				$addressShipping->setData($addressPostShipping);
-				// $address->setData($addressPostShipping);
-				$shippingSave = $addressShipping->save();
-			// 	print_r($shippingSave);
-			// die();
-				if (!$shippingSave) {
-					throw new Exception("customer data not saved.", 1);
-				}
-				// die();
-			// $customer = Ccc::getModel('customer');
-
-			$customer->billing_address_id = $billingSave->address_id;
-			$customer->shipping_address_id = $shippingSave->address_id;
-			$customer->save();
+				return $customer;
 			}
+	}
+
+	public function saveAction()
+	{
+		try {
+       		Ccc::getModel('Core_Session')->start();
+			if (!Ccc::getModel('Core_Request')->isPost()) {
+				throw new Exception("Invalid request.", 1);
+			}
+
+			$customer = $this->saveCustomer();
+			$shippingAddress = $this->saveShippingAddress($customer);
+			// echo "<pre>";
+			// print_r($customer);
+			// die();
+			$billingAddress = $this->saveBillingAddress($customer);
+
+			$customer->billing_address_id = $billingAddress->address_id;
+			$customer->shipping_address_id = $shippingAddress->address_id;
+
+			unset($customer->updated_at);
+			$customer = $customer->save();
+			// var_dump($customer);
+			// die();
+			
+			
+			if (!$customer) {
+				throw new Exception("customer data not saved.", 1);
+			}
+		
 			$this->getMessage()->addMessage('customer data saved Successfully.');
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage($e->getMessage(), Model_Core_Message::FAILURE);
@@ -208,5 +228,5 @@ class Controller_Customer extends Controller_Core_Action
 		}
 		$this->redirect('customer','grid',null,true);
 	}
-	}
+}
 

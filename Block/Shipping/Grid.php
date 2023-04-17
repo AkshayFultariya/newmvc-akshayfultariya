@@ -21,7 +21,7 @@ class Block_Shipping_Grid extends Block_Core_Grid
 
 	protected function _prepareColumns()
 	{
-		$this->addColumn('shipping_id',['title' => 'Payment Id']);
+		$this->addColumn('shipping_id',['title' => 'Shipping Id']);
 		$this->addColumn('name',['title' => 'Name']);
 		$this->addColumn('amount',['title' => 'Amount']);
 		$this->addColumn('status',['title' => 'Status']);

@@ -30,6 +30,15 @@ class Model_Item extends Model_Core_Table{
       $this->setResourceClass('Model_Item_Resource');
       $this->setCollectionClass('Model_Item_Collection');
    }
+
+   public function getAttributes()
+   {
+      $sql = "SELECT * FROM `eav_attribute` WHERE `entity_type_id` = 6";
+      $attributes =Ccc::getModel('Eav_Attribute')->fetchAll($sql);
+      // print_r($attributes);
+      // die();
+      return $attributes->getData();
+   }
 }
 //http refrer means je url mathi aapade aaviya hoy te
 

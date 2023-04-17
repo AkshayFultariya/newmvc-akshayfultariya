@@ -42,7 +42,7 @@ class Controller_Salesman extends Controller_Core_Action
 
 		try {
 				$this->getMessage()->getSession()->start();
-			$salesmanId = (int) Ccc::getModel('Core_Request')->getParam('salesman_id');
+			$salesmanId = (int) Ccc::getModel('Core_Request')->getParam('id');
 			if (!$salesmanId) {
 				throw new Exception("Invalid Id", 1);
 				
@@ -83,7 +83,7 @@ class Controller_Salesman extends Controller_Core_Action
 				throw new Exception("Data not found.", 1);
 			}
 
-			if ($id = (int) Ccc::getModel('Core_Request')->getParam('salesman_id')) {
+			if ($id = (int) Ccc::getModel('Core_Request')->getParam('id')) {
 				$salesman = Ccc::getModel('salesman')->load($id);
 				if (!$salesman) {
 					throw new Exception("Data not found.", 1);
@@ -104,7 +104,7 @@ class Controller_Salesman extends Controller_Core_Action
 					throw new Exception("Data not found.", 1);
 				}
 
-				if ($id = (int) Ccc::getModel('Core_Request')->getParam('salesman_id')) {
+				if ($id = (int) Ccc::getModel('Core_Request')->getParam('id')) {
 					$address = Ccc::getModel('salesman_Address')->load($id);
 					if (!$address) {
 						throw new Exception("Data not found.", 1);
@@ -132,7 +132,7 @@ class Controller_Salesman extends Controller_Core_Action
 	{
 	    try {
 	    	$this->getMessage()->getSession()->start();
-				if (!($id = (int) $this->getRequest()->getParam('salesman_id'))) {
+				if (!($id = (int) $this->getRequest()->getParam('id'))) {
 				throw new Exception("Error Processing Request", 1);
 				
 			}

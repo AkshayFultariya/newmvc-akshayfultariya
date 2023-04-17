@@ -8,10 +8,16 @@ class Block_Item_Edit extends Block_Core_Template
 		$this->setTemplate('item/edit.phtml');
 	}
 
-	public function getCollection()
+	public function getRow()
 	{
 		$item = $this->getData('item');
 		return $item;
+	}
+
+	public function getAttributes()
+	{
+		$attributes = Ccc::getModel('Item')->getAttributes();
+		return $attributes;
 	}
 
 }

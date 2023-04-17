@@ -1,0 +1,12 @@
+<?php $attribute = $this->getAttribute(); ?>
+<?php $options = $attribute->getOption(); ?>
+
+
+<select name="attribute[<?php echo $attribute->backend_type;?>][<?php echo $attribute->getId();?>]">
+	<option value="0">select</option>	
+	<?php if ($options):?>
+	<?php foreach ($options->getData() as $option): ?>
+	<option value = "<?php echo $option->option_id;?>"><?php echo $option->name;?></option>
+	<?php endforeach; ?>
+<?php endif; ?>
+</select>

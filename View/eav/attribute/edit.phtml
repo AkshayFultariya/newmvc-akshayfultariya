@@ -1,6 +1,9 @@
 <?php
 $attribute = $this->getCollection();
 $attributeOptions = $this->getAttributeOption();
+$entityTypes = Ccc::getModel('Eav_Attribute')->getEntityType();
+// print_r($entityType);
+// die()
 
 ?>
 
@@ -20,8 +23,16 @@ $attributeOptions = $this->getAttributeOption();
 	</div> 
 	<table class="table table-dark table-striped-columns">
 		<tr>
-			<td>Entity Type Id</td>
-			<td><input type="text" name="attribute[entity_type_id]" value="<?php echo $attribute->entity_type_id; ?>" class="addi9"></td>
+			<td>Entity Type</td>
+			<td>
+			<select name="attribute[entity_type_id]">
+			<?php foreach ($entityTypes as $key => $value): ?>
+			<option value="<?php echo $key ?>"> <?php echo $value ?></option>	
+			<!-- <td><input type="text" name="entityType[entity_type]" value="<?php echo $entityType->name; ?>" class="addi9"></td> -->
+			<?php endforeach; ?>
+			</select>
+			</td>
+
 		</tr>
 
 		<tr>

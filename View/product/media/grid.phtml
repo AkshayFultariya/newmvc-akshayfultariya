@@ -63,8 +63,7 @@ $medias = $this->getMedias();
 				echo "checked";
 			}
 		 	?>></td>
-		<td><a href="<?php echo $this->getUrl('product_media','delete', ['product_id' => $media->product_id, 'media_id' => $media->media_id], true); ?>">delete</a></td>
-		
+		<td><a href="<?php echo $this->getUrl('product_media','delete', ['id' => $media->product_id, 'media_id' => $media->media_id], true); ?>">delete</a></td>
 	</tr>
 	<?php endforeach;
 }

@@ -17,6 +17,7 @@ class Block_Eav_Attribute_Edit extends Block_Core_Template
 			return $attribute;
 	}
 
+
 	public function getAttributeOption()
 	{
 		$attributeId = Ccc::getModel('Core_Request')->getParam('attribute_id');

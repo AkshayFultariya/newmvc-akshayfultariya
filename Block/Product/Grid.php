@@ -5,12 +5,11 @@ class Block_Product_Grid extends Block_Core_Grid
 	public function __construct()
 	{
 		parent::__construct();
-		$this->setTemplate('product/grid.phtml');
-		// $this->getCollection();
-		// $this->_prepareColumns();
-		// $this->_prepareActions();
-		// $this->_prepareButtons();
-		// $this->setTitle('Manage Payment Method');
+		$this->getCollection();
+		$this->_prepareColumns();
+		$this->_prepareActions();
+		$this->_prepareButtons();
+		$this->setTitle('Manage Product Method');
 	}
 	public function getCollection()
 	{
@@ -33,6 +32,9 @@ class Block_Product_Grid extends Block_Core_Grid
 		$this->addColumn('material',['title' => 'Material']);
 		$this->addColumn('created_at',['title' => 'Created_at']);
 		$this->addColumn('updated_at',['title' => 'Updated_at']);
+		$this->addColumn('base_id',['title' => 'Base_id']);
+		$this->addColumn('thumbnail_id',['title' => 'Thumbnail_id']);
+		$this->addColumn('small_id',['title' => 'Small_id']);
 
 		return parent::_prepareColumns();
 	}

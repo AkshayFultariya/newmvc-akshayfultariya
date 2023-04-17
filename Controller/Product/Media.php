@@ -7,7 +7,7 @@ class Controller_Product_Media extends Controller_Core_Action
 	{
 		try {
 			Ccc::getModel('Core_Session')->start();
-			$productId = Ccc::getModel('Core_Request')->getParam('product_id');
+			$productId = Ccc::getModel('Core_Request')->getParam('id');
 			if (!$productId) {
 				throw new Exception("Id not found", 1);
 			}
@@ -31,7 +31,7 @@ class Controller_Product_Media extends Controller_Core_Action
 	{
 		try {
 			Ccc::getModel('Core_Session')->start();
-			$productId = Ccc::getModel('Core_Request')->getParam('product_id');
+			$productId = Ccc::getModel('Core_Request')->getParam('id');
 			Ccc::register('product_id',$productId);
 			$media = Ccc::getModel('Product_Media');
 			$layout = $this->getLayout();
@@ -53,7 +53,7 @@ class Controller_Product_Media extends Controller_Core_Action
 				throw new Exception("Invalid Request", 1);
 			}
 
-			$productId = Ccc::getModel('Core_Request')->getParam('product_id');
+			$productId = Ccc::getModel('Core_Request')->getParam('id');
 			if (!$productId) {
 				throw new Exception("ID not found.", 1);
 			}
@@ -73,8 +73,10 @@ class Controller_Product_Media extends Controller_Core_Action
 				$mediaIds['gallery'] = 0;
 
 				$mediaPost = Ccc::getModel('Product_Media');
-				$sql = "SELECT `media_id` FROM `product_media` WHERE `product_id` = {$productId}";
-				$id = $mediaPost->fetchAll($sql);
+				$sql = "SELECT `media_id` FROM `media` WHERE `product_id` = {$productId}";
+				$id = $mediaPost->fetchAll($sql)->getData();
+				// print_r($id);
+				// die();
 
 				foreach($id as $key => $value)
 				{	
@@ -93,14 +95,23 @@ class Controller_Product_Media extends Controller_Core_Action
 				}
 				$base['base'] = 1;
 				$base['media_id'] = $baseId;
+				// $postData = $this->getRequest()->getpost('product');
+				$i = Ccc::getModel('Product')->load($productId);
+				$i->base_id = $base['media_id'];
+				$i->save();
 				$mediaPost->setData($base);
 				$productMedia = $mediaPost->save();
 				$mediaPost->removeData();
 				if ($productMedia) {
 					$this->getMessage()->addMessage('Product media saved Successfully.');
 				}
+				
 				$thumbnail['thumbnail'] = 1;
 				$thumbnail['media_id'] = $thumbnailId;
+				// $i = Ccc::getModel('Product');
+				$i->thumbnail_id = $thumbnail['media_id'];
+				$i->save();
+				// $i->setData($thumbnail);
 				$mediaPost->setData($thumbnail);
 				$productMedia = $mediaPost->save();
 				$mediaPost->removeData();
@@ -110,14 +121,18 @@ class Controller_Product_Media extends Controller_Core_Action
 
 				$small['small'] = 1;
 				$small['media_id'] = $smallId;
+				// $i = Ccc::getModel('Product');
+				$i->small_id = $small['media_id'];
+				$i->save();
+				// print_r($i);
+				// die();
+				// $i->setData($postData);
 				$mediaPost->setData($small);
 				$productMedia = $mediaPost->save();
 				$mediaPost->removeData();			
 				if ($productMedia) {
 					$this->getMessage()->addMessage('Product media saved Successfully.');
 				}
-
-
 
 				$gallery['gallery'] = 1;
 				foreach ($galleryId as $key => $value) {
@@ -172,12 +187,12 @@ class Controller_Product_Media extends Controller_Core_Action
 	{
 		try {
 			Ccc::getModel('Core_Session')->start();
-			$productId = Ccc::getModel('Core_Request')->getParam('product_id');
+			$productId = Ccc::getModel('Core_Request')->getParam('id');
 			if (!$productId) {
 				throw new Exception("ID not found.", 1);
 			}
 
-			$mediaId = Ccc::getModel('Core_Request')->getParam('media_id');
+			$mediaId = Ccc::getModel('Core_Request')->getParam('id');
 			if (!$mediaId) {
 				throw new Exception("ID not found.", 1);
 			}
