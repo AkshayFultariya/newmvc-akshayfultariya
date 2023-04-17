@@ -70,7 +70,6 @@ class Model_Customer extends Model_Core_Table{
       //    $this->data = $a;
       // }
       // return $this;
-      // die();
    }
 
    public function getShippingAddress()

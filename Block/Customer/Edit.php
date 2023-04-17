@@ -11,9 +11,6 @@ class Block_Customer_Edit extends Block_Core_Template
 	public function getCollection()
 	{
 		$customer = $this->getData('customer');
-		// echo "<pre>";
-		// print_r($customer);
-		// die();
 		$billingAddress = $this->getData('billingAddress');
 		$shippingAddress = $this->getData('shippingAddress');
 		$final = [$customer,$billingAddress,$shippingAddress];

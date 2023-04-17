@@ -64,7 +64,6 @@ $medias = $this->getMedias();
 			}
 		 	?>></td>
 		<td><a href="<?php echo $this->getUrl('product_media','delete', ['id' => $media->product_id, 'media_id' => $media->media_id], true); ?>">delete</a></td>
-		
 	</tr>
 	<?php endforeach;
 }

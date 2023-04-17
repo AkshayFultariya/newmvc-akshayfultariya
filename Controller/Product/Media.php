@@ -99,13 +99,13 @@ class Controller_Product_Media extends Controller_Core_Action
 				$i = Ccc::getModel('Product')->load($productId);
 				$i->base_id = $base['media_id'];
 				$i->save();
-
 				$mediaPost->setData($base);
 				$productMedia = $mediaPost->save();
 				$mediaPost->removeData();
 				if ($productMedia) {
 					$this->getMessage()->addMessage('Product media saved Successfully.');
 				}
+				
 				$thumbnail['thumbnail'] = 1;
 				$thumbnail['media_id'] = $thumbnailId;
 				// $i = Ccc::getModel('Product');
@@ -133,8 +133,6 @@ class Controller_Product_Media extends Controller_Core_Action
 				if ($productMedia) {
 					$this->getMessage()->addMessage('Product media saved Successfully.');
 				}
-
-
 
 				$gallery['gallery'] = 1;
 				foreach ($galleryId as $key => $value) {

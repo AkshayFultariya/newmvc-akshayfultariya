@@ -114,8 +114,6 @@ class Block_Core_Grid extends Block_Core_Template
 
 	public function getColumnValue($row,$key)
 	{
-		// print_r($row);
-		// die();
 		if ($key == 'status') {
 			return $row->getStatusText($key);
 		}

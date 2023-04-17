@@ -5,7 +5,6 @@ class Block_Product_Grid extends Block_Core_Grid
 	public function __construct()
 	{
 		parent::__construct();
-		// $this->setTemplate('product/grid.phtml');
 		$this->getCollection();
 		$this->_prepareColumns();
 		$this->_prepareActions();
