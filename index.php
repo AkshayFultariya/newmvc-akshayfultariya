@@ -47,6 +47,20 @@ class Ccc{
 		$GLOBALS[$className] = new $className();
 		return $GLOBALS[$className];
 	}
+
+	public static function log($data, $fileName = 'system.log', $newFile = false)
+	{
+		self::getSingleton('Core_Log')->log($data, $fileName, $newFile);
+	} 
+
+	public static function getBaseDir($subDir = null)
+	{
+		$dir = getcwd();
+		if ($subDir) {
+			return $dir.$subDir;
+		}
+		return $dir;
+	}
 }
 
 Ccc::init();
