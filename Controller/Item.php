@@ -62,6 +62,9 @@ class Controller_Item extends Controller_Core_Action
 		$item->save();
 
 		$attributeData = $this->getRequest()->getPost('attribute');
+		// echo "<pre>";
+		// print_r($attributeData);
+		// die();
 
 		$queries = [];
 		foreach ($attributeData as $backendType => $value) {

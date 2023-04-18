@@ -47,6 +47,7 @@ class Controller_Product extends Controller_Core_Action
 			}
 			$layout = $this->getLayout();
 			$product = Ccc::getModel('Product')->load($productId);
+			// Ccc::log($product,'a.log');
 			if (!$product) {
 				throw new Exception("Invalid Id", 1);
 				

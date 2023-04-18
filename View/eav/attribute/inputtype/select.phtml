@@ -1,5 +1,9 @@
 <?php $attribute = $this->getAttribute(); ?>
-<?php $options = $attribute->getOption(); ?>
+<?php $options = $attribute->getOption(); 
+// echo "<pre>";
+// print_r($options);
+// die();
+?>
 
 
 <select name="attribute[<?php echo $attribute->backend_type;?>][<?php echo $attribute->getId();?>]">
