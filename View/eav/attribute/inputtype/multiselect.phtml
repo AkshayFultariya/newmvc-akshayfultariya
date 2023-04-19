@@ -4,7 +4,7 @@ $options = $attribute->getOption();
 $row = $this->getRow();
 $optionValues = $row->getAttributeValue($attribute);
 if ($optionValues) {
-	$optionValues = emplode(',',$optionValues);
+	$optionValues = explode(',',$optionValues);
 }
 
 ?>
