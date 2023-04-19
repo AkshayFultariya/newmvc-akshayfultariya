@@ -7,7 +7,6 @@ class Controller_Product extends Controller_Core_Action
 	public function gridAction()
 	{
 		try {
-			$this->getMessage()->getSession()->start();
 			$layout = $this->getLayout();
 			$grid = $layout->createBlock('Product_Grid');
 			$layout->getChild('content')->addChild('grid',$grid);
@@ -23,7 +22,6 @@ class Controller_Product extends Controller_Core_Action
 	public function addAction()
 	{
 		try {
-        	$this->getMessage()->getSession()->start();
 
 			$layout = $this->getLayout();
 			$product = Ccc::getModel('Product');
@@ -39,7 +37,6 @@ class Controller_Product extends Controller_Core_Action
 	public function editAction()
 	{
 		try {
-	        $this->getMessage()->getSession()->start();
 			$productId = (int) Ccc::getModel('Core_Request')->getParam('id');
 			if (!$productId) {
 				throw new Exception("Invalid Id", 1);

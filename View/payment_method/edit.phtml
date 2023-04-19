@@ -1,6 +1,6 @@
 <?php
 
-$paymentMethod = $this->getCollection();
+$payment = $this->getRow();
 
 ?>
 	<form action="<?php echo $this->getUrl('payment','save');?>" method = "post">
@@ -19,18 +19,26 @@ $paymentMethod = $this->getCollection();
 		<table class="table table-dark table-striped-columns">
 			<tr>
 				<td>name</td>
-				<td><input type="text" name="payment[name]" value="<?php echo $paymentMethod->name;?>" class="addi9"></td>
+				<td><input type="text" name="payment[name]" value="<?php echo $payment->name;?>" class="addi9"></td>
 			</tr>
 		<td>Status</td>
 		<td>
 		<select name="payment[status]">
-			<?php foreach ($paymentMethod->getResource()->getStatusOptions() as $key => $value):?>
-			<?php $selected = ($key == $paymentMethod->getstatus()) ? 'selected' : '';?>
+			<?php foreach ($payment->getResource()->getStatusOptions() as $key => $value):?>
+			<?php $selected = ($key == $payment->getstatus()) ? 'selected' : '';?>
 			<option value="<?php echo $key ?>"<?php echo $selected; ?>><?php echo $value;?></option>
 			<?php endforeach;?>
 		</select>
 	</td>
 		<!-- <td><input type="text" name="admin[status]" value="<?php echo $admin->status ?>"></td> -->
 	</tr>
+	<?php foreach ($payment->getattributes() as $key => $attribute): ?>
+		<tr>
+			<td><?php echo $attribute->name;?></td>
+			<td>
+				<?php $this->getLayout()->createBlock('Eav_Attribute_Inputtype')->setAttributes($attribute)->setRow($payment)->render(); ?>
+			</td>
+		</tr>
+	<?php endforeach;?>
 		</table>
 	</form>

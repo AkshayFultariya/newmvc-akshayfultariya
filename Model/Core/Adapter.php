@@ -25,29 +25,42 @@ class Model_Core_Adapter
 		return $connect;
 	}
 
+	public function query($sql)
+	{
+		$connect = $this->connect();
+		return $connect->query($sql);
+	}
+
+	public function insertUpdateOnDuplicate($arrayData,$uniqueColumns)
+	{
+		$keyString = '`'.implode('`,`',array_keys($arrayData)).'`';
+		$valueString = "'".implode("','",array_values($arrayData))."'";
+		$sql = "INSERT INTO `{$this->getResourceName()}` ({$keyString}) VALUES ({$valueString})";
+	}
+
 	public function fetchAll($query){
 		$connect = $this->connect();
 		$result = mysqli_query($connect,$query);
-		if ($result->num_rows>0) {
-			return $result->fetch_all(MYSQLI_ASSOC);
+		if ($result->num_rows == 0) {
+			return false;
 		}
-		return false;
+			return $result->fetch_all(MYSQLI_ASSOC);
 	}
 
 	public function fetchRow($query){
 		$connect = $this->connect();
 		$result = mysqli_query($connect,$query);
-		if ($result->num_rows>0) {
-			return $result->fetch_assoc();
-		}
+		if ($result->num_rows == 0) {
 			return 	false;
+		}
+			return $result->fetch_assoc();
 	}
 
 	public function fetchPairs($query)
 	{
 		$connect = $this->connect();
 		$result = mysqli_query($connect,$query);
-		if (!$result) {
+		if ($result->num_rows == 0) {
 			return false;
 		}
 
@@ -64,12 +77,14 @@ class Model_Core_Adapter
 	{
 		$connect = $this->connect();
 		$result = mysqli_query($connect,$query);
-		if (!$result) {
-			return false;
+		if ($result->num_rows == 0) {
+			return null;
 		}
 
 		$row = $result->fetch_array();
+		if ($row) {
 		return (array_key_exists(0, $row)) ? $row[0] : null;
+		}
 	}
 
 	public function insert($query){

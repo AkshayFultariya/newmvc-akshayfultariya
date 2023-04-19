@@ -1,12 +1,25 @@
-<?php $attribute = $this->getAttribute(); ?>
-<?php $options = $attribute->getOption(); ?>
+<?php 
+$attribute = $this->getAttribute();
+$options = $attribute->getOption();
+$row = $this->getRow();
+$optionValues = $row->getAttributeValue($attribute);
+if ($optionValues) {
+	$optionValues = emplode(',',$optionValues);
+}
+
+?>
 
 
 <select name="attribute[<?php echo $attribute->backend_type;?>][<?php echo $attribute->getId();?>][]" multiple>
-	<option value="0">select</option>	
-	<?php if ($options):?>
+	<?php if ($options->count()>0):?>
 	<?php foreach ($options->getData() as $option): ?>
-	<option value = "<?php echo $option->option_id;?>"><?php echo $option->name;?></option>
+		<?php
+		$selected = '';
+		if ($optionValues) {
+			$selected = (in_array($option->option_id,$optionValues))? 'selected':'';
+		}
+		?>
+	<option value = "<?php echo $option->option_id;?>"<?php echo $selected ?>><?php echo $option->name;?></option>
 	<?php endforeach; ?>
-<?php endif; ?>
+<?php endif ; ?>
 </select>

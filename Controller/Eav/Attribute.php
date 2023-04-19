@@ -99,6 +99,8 @@ class Controller_Eav_Attribute extends Controller_Core_Action
 			else
 			{
 				$attributeId = $attribute->attribute_id;
+				if ($postData['option']) {
+					
 				// print_r(expression)
 				if (array_key_exists('exits',$postData['option'])) {
 					$query = "SELECT * FROM `eav_attribute_option` WHERE `attribute_id` = $attributeId";
@@ -125,6 +127,7 @@ class Controller_Eav_Attribute extends Controller_Core_Action
 						$attributeOption->save();
 						unset($option);
 					}
+				}
 				}
 
 			}

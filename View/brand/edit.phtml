@@ -1,0 +1,32 @@
+<?php
+$brand = $this->getRow();
+?>
+	<form action="<?php echo $this->getUrl('brand','save');?>" method = "post">
+		<div class="content9">
+			<div class="add19">
+				EDIT Brand
+			</div>	
+			<div class="add29">
+				<a type="button" class="btn btn-primary" href="<?php echo $this->getUrl('brand','grid',[],true);?>" class="add39">Cancel</a>
+				<button type="submit" >Save</button>
+			</div>
+		</div>
+		<div class="head9">
+			BRAND INFORMATION
+		</div>
+		<table class="table table-dark table-striped-columns">
+			<tr>
+				<td>name</td>
+				<td><input type="text" name="brand[name]" value="<?php echo $brand->name;?>" class="addi9"></td>
+			</tr>
+			<tr>
+				<td>description</td>
+				<td><input type="text" name="brand[description]" value="<?php echo $brand->description;?>" class="addi9"></td>
+			</tr>
+			<tr>
+				<td>image</td>
+				<td><input type="text" name="brand[image]" value="<?php echo $brand->image;?>" class="addi9"></td>
+			</tr>
+		
+		</table>
+	</form>

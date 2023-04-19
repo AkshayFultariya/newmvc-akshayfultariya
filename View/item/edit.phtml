@@ -1,7 +1,8 @@
 <?php
 
 $item = $this->getRow();
-$attributes = $this->getAttributes();
+// $attributes = $this->getAttributes();
+// echo "<pre>";
 // print_r($attributes);
 // die();
 
@@ -35,7 +36,7 @@ $attributes = $this->getAttributes();
 		</select>
 	</td>
 	</tr>
-	<?php foreach ($attributes as $key => $attribute): ?>
+	<?php foreach ($item->getattributes() as $key => $attribute): ?>
 		<tr>
 			<td><?php echo $attribute->name;?></td>
 			<td>

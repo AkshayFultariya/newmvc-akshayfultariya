@@ -27,8 +27,10 @@ class Block_Eav_Attribute_Edit extends Block_Core_Template
 			return Ccc::getModel('Eav_Attribute_Option');
 		}
 		$sql = "SELECT * FROM `eav_attribute_option` WHERE `attribute_id` = {$attributeId}";
+		// print_r($sql);
+		// die();
 		$attributeOptions = Ccc::getModel('Eav_Attribute_Option')->fetchAll($sql);
-		return $attributeOptions->getData();
+		return $attributeOptions;
 	}
 	
 }

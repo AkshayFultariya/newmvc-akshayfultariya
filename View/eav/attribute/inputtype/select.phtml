@@ -1,5 +1,6 @@
 <?php $attribute = $this->getAttribute(); ?>
 <?php $options = $attribute->getOption(); 
+$row = $this->getRow();
 // echo "<pre>";
 // print_r($options);
 // die();
@@ -8,9 +9,12 @@
 
 <select name="attribute[<?php echo $attribute->backend_type;?>][<?php echo $attribute->getId();?>]">
 	<option value="0">select</option>	
-	<?php if ($options):?>
+	<?php if ($options->count()>0):?>
 	<?php foreach ($options->getData() as $option): ?>
-	<option value = "<?php echo $option->option_id;?>"><?php echo $option->name;?></option>
+		<?php $selected = ($row->getAttributeValue($attribute) == $option->option_id)? 'selected':''?>
+	<option value = "<?php echo $option->option_id;?>"<?php echo $selected;?>><?php echo $option->name;?></option>
 	<?php endforeach; ?>
 <?php endif; ?>
 </select>
+
+

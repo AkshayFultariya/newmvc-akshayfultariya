@@ -16,7 +16,7 @@ class Model_Payment_Resource extends Model_Core_Table_Resource
 	   }
 		function __construct()
 		{
-			$this->setResourceName('payment method');
+			$this->setResourceName('payment');
 			$this->setPrimaryKey('payment_method_id');
 		}
 

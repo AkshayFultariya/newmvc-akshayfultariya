@@ -4,6 +4,7 @@ class Model_Item extends Model_Core_Table{
 
    
    // const STATUS_DEFAULT= 1;
+   const ENTITY_TYPE_ID = 6;
 
 
    public function getStatus()
@@ -33,11 +34,21 @@ class Model_Item extends Model_Core_Table{
 
    public function getAttributes()
    {
-      $sql = "SELECT * FROM `eav_attribute` WHERE `entity_type_id` = 6";
+      $sql = "SELECT * FROM `eav_attribute` WHERE `entity_type_id` = 6 AND `status` = 1";
       $attributes =Ccc::getModel('Eav_Attribute')->fetchAll($sql);
       // print_r($attributes);
       // die();
-      return $attributes->getData();
+      if ($attributes) {
+           return $attributes->getData();
+      }
+      return Ccc::getModel('Eav_Attribute');
+   }
+
+   public function getAttributeValue($attribute)
+   {
+      $sql = "SELECT `value` FROM `item_{$attribute->backend_type}` WHERE `entity_id` = '{$this->getId()}' AND `attribute_id` = '{$attribute->getId()}'";
+
+      return $this->getResource()->getAdapter()->fetchOne($sql);
    }
 }
 //http refrer means je url mathi aapade aaviya hoy te
