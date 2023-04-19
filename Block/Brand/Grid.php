@@ -1,6 +1,6 @@
 <?php
 
-class Block_Payment_Grid extends Block_Core_Grid
+class Block_Brand_Grid extends Block_Core_Grid
 {
 
 	public function __construct()
@@ -10,24 +10,22 @@ class Block_Payment_Grid extends Block_Core_Grid
 		$this->_prepareColumns();
 		$this->_prepareActions();
 		$this->_prepareButtons();
-		$this->setTitle('Manage Payment Method');
+		$this->setTitle('Manage Brand Method');
 	}
 	public function getCollection()
 	{
-		$query = "SELECT * FROM `payment` ORDER BY `payment_method_id` DESC";
-		$payments = Ccc::getModel('Payment')->fetchAll($query);
-		// echo "<pre>";
-		// print_r($payments);
-		// die();
+		$query = "SELECT * FROM `brand` ORDER BY `brand_id` DESC";
+		$payments = Ccc::getModel('Brand')->fetchAll($query);
 		return $payments;
 	}
 
 
 	protected function _prepareColumns()
 	{
-		$this->addColumn('payment_method_id',['title' => 'Payment Id']);
+		$this->addColumn('brand_id',['title' => 'Brand Id']);
 		$this->addColumn('name',['title' => 'Name']);
-		$this->addColumn('status',['title' => 'Status']);
+		$this->addColumn('description',['title' => 'Description']);
+		$this->addColumn('image',['title' => 'Image']);
 		$this->addColumn('created_at',['title' => 'Created_at']);
 		$this->addColumn('updated_at',['title' => 'Updated_at']);
 
@@ -45,7 +43,7 @@ class Block_Payment_Grid extends Block_Core_Grid
 
 	protected function _prepareButtons()
 	{
-		$this->addButton('payment_method_id',['title' => 'Add New','url' => $this->getUrl('payment','add')]);
+		$this->addButton('brand_id',['title' => 'Add New','url' => $this->getUrl('brand','add')]);
 		return parent::_prepareButtons();
 	}
 

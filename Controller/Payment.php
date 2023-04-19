@@ -63,40 +63,56 @@ class Controller_Payment extends Controller_Core_Action
 	public function saveAction()
 	{
 		try {
-       		$this->getMessage()->getSession()->start();
+			
+		
+		if (!$this->getRequest()->isPost()) {
+			throw new Exception("Invalid Id", 1);
+		}
+		$paymentData = $this->getRequest()->getPost();
 
-			if (!$this->getRequest()->isPost()) {
-				// echo "111";
-				throw new Exception("Invalid request.", 1);
-			}
+		if (!$paymentData) {
+			throw new Exception("Invalid data posted", 1);
+		}
 
-			$postData = $this->getRequest()->getpost('payment');
+		if ($id = $this->getRequest()->getParam('id')) {
+			$payment = Ccc::getModel('payment');
+			$payment->load($id);
+			$payment->updated_at = date("Y-m-d H-i-s"); 
+		}
+		else{
+			$payment = Ccc::getModel('payment');
+			// $payment->entity_type_id = $payment::ENTITY_TYPE_ID;
+			$payment->created_at = date("Y-m-d H-i-s"); 
+		}
+		$payment->setData($paymentData['payment']);
+		
+		if (!$payment->save()) {
+			throw new Exception("Unable to save", 1);
+		}
+		else{
 
-			if (!$postData) {
-				throw new Exception("Invalid data posted.", 1);
-			}
+		$attributeData = $this->getRequest()->getPost('attribute');
+		// echo "<pre>";
+		// print_r($attributeData);
+		// die();
 
-			if ($id = (int)$this->getRequest()->getParam('id')) {
-				$payment = Ccc::getModel('Payment')->load($id);
+		$queries = [];
+		foreach ($attributeData as $backendType => $value) {
 
-				if (!$payment) {
-					throw new Exception("Invalid id.", 1);
+			foreach ($value as $attributeId => $v) {
+				if (is_array($v)) {
+					$v = implode(",", $v);
 				}
-			$payment->updated_at = date("Y-m-d H:i:s");
-			}
-			else{
-				$payment = Ccc::getModel('Payment');
-				$payment->created_at = date("Y-m-d H:i:s");
-			}
-			$payment->setData($postData);
 
-			if (!$payment->save()) {
-				throw new Exception("Unable to save payment.", 1);
+				$model = Ccc::getModel('Core_Table');
+				$resource = $model->getResource()->setResourceName("payment_{$backendType}")->setPrimaryKey('value_id');
+				$query = "INSERT INTO `payment_{$backendType}` (`payment_method_id`,`attribute_id`,`value`) VALUES ('{$payment->getId()}','{$attributeId}','{$v}') ON DUPLICATE KEY UPDATE `value` = '{$v}'";
+
+				$id = $model->getResource()->getAdapter()->query($query);
+				}
 			}
-		    $this->getMessage()->addMessage('Payment updeted sucessfully.',Model_Core_Message :: SUCCESS);
-
-
-		} catch (Exception $e) {
+		}
+		}  catch (Exception $e) {
 		    $this->getMessage()->addMessage('Invalid.',Model_Core_Message :: FAILURE);
 			
 		}

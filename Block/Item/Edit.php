@@ -10,8 +10,8 @@ class Block_Item_Edit extends Block_Core_Template
 
 	public function getRow()
 	{
-		$item = $this->getData('item');
-		return $item;
+		return  $this->item;
+		
 	}
 
 	public function getAttributes()
