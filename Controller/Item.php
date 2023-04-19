@@ -5,7 +5,6 @@ class Controller_Item extends Controller_Core_Action
 	public function gridAction()
 	{
 		try {
-			$this->getMessage()->getSession()->start();
 			$layout = $this->getLayout();
 			$grid = $layout->createBlock('Item_Grid');
 			$layout->getChild('content')->addChild('grid',$grid);
@@ -19,7 +18,6 @@ class Controller_Item extends Controller_Core_Action
 	public function addAction()
 	{
 		try {
-			$this->getMessage()->getSession()->start();
 			$layout = $this->getLayout();
 			$item = Ccc::getModel('Item');
 			$edit = $layout->createBlock('Item_Edit')->setData(['item'=>$item]);
