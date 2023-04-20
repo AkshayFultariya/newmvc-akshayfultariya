@@ -72,7 +72,7 @@ class Controller_Admin extends Controller_Core_Action
 				throw new Exception("Error Processing Request", 1);
 			}
 
-		$postData = $this->getRequest()->getPost('admin');
+		$postData = $this->getRequest()->getPost();
 		if (!$postData) {
 			throw new Exception("Error Processing Request", 1);
 		}
@@ -92,12 +92,35 @@ class Controller_Admin extends Controller_Core_Action
 			$admin = Ccc::getModel('Admin');
 			$admin->created_at = date("Y-m-d H:i:s");
 		}
-		$admin->setData($postData);
+		$admin->setData($postData['admin']);
 
 		if (!$admin->save()) {
 			throw new Exception("unable to save admin",1);
 		}
 	
+		else{
+
+		$attributeData = $this->getRequest()->getPost('attribute');
+		// echo "<pre>";
+		// print_r($attributeData);
+		// die();
+
+		$queries = [];
+		foreach ($attributeData as $backendType => $value) {
+
+			foreach ($value as $attributeId => $v) {
+				if (is_array($v)) {
+					$v = implode(",", $v);
+				}
+
+				$model = Ccc::getModel('Core_Table');
+				$resource = $model->getResource()->setResourceName("admin_{$backendType}")->setPrimaryKey('value_id');
+				$query = "INSERT INTO `admin_{$backendType}` (`admin_id`,`attribute_id`,`value`) VALUES ('{$admin->getId()}','{$attributeId}','{$v}') ON DUPLICATE KEY UPDATE `value` = '{$v}'";
+
+				$id = $model->getResource()->getAdapter()->query($query);
+				}
+			}
+		}
 		} catch (Exception $e) {
 			
 		}

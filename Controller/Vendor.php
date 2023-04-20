@@ -70,7 +70,7 @@ class Controller_Vendor extends Controller_Core_Action
 				throw new Exception("Invalid request.", 1);
 			}
 			
-			$vendorPost = Ccc::getModel('Core_Request')->getPost('vendor');
+			$vendorPost = Ccc::getModel('Core_Request')->getPost();
 			// print_r($vendorPost);
 			// die();
 			if (!$vendorPost) {
@@ -88,12 +88,12 @@ class Controller_Vendor extends Controller_Core_Action
 				$vendor->created_at = date('Y-m-d h-i-sA');
 			}
 
-			$vendor->setData($vendorPost);
+			$vendor->setData($vendorPost['vendor']);
 			if (!$vendor->save()) {
 				throw new Exception("Vendor data not saved.", 1);
 			}
 			else{
-				$addressPost = Ccc::getModel('Core_Request')->getPost('address');
+				$addressPost = Ccc::getModel('Core_Request')->getPost();
 				if (!$addressPost) {
 					throw new Exception("Data not found.", 1);
 				}
@@ -106,16 +106,40 @@ class Controller_Vendor extends Controller_Core_Action
 					$address->address_id = $vendor->vendor_id;
 				} else {
 					$address = Ccc::getModel('Vendor_Address');
+					// print_r($address);
 					$address->vendor_id = $vendor->vendor_id;
 				}
 
-				$address->setData($addressPost);
+				$address->setData($addressPost['address']);
 				if (!$address->save()) {
 					throw new Exception("Vendor data not saved.", 1);
 				}
+			else{
+
+		$attributeData = $this->getRequest()->getPost('attribute');
+		// echo "<pre>";
+		// print_r($attributeData);
+		// die();
+
+		$queries = [];
+		foreach ($attributeData as $backendType => $value) {
+
+			foreach ($value as $attributeId => $v) {
+				if (is_array($v)) {
+					$v = implode(",", $v);
+				}
+
+				$model = Ccc::getModel('Core_Table');
+				$resource = $model->getResource()->setResourceName("vendor_{$backendType}")->setPrimaryKey('value_id');
+				$query = "INSERT INTO `vendor_{$backendType}` (`vendor_id`,`attribute_id`,`value`) VALUES ('{$vendor->getId()}','{$attributeId}','{$v}') ON DUPLICATE KEY UPDATE `value` = '{$v}'";
+
+				$id = $model->getResource()->getAdapter()->query($query);
+				}
 			}
-			$this->getMessage()->addMessage('Vendor data saved Successfully.');
-		} catch (Exception $e) {
+		}
+	}
+}
+		 catch (Exception $e) {
 			$this->getMessage()->addMessage($e->getMessage(), Model_Core_Message::FAILURE);
 		}
 		

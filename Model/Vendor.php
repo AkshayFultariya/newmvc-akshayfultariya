@@ -30,6 +30,25 @@ class Model_Vendor extends Model_Core_Table{
       $this->setResourceClass('Model_Vendor_Resource');
       $this->setCollectionClass('Model_Vendor_Collection');
    }
+
+   public function getAttributes()
+   {
+      $sql = "SELECT * FROM `eav_attribute` WHERE `entity_type_id` = 4 AND `status` = 1";
+      $attributes =Ccc::getModel('Eav_Attribute')->fetchAll($sql);
+      // print_r($attributes);
+      // die();
+      if ($attributes) {
+           return $attributes->getData();
+      }
+      return Ccc::getModel('Eav_Attribute');
+   }
+
+   public function getAttributeValue($attribute)
+   {
+      $sql = "SELECT `value` FROM `vendor_{$attribute->backend_type}` WHERE `vendor_id` = '{$this->getId()}' AND `attribute_id` = '{$attribute->getId()}'";
+
+      return $this->getResource()->getAdapter()->fetchOne($sql);
+   }
 }
 //http refrer means je url mathi aapade aaviya hoy te
 

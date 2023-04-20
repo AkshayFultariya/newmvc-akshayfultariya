@@ -61,42 +61,57 @@ class Controller_Product extends Controller_Core_Action
 
 	public function saveAction()
 	{
+
 		try {
-       		$this->getMessage()->getSession()->start();
+			
+		
+		if (!$this->getRequest()->isPost()) {
+			throw new Exception("Invalid Id", 1);
+		}
+		$productData = $this->getRequest()->getPost();
 
-			if (!$this->getRequest()->isPost()) {
-				// echo "111";
-				throw new Exception("Invalid request.", 1);
-			}
+		if (!$productData) {
+			throw new Exception("Invalid data posted", 1);
+		}
 
-			$postData = $this->getRequest()->getpost('product');
+		if ($id = $this->getRequest()->getParam('id')) {
+			$product = Ccc::getModel('Product');
+			$product->load($id);
+			$product->updated_at = date("Y-m-d H-i-s"); 
+		}
+		else{
+			$product = Ccc::getModel('Product');
+			// $product->entity_type_id = $product::ENTITY_TYPE_ID;
+			$product->created_at = date("Y-m-d H-i-s"); 
+		}
+		$product->setData($productData['product']);
+		
+		if (!$product->save()) {
+			throw new Exception("Unable to save", 1);
+		}
+		else{
 
-			// print_r($postData);
+		$attributeData = $this->getRequest()->getPost('attribute');
+		// echo "<pre>";
+		// print_r($attributeData);
+		// die();
 
-			if (!$postData) {
-				throw new Exception("Invalid data posted.", 1);
-			}
+		$queries = [];
+		foreach ($attributeData as $backendType => $value) {
 
-			if ($id = (int)$this->getRequest()->getParam('id')) {
-				$product = Ccc::getModel('Product')->load($id);
-
-				if (!$product) {
-					throw new Exception("Invalid id.", 1);
+			foreach ($value as $attributeId => $v) {
+				if (is_array($v)) {
+					$v = implode(",", $v);
 				}
-			$product->updated_at = date("Y-m-d H:i:s");
-			}
-			else{
-				$product = Ccc::getModel('Product');
-				$product->created_at = date("Y-m-d H:i:s");
-			}
-			$product->setData($postData);
 
-			if (!$product->save()) {
-				throw new Exception("Unable to save product.", 1);
+				$model = Ccc::getModel('Core_Table');
+				$resource = $model->getResource()->setResourceName("product_{$backendType}")->setPrimaryKey('value_id');
+				$query = "INSERT INTO `product_{$backendType}` (`product_id`,`attribute_id`,`value`) VALUES ('{$product->getId()}','{$attributeId}','{$v}') ON DUPLICATE KEY UPDATE `value` = '{$v}'";
+
+				$id = $model->getResource()->getAdapter()->query($query);
+				}
 			}
-		    $this->getMessage()->addMessage('Product has been sucessfully.',Model_Core_Message :: SUCCESS);
-
-
+		}
 		} catch (Exception $e) {
 		    $this->getMessage()->addMessage($e->getMessage(),Model_Core_Message :: FAILURE);
 			

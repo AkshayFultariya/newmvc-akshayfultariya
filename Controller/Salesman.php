@@ -76,7 +76,7 @@ class Controller_Salesman extends Controller_Core_Action
 				throw new Exception("Invalid request.", 1);
 			}
 			
-			$salesmanPost = Ccc::getModel('Core_Request')->getPost('salesman');
+			$salesmanPost = Ccc::getModel('Core_Request')->getPost();
 			// print_r($salesmanPost);
 			// die();
 			if (!$salesmanPost) {
@@ -94,12 +94,12 @@ class Controller_Salesman extends Controller_Core_Action
 				$salesman->created_at = date('Y-m-d h-i-sA');
 			}
 
-			$salesman->setData($salesmanPost);
+			$salesman->setData($salesmanPost['salesman']);
 			if (!$salesman->save()) {
 				throw new Exception("salesman data not saved.", 1);
 			}
 			else{
-				$addressPost = Ccc::getModel('Core_Request')->getPost('address');
+				$addressPost = Ccc::getModel('Core_Request')->getPost();
 				if (!$addressPost) {
 					throw new Exception("Data not found.", 1);
 				}
@@ -115,13 +115,34 @@ class Controller_Salesman extends Controller_Core_Action
 					$address->salesman_id = $salesman->salesman_id;
 				}
 
-				$address->setData($addressPost);
+				$address->setData($addressPost['address']);
 				if (!$address->save()) {
 					throw new Exception("salesman data not saved.", 1);
+				}else{
+
+		$attributeData = $this->getRequest()->getPost('attribute');
+		// echo "<pre>";
+		// print_r($attributeData);
+		// die();
+
+		$queries = [];
+		foreach ($attributeData as $backendType => $value) {
+
+			foreach ($value as $attributeId => $v) {
+				if (is_array($v)) {
+					$v = implode(",", $v);
+				}
+
+				$model = Ccc::getModel('Core_Table');
+				$resource = $model->getResource()->setResourceName("salesman_{$backendType}")->setPrimaryKey('value_id');
+				$query = "INSERT INTO `salesman_{$backendType}` (`salesman_id`,`attribute_id`,`value`) VALUES ('{$salesman->getId()}','{$attributeId}','{$v}') ON DUPLICATE KEY UPDATE `value` = '{$v}'";
+
+				$id = $model->getResource()->getAdapter()->query($query);
 				}
 			}
-			$this->getMessage()->addMessage('salesman data saved Successfully.');
-		} catch (Exception $e) {
+		}
+	}
+} catch (Exception $e) {
 			$this->getMessage()->addMessage($e->getMessage(), Model_Core_Message::FAILURE);
 		}
 		

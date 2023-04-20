@@ -1,6 +1,11 @@
 <?php
-
+$rows = $this->getCollection();
+if (!$rows) {
+	echo "No data found";
+}
+else{
 $rows = $this->getCollection()->getData();
+}
 
 ?>
 	<?php require_once 'View/html/header.phtml';?>

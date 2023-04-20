@@ -7,12 +7,19 @@ class Block_Product_Edit extends Block_Core_Template
 		parent::__construct();
 		$this->setTemplate('product/edit.phtml');
 	}
-	
-	public function getCollection()
+
+	public function getRow()
 	{
-			$product = $this->getData('product');
-			return $product;
+		return  $this->product;
+		
 	}
+
+	public function getAttributes()
+	{
+		$attributes = Ccc::getModel('Product')->getAttributes();
+		return $attributes;
+	}
+
 }
 
 ?>

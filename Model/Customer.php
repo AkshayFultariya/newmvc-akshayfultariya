@@ -32,6 +32,25 @@ class Model_Customer extends Model_Core_Table{
       $this->setCollectionClass('Model_Customer_Collection');
    }
 
+   public function getAttributes()
+   {
+      $sql = "SELECT * FROM `eav_attribute` WHERE `entity_type_id` = 3 AND `status` = 1";
+      $attributes =Ccc::getModel('Eav_Attribute')->fetchAll($sql);
+      // print_r($attributes);
+      // die();
+      if ($attributes) {
+           return $attributes->getData();
+      }
+      return Ccc::getModel('Eav_Attribute');
+   }
+
+   public function getAttributeValue($attribute)
+   {
+      $sql = "SELECT `value` FROM `customer_{$attribute->backend_type}` WHERE `customer_id` = '{$this->getId()}' AND `attribute_id` = '{$attribute->getId()}'";
+
+      return $this->getResource()->getAdapter()->fetchOne($sql);
+   }
+
 // getaddresses getbillingaddress 
 //    public function getAddresses()
 //    {
