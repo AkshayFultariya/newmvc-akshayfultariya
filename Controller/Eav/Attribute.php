@@ -16,7 +16,7 @@ class Controller_Eav_Attribute extends Controller_Core_Action
 			$layout = $this->getLayout();
 			$grid = new Block_Eav_Attribute_Grid();
 			$layout->getChild('content')->addChild('grid',$grid);
-			$layout->render();
+			echo $layout->toHtml();
 	}
 
 	public function addAction()
@@ -26,14 +26,14 @@ class Controller_Eav_Attribute extends Controller_Core_Action
         	// $add = new Block_Eav_Attribute_Edit();
         	// $layout = $this->getLayout();
 			// $layout->getChild('content')->addChild('content',$add);
-			// $layout->render();
+			// echo $layout->toHtml();
 			$this->getMessage()->getSession()->start();
 
 			$layout = $this->getLayout();
 			$attribute = Ccc::getModel('Eav_Attribute');
         	$edit = $layout->createBlock('Eav_Attribute_Edit')->setData(['attribute'=>$attribute]);
 			$layout->getChild('content')->addChild('edit',$edit);
-			$layout->render();
+			echo $layout->toHtml();
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Eav_Attribute not showed.',Model_Core_Message :: FAILURE);
 		}
@@ -52,7 +52,7 @@ class Controller_Eav_Attribute extends Controller_Core_Action
         	// die();
         	$edit = $layout->createBlock('Eav_Attribute_Edit')->setData(['attribute'=>$attribute]);
         	$layout->getChild('content')->addChild('edit',$edit);
-        	$layout->render();
+        	echo $layout->toHtml();
 			
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Eav_Attribute not showed.',Model_Core_Message :: FAILURE);

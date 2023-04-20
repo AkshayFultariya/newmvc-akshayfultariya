@@ -10,7 +10,7 @@ class Controller_Product extends Controller_Core_Action
 			$layout = $this->getLayout();
 			$grid = $layout->createBlock('Product_Grid');
 			$layout->getChild('content')->addChild('grid',$grid);
-			$layout->render();
+			echo $layout->toHtml();
 		} catch (Exception $e) {
 	    	$this->getMessage()->addMessage('Currently Products not avilable',Model_Core_Message :: FAILURE);
 			
@@ -27,7 +27,7 @@ class Controller_Product extends Controller_Core_Action
 			$product = Ccc::getModel('Product');
         	$edit = $layout->createBlock('Product_Edit')->setData(['product'=>$product]);
 			$layout->getChild('content')->addChild('edit',$edit);
-			$layout->render();
+			echo $layout->toHtml();
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Product not showed.',Model_Core_Message :: FAILURE);
 		}
@@ -52,7 +52,7 @@ class Controller_Product extends Controller_Core_Action
 			$edit = $layout->createBlock('Product_Edit')->setData(['product'=>$product]);
 
 			$layout->getChild('content')->addChild('edit',$edit);
-			$layout->render();
+			echo $layout->toHtml();
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Product not showed.',Model_Core_Message :: FAILURE);
 		}

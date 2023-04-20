@@ -10,7 +10,7 @@ class Controller_Payment extends Controller_Core_Action
 			$layout = $this->getLayout();
 			$grid = $layout->createBlock('Payment_Grid');
 			$layout->getChild('content')->addChild('grid',$grid);
-			$layout->render();
+			echo $layout->toHtml();
 
 		} catch (Exception $e) {
 		    $this->getMessage()->addMessage('Payments not avilable',Model_Core_Message :: FAILURE);
@@ -28,7 +28,7 @@ class Controller_Payment extends Controller_Core_Action
 			$payment = Ccc::getModel('payment');
         	$edit = $layout->createBlock('Payment_Edit')->setData(['payment'=>$payment]);
 			$layout->getChild('content')->addChild('edit',$edit);
-			$layout->render();
+			echo $layout->toHtml();
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Payment not showed.',Model_Core_Message :: FAILURE);
 		}
@@ -53,7 +53,7 @@ class Controller_Payment extends Controller_Core_Action
 			$edit = $layout->createBlock('Payment_Edit')->setData(['payment'=>$payment]);
 
 			$layout->getChild('content')->addChild('edit',$edit);
-			$layout->render();
+			echo $layout->toHtml();
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Payment not showed.',Model_Core_Message :: FAILURE);
 		}

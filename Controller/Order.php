@@ -8,7 +8,7 @@ class Controller_Order extends Controller_Core_Action
 			$layout = $this->getLayout();
 			$grid = $layout->createBlock('Order_Grid');
 			$layout->getChild('content')->addChild('grid',$grid);
-			$layout->render();
+			echo $layout->toHtml();
 			
 		} catch (Exception $e) {
 			

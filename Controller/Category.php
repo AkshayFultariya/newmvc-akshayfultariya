@@ -10,7 +10,7 @@ class Controller_Category extends Controller_Core_Action
 			$layout = $this->getLayout();
 			$grid = $layout->createBlock('Category_Grid');
 			$layout->getChild('content')->addChild('grid',$grid);
-			$layout->render();
+			echo $layout->toHtml();
 			
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Currently category not avilable',Model_Core_Message :: FAILURE);
@@ -26,7 +26,7 @@ class Controller_Category extends Controller_Core_Action
 			$category = Ccc::getModel('Category');
         	$edit = $layout->createBlock('Category_Edit')->setData(['category'=>$category]);
 			$layout->getChild('content')->addChild('edit',$edit);
-			$layout->render();
+			echo $layout->toHtml();
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('data not showed',Model_Core_Message :: FAILURE);
 		}
@@ -50,7 +50,7 @@ class Controller_Category extends Controller_Core_Action
 			$edit = $layout->createBlock('Category_Edit')->setData(['category'=>$category]);
 
 			$layout->getChild('content')->addChild('edit',$edit);
-			$layout->render();
+			echo $layout->toHtml();
 
 		} catch (Exception $e) {
 			 $this->getMessage()->addMessage('data not showed',Model_Core_Message :: FAILURE);

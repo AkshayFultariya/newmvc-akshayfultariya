@@ -8,7 +8,7 @@ class Controller_Item extends Controller_Core_Action
 			$layout = $this->getLayout();
 			$grid = $layout->createBlock('Item_Grid');
 			$layout->getChild('content')->addChild('grid',$grid);
-			$layout->render();
+			echo $layout->toHtml();
 			
 		} catch (Exception $e) {
 			
@@ -22,7 +22,7 @@ class Controller_Item extends Controller_Core_Action
 			$item = Ccc::getModel('Item');
 			$edit = $layout->createBlock('Item_Edit')->setData(['item'=>$item]);
 			$layout->getChild('content')->addChild('edit',$edit);
-			$layout->render();
+			echo $layout->toHtml();
 		} catch (Exception $e) {
 			
 		}
@@ -46,7 +46,7 @@ class Controller_Item extends Controller_Core_Action
 			$edit = $layout->createBlock('Item_Edit')->setData(['item'=>$item]);
 
 			$layout->getChild('content')->addChild('edit',$edit);
-			$layout->render();
+			echo $layout->toHtml();
 
 	}
 

@@ -11,7 +11,7 @@ class Controller_Salesman extends Controller_Core_Action
 			$layout = $this->getLayout();
 			$grid = $layout->createBlock('Salesman_Grid');
 			$layout->getChild('content')->addChild('grid',$grid);
-			$layout->render();
+			echo $layout->toHtml();
 
 			
 		} catch (Exception $e) {
@@ -30,8 +30,8 @@ class Controller_Salesman extends Controller_Core_Action
 				$address = Ccc::getModel('Salesman_Address');
 	        	$edit = $layout->createBlock('Salesman_Edit')->setData(['salesman'=>$salesman,'address'=>$address]);
 				$layout->getChild('content')->addChild('edit',$edit);
-				$layout->render();
-				// $layout->render();
+				echo $layout->toHtml();
+				// echo $layout->toHtml();
 			} catch (Exception $e) {
 				
 			}
@@ -59,7 +59,7 @@ class Controller_Salesman extends Controller_Core_Action
 			$edit = $layout->createBlock('Salesman_Edit')->setData(['salesman'=>$salesman,'address' => $address]);
 
 			$layout->getChild('content')->addChild('edit',$edit);
-			$layout->render();
+			echo $layout->toHtml();
 				
 			} catch (Exception $e) {
 				 $this->getMessage()->addMessage('data not showed',Model_Core_Message :: FAILURE);

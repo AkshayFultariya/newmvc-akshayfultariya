@@ -20,7 +20,7 @@ class Controller_Product_Media extends Controller_Core_Action
 			$medias = $grid->getMedias()->getData();
 			}
 			$layout->getChild('content')->addChild('grid',$grid);
-			$layout->render();
+			echo $layout->toHtml();
 
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage($e->getMessage(), Model_Core_Message::FAILURE);
@@ -38,7 +38,7 @@ class Controller_Product_Media extends Controller_Core_Action
 			$add = $layout->createBlock('Product_Media_Edit')->setData(['product_id'=>$productId,'media'=>$media]);
 			// $add = new Block_Product_Media_Edit();
 			$layout->getChild('content')->addChild('add',$add);
-			$layout->render();
+			echo $layout->toHtml();
 
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage($e->getMessage(), Model_Core_Message::FAILURE);
