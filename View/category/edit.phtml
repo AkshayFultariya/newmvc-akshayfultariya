@@ -1,6 +1,6 @@
 <?php
 
-$category = $this->getCollection();
+$category = $this->getRow();
 $pathCategories = $category->getParentCategories();
 
 ?>
@@ -48,8 +48,16 @@ $pathCategories = $category->getParentCategories();
 			<?php endforeach;?>
 		</select>
 	</td>
-		<!-- <td><input type="text" name="category[status]" value="<?php echo $category->status ?>"></td> -->
 	</tr>
+
+	<?php foreach ($category->getattributes() as $key => $attribute): ?>
+		<tr>
+			<td><?php echo $attribute->name;?></td>
+			<td>
+				<?php $this->getLayout()->createBlock('Eav_Attribute_Inputtype')->setAttributes($attribute)->setRow($category)->render(); ?>
+			</td>
+		</tr>
+	<?php endforeach;?>
 	
 		</table>
 	</form>

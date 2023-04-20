@@ -88,6 +88,26 @@ class Model_Category extends Model_Core_Table{
 
 		return $this;
 	}
+
+
+	public function getAttributes()
+   {
+      $sql = "SELECT * FROM `eav_attribute` WHERE `entity_type_id` = 2 AND `status` = 1";
+      $attributes =Ccc::getModel('Eav_Attribute')->fetchAll($sql);
+      // print_r($attributes);
+      // die();
+      if ($attributes) {
+           return $attributes->getData();
+      }
+      return Ccc::getModel('Eav_Attribute');
+   }
+
+   public function getAttributeValue($attribute)
+   {
+      $sql = "SELECT `value` FROM `category_{$attribute->backend_type}` WHERE `category_id` = '{$this->getId()}' AND `attribute_id` = '{$attribute->getId()}'";
+
+      return $this->getResource()->getAdapter()->fetchOne($sql);
+   }
 }
 //http refrer means je url mathi aapade aaviya hoy te
 

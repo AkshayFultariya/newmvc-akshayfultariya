@@ -64,42 +64,60 @@ class Controller_Shipping extends Controller_Core_Action
 	public function saveAction()
 	{
 		try {
-       		$this->getMessage()->getSession()->start();
+			
+		
+		if (!$this->getRequest()->isPost()) {
+			throw new Exception("Invalid Id", 1);
+		}
+		$shippingData = $this->getRequest()->getPost();
 
-			if (!$this->getRequest()->isPost()) {
-				// echo "111";
-				throw new Exception("Invalid request.", 1);
-			}
+		if (!$shippingData) {
+			throw new Exception("Invalid data posted", 1);
+		}
 
-			$postData = $this->getRequest()->getpost('shipping');
+		if ($id = $this->getRequest()->getParam('id')) {
+			$shipping = Ccc::getModel('Shipping');
+			$shipping->load($id);
+			$shipping->updated_at = date("Y-m-d H-i-s"); 
+		}
+		else{
+			$shipping = Ccc::getModel('Shipping');
+			// $shipping->entity_type_id = $shipping::ENTITY_TYPE_ID;
+			$shipping->created_at = date("Y-m-d H-i-s"); 
+		}
 
+		$shipping->setData($shippingData['shipping']);
+		
+		if (!$shipping->save()) {
+			throw new Exception("Unable to save", 1);
+		}
+		else{
 
+		$attributeData = $this->getRequest()->getPost('attribute');
+		// echo "<pre>";
+		// print_r($attributeData);
+		// die();
 
-			if (!$postData) {
+		$queries = [];
+		foreach ($attributeData as $backendType => $value) {
 
-				throw new Exception("Invalid data posted.", 1);
-			}
-			if ($id = (int)$this->getRequest()->getParam('id')) {
-				$shipping = Ccc::getModel('Shipping')->load($id);
-
-				if (!$shipping) {
-					throw new Exception("Invalid id.", 1);
+			foreach ($value as $attributeId => $v) {
+				if (is_array($v)) {
+					$v = implode(",", $v);
 				}
-			$shipping->updated_at = date("Y-m-d H:i:s");
-			}
-			else{
-				$shipping = Ccc::getModel('Shipping');
-				$shipping->created_at = date("Y-m-d H:i:s");
-			}
-			$shipping->setData($postData);
-			if (!$shipping->save()) {
-				throw new Exception("Unable to save shipping.", 1);
-			}
-			// die();
-		    $this->getMessage()->addMessage('Shipping updeted sucessfully.',Model_Core_Message :: SUCCESS);
+
+				$model = Ccc::getModel('Core_Table');
+				$resource = $model->getResource()->setResourceName("shipping_{$backendType}")->setPrimaryKey('value_id');
+				$query = "INSERT INTO `shipping_{$backendType}` (`shipping_id`,`attribute_id`,`value`) VALUES ('{$shipping->getId()}','{$attributeId}','{$v}') ON DUPLICATE KEY UPDATE `value` = '{$v}'";
+
+				$id = $model->getResource()->getAdapter()->query($query);
 
 
-		} catch (Exception $e) {
+		
+			}
+		}
+		} 
+	}catch (Exception $e) {
 		    $this->getMessage()->addMessage('Invalid.',Model_Core_Message :: FAILURE);
 			
 		}

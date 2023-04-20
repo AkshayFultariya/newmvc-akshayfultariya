@@ -65,7 +65,7 @@ class Controller_Category extends Controller_Core_Action
 				throw new Exception("Invalid request.", 1);
 			}
 
-			$categoryPost = Ccc::getModel('Core_Request')->getPost('category');
+			$categoryPost = Ccc::getModel('Core_Request')->getPost();
 			if (!$categoryPost) {
 				throw new Exception("Data not found.", 1);
 			}
@@ -81,7 +81,7 @@ class Controller_Category extends Controller_Core_Action
 				$category->created_at = date('Y-m-d h-i-sA');
 			}
 
-			$category->setData($categoryPost);
+			$category->setData($categoryPost['category']);
 
 			if (!$category->save()) {
 				throw new Exception("Category data not saved.", 1);
@@ -90,7 +90,28 @@ class Controller_Category extends Controller_Core_Action
 				$this->getMessage()->addMessage('Category data saved Successfully.',Model_Core_Message :: SUCCESS);
 			}
 
-		} catch (Exception $e) {
+		$attributeData = $this->getRequest()->getPost('attribute');
+		// echo "<pre>";
+		// print_r($attributeData);
+		// die();
+
+		$queries = [];
+		foreach ($attributeData as $backendType => $value) {
+
+			foreach ($value as $attributeId => $v) {
+				if (is_array($v)) {
+					$v = implode(",", $v);
+				}
+
+				$model = Ccc::getModel('Core_Table');
+				$resource = $model->getResource()->setResourceName("category_{$backendType}")->setPrimaryKey('value_id');
+				$query = "INSERT INTO `payment_{$backendType}` (`category_id`,`attribute_id`,`value`) VALUES ('{$category->getId()}','{$attributeId}','{$v}') ON DUPLICATE KEY UPDATE `value` = '{$v}'";
+
+				$id = $model->getResource()->getAdapter()->query($query);
+				}
+			}
+		}
+		 catch (Exception $e) {
 			 $this->getMessage()->addMessage('Invalid.',Model_Core_Message :: FAILURE);
 		}
 

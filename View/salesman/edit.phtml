@@ -1,6 +1,6 @@
 <?php
 
-$s = $this->getCollection();
+$s = $this->getRow();
 $salesman = $s[0];
 $address = $s[1];
 
@@ -57,6 +57,15 @@ $address = $s[1];
    			<td>company</td>
    			<td><input type="text" name="salesman[company]" value="<?php echo $salesman->company?>" class="addi9"></td>
    		</tr>
+
+   		<?php foreach ($salesman->getattributes() as $key => $attribute): ?>
+		<tr>
+			<td><?php echo $attribute->name;?></td>
+			<td>
+				<?php $this->getLayout()->createBlock('Eav_Attribute_Inputtype')->setAttributes($attribute)->setRow($salesman)->render(); ?>
+			</td>
+		</tr>
+	<?php endforeach;?>
    	</table>
    	<div class="head9">
 		ADDRESS INFORMATION

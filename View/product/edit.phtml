@@ -1,5 +1,7 @@
 <?php
-$product = $this->getCollection();
+$product = $this->getRow();
+// print_r($product);
+// die();
 ?>
 
 	<form action="<?php echo $this->getUrl('product','save');?>" method="post">
@@ -56,7 +58,6 @@ $product = $this->getCollection();
 			<?php endforeach;?>
 		</select>
 	</td>
-		<!-- <td><input type="text" name="admin[status]" value="<?php echo $admin->status ?>"></td> -->
 		<tr>
 			<td>color</td>
 			<td><input type="text" name="product[color]" value=" <?php echo $product->color; ?>" class="addi9"></td>
@@ -77,7 +78,16 @@ $product = $this->getCollection();
 				</option>
 				</select>
 			</td>
-		</tr>			
+		</tr>
+
+		<?php foreach ($product->getattributes() as $key => $attribute): ?>
+		<tr>
+			<td><?php echo $attribute->name;?></td>
+			<td>
+				<?php $this->getLayout()->createBlock('Eav_Attribute_Inputtype')->setAttributes($attribute)->setRow($product)->render(); ?>
+			</td>
+		</tr>
+	<?php endforeach;?>			
 
 	</table>
 	</form>

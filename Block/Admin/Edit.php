@@ -8,10 +8,16 @@ class Block_admin_Edit extends Block_Core_Template
 		$this->setTemplate('admin/edit.phtml');
 	}
 
-	public function getCollection()
+	public function getRow()
 	{
-			$admin = $this->getData('admin');
-			return $admin;
+		return  $this->admin;
+		
+	}
+
+	public function getAttributes()
+	{
+		$attributes = Ccc::getModel('Admin')->getAttributes();
+		return $attributes;
 	}
 	
 }

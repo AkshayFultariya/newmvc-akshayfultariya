@@ -9,12 +9,18 @@ class Block_Salesman_Edit extends Block_Core_Template
 	}
 	
 
-	public function getCollection()
+	public function getRow()
 	{
 		$salesman = $this->getData('salesman');
 		$address = $this->getData('address');
 		$final = [$salesman,$address];
 		return $final;
+	}
+
+	public function getAttributes()
+	{
+		$attributes = Ccc::getModel('Salesman')->getAttributes();
+		return $attributes;
 	}
 	
 }

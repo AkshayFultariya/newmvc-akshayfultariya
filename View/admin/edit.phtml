@@ -1,6 +1,6 @@
 <?php
 
-$admin = $this->getCollection();
+$admin = $this->getRow();
 ?>
 <form method="post" action="<?php echo $this->getUrl('admin','save')?>">
 <table width="100%" border="1px">
@@ -22,8 +22,16 @@ $admin = $this->getCollection();
 			<?php endforeach;?>
 		</select>
 	</td>
-		<!-- <td><input type="text" name="admin[status]" value="<?php echo $admin->status ?>"></td> -->
 	</tr>
+
+	<?php foreach ($admin->getattributes() as $key => $attribute): ?>
+		<tr>
+			<td><?php echo $attribute->name;?></td>
+			<td>
+				<?php $this->getLayout()->createBlock('Eav_Attribute_Inputtype')->setAttributes($attribute)->setRow($admin)->render(); ?>
+			</td>
+		</tr>
+	<?php endforeach;?>	
 	<tr>
 		<td><input type="submit" name="submit" value="Save"></td>
 	</tr>

@@ -14,7 +14,7 @@ class Block_Shipping_Grid extends Block_Core_Grid
 	}
 	public function getCollection()
 	{
-		$query = "SELECT * FROM `shipping method` ORDER BY `shipping_id` DESC";
+		$query = "SELECT * FROM `shipping` ORDER BY `shipping_id` DESC";
 		$shippings = Ccc::getModel('Shipping')->fetchAll($query);
 		return $shippings;
 	}

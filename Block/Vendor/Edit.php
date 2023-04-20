@@ -11,7 +11,7 @@ class Block_Vendor_Edit extends Block_Core_Template
 	}
 	
 
-	public function getCollection()
+	public function getRow()
 	{
 		// 	if ($id = (int)Ccc::getModel('Core_Request')->getParam('vendor_id')) {
 		// 	$vendor = Ccc::getModel('Vendor')->load($id);
@@ -32,6 +32,12 @@ class Block_Vendor_Edit extends Block_Core_Template
 		$address = $this->getData('address');
 		$final = [$vendor,$address];
 		return $final;
+	}
+
+	public function getAttributes()
+	{
+		$attributes = Ccc::getModel('Vendor')->getAttributes();
+		return $attributes;
 	}
 	
 }

@@ -9,10 +9,16 @@ class Block_category_Edit extends Block_Core_Template
 		
 	}
 
-	public function getCollection()
+	public function getRow()
 	{
-			$category = $this->getData('category');
-			return $category;
+		return  $this->category;
+		
+	}
+
+	public function getAttributes()
+	{
+		$attributes = Ccc::getModel('Category')->getAttributes();
+		return $attributes;
 	}
 	
 }

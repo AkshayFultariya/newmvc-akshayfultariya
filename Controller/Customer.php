@@ -196,7 +196,29 @@ class Controller_Customer extends Controller_Core_Action
 				throw new Exception("customer data not saved.", 1);
 			}
 		
-			$this->getMessage()->addMessage('customer data saved Successfully.');
+			else{
+
+		$attributeData = $this->getRequest()->getPost('attribute');
+		// echo "<pre>";
+		// print_r($attributeData);
+		// die();
+
+		$queries = [];
+		foreach ($attributeData as $backendType => $value) {
+
+			foreach ($value as $attributeId => $v) {
+				if (is_array($v)) {
+					$v = implode(",", $v);
+				}
+
+				$model = Ccc::getModel('Core_Table');
+				$resource = $model->getResource()->setResourceName("customer_{$backendType}")->setPrimaryKey('value_id');
+				$query = "INSERT INTO `customer_{$backendType}` (`customer_id`,`attribute_id`,`value`) VALUES ('{$customer->getId()}','{$attributeId}','{$v}') ON DUPLICATE KEY UPDATE `value` = '{$v}'";
+
+				$id = $model->getResource()->getAdapter()->query($query);
+				}
+			}
+		}
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage($e->getMessage(), Model_Core_Message::FAILURE);
 		}

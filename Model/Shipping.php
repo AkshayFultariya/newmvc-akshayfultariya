@@ -4,6 +4,7 @@ class Model_Shipping extends Model_Core_Table{
 
    
    // const STATUS_DEFAULT= 1;
+   const ENTITY_TYPE_ID = 8;
 
 
    public function getStatus()
@@ -29,6 +30,25 @@ class Model_Shipping extends Model_Core_Table{
 
       $this->setResourceClass('Model_Shipping_Resource');
       $this->setCollectionClass('Model_Shipping_Collection');
+   }
+
+   public function getAttributes()
+   {
+      $sql = "SELECT * FROM `eav_attribute` WHERE `entity_type_id` = 8 AND `status` = 1";
+      $attributes =Ccc::getModel('Eav_Attribute')->fetchAll($sql);
+      // print_r($attributes);
+      // die();
+      if ($attributes) {
+           return $attributes->getData();
+      }
+      return Ccc::getModel('Eav_Attribute');
+   }
+
+   public function getAttributeValue($attribute)
+   {
+      $sql = "SELECT `value` FROM `shipping_{$attribute->backend_type}` WHERE `shipping_id` = '{$this->getId()}' AND `attribute_id` = '{$attribute->getId()}'";
+
+      return $this->getResource()->getAdapter()->fetchOne($sql);
    }
 }
 //http refrer means je url mathi aapade aaviya hoy te
