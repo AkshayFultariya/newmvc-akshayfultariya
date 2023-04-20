@@ -10,7 +10,7 @@ class Controller_Shipping extends Controller_Core_Action
 			$layout = $this->getLayout();
 			$grid = $layout->createBlock('Shipping_Grid');
 			$layout->getChild('content')->addChild('grid',$grid);
-			$layout->render();
+			echo $layout->toHtml();
 		} catch (Exception $e) {
 	    	$this->getMessage()->addMessage('Currently Shippings not avilable',Model_Core_Message :: FAILURE);
 			
@@ -28,7 +28,7 @@ class Controller_Shipping extends Controller_Core_Action
 			$shipping = Ccc::getModel('Shipping');
         	$edit = $layout->createBlock('Shipping_Edit')->setData(['shipping'=>$shipping]);
 			$layout->getChild('content')->addChild('edit',$edit);
-			$layout->render();
+			echo $layout->toHtml();
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Shipping not showed.',Model_Core_Message :: FAILURE);
 		}
@@ -53,7 +53,7 @@ class Controller_Shipping extends Controller_Core_Action
 			$edit = $layout->createBlock('shipping_Edit')->setData(['shipping'=>$shipping]);
 
 			$layout->getChild('content')->addChild('edit',$edit);
-			$layout->render();
+			echo $layout->toHtml();
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Shipping not showed.',Model_Core_Message :: FAILURE);
 		}

@@ -10,7 +10,7 @@ class Controller_Vendor extends Controller_Core_Action
 			$layout = $this->getLayout();
 			$grid = $layout->createBlock('Vendor_Grid');
 			$layout->getChild('content')->addChild('grid',$grid);
-			$layout->render();
+			echo $layout->toHtml();
 			
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Currently vendors not avilable',Model_Core_Message :: FAILURE);
@@ -28,7 +28,7 @@ class Controller_Vendor extends Controller_Core_Action
 			$address = Ccc::getModel('Vendor_Address');
         	$edit = $layout->createBlock('Vendor_Edit')->setData(['vendor'=>$vendor,'address'=>$address]);
 			$layout->getChild('content')->addChild('edit',$edit);
-			$layout->render();
+			echo $layout->toHtml();
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Currently vendors not avilable',Model_Core_Message :: FAILURE);
 		}
@@ -55,7 +55,7 @@ class Controller_Vendor extends Controller_Core_Action
 			$edit = $layout->createBlock('Vendor_Edit')->setData(['vendor'=>$vendor,'address' => $address]);
 
 			$layout->getChild('content')->addChild('edit',$edit);
-			$layout->render();
+			echo $layout->toHtml();
 		} catch (Exception $e) {
 			 $this->getMessage()->addMessage('data not showed',Model_Core_Message :: FAILURE);
 		}

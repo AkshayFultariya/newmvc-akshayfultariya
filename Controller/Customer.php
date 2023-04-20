@@ -20,7 +20,7 @@ class Controller_Customer extends Controller_Core_Action
 			$layout = $this->getLayout();
 			$grid = $layout->createBlock('Customer_Grid');
 			$layout->getChild('content')->addChild('grid',$grid);
-			$layout->render();
+			echo $layout->toHtml();
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Currently customers not avilable',Model_Core_Message :: FAILURE);
 			
@@ -39,7 +39,7 @@ class Controller_Customer extends Controller_Core_Action
 			$shippingAddress = Ccc::getModel('Customer_Address');
         	$edit = $layout->createBlock('Customer_Edit')->setData(['customer'=>$customer,'billingAddress'=>$billingAddress,'shippingAddress' =>$shippingAddress]);
 			$layout->getChild('content')->addChild('edit',$edit);
-			$layout->render();
+			echo $layout->toHtml();
 			
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('data not showed',Model_Core_Message :: FAILURE);
@@ -72,7 +72,7 @@ class Controller_Customer extends Controller_Core_Action
 			$edit = $layout->createBlock('Customer_Edit')->setData(['customer'=>$customer,'billingAddress' => $billingAddress,'shippingAddress' => $shippingAddress]);
 
 			$layout->getChild('content')->addChild('edit',$edit);
-			$layout->render();
+			echo $layout->toHtml();
 
 
 			

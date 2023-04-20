@@ -10,7 +10,7 @@ class Controller_Admin extends Controller_Core_Action
 			$layout = $this->getLayout();
 			$grid = $layout->createBlock('Admin_Grid');
 			$layout->getChild('content')->addChild('content',$grid);
-			$layout->render();
+			echo $layout->toHtml();
 			
 		} catch (Exception $e) {
 			
@@ -28,7 +28,7 @@ class Controller_Admin extends Controller_Core_Action
 			$admin = Ccc::getModel('admin');
         	$edit = $layout->createBlock('Admin_Edit')->setData(['admin'=>$admin]);
 			$layout->getChild('content')->addChild('edit',$edit);
-			$layout->render();
+			echo $layout->toHtml();
 		
 	}
 		catch (Exception $e) {
@@ -54,7 +54,7 @@ class Controller_Admin extends Controller_Core_Action
 			$edit = $layout->createBlock('Admin_Edit')->setData(['admin'=>$admin]);
 
 			$layout->getChild('content')->addChild('edit',$edit);
-			$layout->render();
+			echo $layout->toHtml();
 		
 	}
 		catch (Exception $e) {

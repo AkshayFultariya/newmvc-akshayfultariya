@@ -10,14 +10,14 @@
 <body>
 	<table class="table table-striped">
 		<tr>
-			<td colspan="3"><?php $this->getChild('header')->render()?></td>
+			<td colspan="3"><?php echo $this->getChildHtml('header')?></td>
 		</tr>
 		<tr>
-			<td colspan="3"><?php $this->getChild('message')->render()?></td>
+			<td colspan="3"><?php echo $this->getChildHtml('message')?></td>
 		</tr>
 		<tr>
 			<td>left</td>
-			<td><?php $this->getChild('content')->render()?></td>
+			<td><?php echo $this->getChildHtml('content')?></td>
 			<td>right</td>
 		</tr>
 		<tr >
