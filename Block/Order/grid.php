@@ -47,7 +47,7 @@ protected function _prepareColumns()
 
 	protected function _prepareButtons()
 	{
-		$this->addButton('order_id',['title' => 'Add New','url' => $this->getUrl('quote','grid')]);
+		$this->addButton('order_id',['title' => 'Add New','url' => $this->getUrl('quote','new')]);
 		return parent::_prepareButtons();
 	}
 }
