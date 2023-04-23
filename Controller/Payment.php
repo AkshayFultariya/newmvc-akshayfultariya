@@ -2,15 +2,24 @@
 
 class Controller_Payment extends Controller_Core_Action
 {
+	public function indexAction()
+	{
+		$layout = $this->getLayout();
+		$index = $layout->createBlock('Core_Template')->setTemplate('payment_method/index.phtml');
+		$layout->getChild('content')->addChild('index',$index);
+		$layout->render();
+    }
+
 	public function gridAction()
 	{
 		try {
 
 			$this->getMessage()->getSession()->start();
 			$layout = $this->getLayout();
-			$grid = $layout->createBlock('Payment_Grid');
-			$layout->getChild('content')->addChild('grid',$grid);
-			echo $layout->toHtml();
+			$grid = $layout->createBlock('Payment_Grid')->toHtml();
+			echo json_encode(['html'=>$grid,'element'=>'content-html']);
+			@header("Content-type:application/json");
+			die();
 
 		} catch (Exception $e) {
 		    $this->getMessage()->addMessage('Payments not avilable',Model_Core_Message :: FAILURE);
@@ -26,9 +35,10 @@ class Controller_Payment extends Controller_Core_Action
 
 			$layout = $this->getLayout();
 			$payment = Ccc::getModel('payment');
-        	$edit = $layout->createBlock('Payment_Edit')->setData(['payment'=>$payment]);
-			$layout->getChild('content')->addChild('edit',$edit);
-			echo $layout->toHtml();
+        	$add = $layout->createBlock('Payment_Edit')->setData(['payment'=>$payment])->toHtml();
+			echo json_encode(['html'=>$add,'element'=>'content-html']);
+			@header("content-type:application/json");
+			die();
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Payment not showed.',Model_Core_Message :: FAILURE);
 		}
@@ -112,6 +122,10 @@ class Controller_Payment extends Controller_Core_Action
 				}
 			}
 		}
+		$layout = $this->getLayout();
+		$grid = $layout->createBlock('Payment_Grid')->toHtml();
+		@header("Content-type:application/json");
+		echo json_encode(['html'=>$grid,'element'=>'content-html']);
 		}  catch (Exception $e) {
 		    $this->getMessage()->addMessage('Invalid.',Model_Core_Message :: FAILURE);
 			

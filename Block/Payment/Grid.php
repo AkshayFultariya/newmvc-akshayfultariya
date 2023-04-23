@@ -6,11 +6,13 @@ class Block_Payment_Grid extends Block_Core_Grid
 	public function __construct()
 	{
 		parent::__construct();
-		$this->getCollection();
-		$this->_prepareColumns();
-		$this->_prepareActions();
-		$this->_prepareButtons();
+		// $this->getCollection();
+		// $this->_prepareColumns();
+		// $this->_prepareActions();
+		// $this->_prepareButtons();
 		$this->setTitle('Manage Payment Method');
+		$this->setTemplate('payment_method/grid.phtml');
+
 	}
 	public function getCollection()
 	{

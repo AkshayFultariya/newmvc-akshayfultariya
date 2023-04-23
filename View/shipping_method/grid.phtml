@@ -14,7 +14,7 @@ $rows = $this->getCollection()->getData();
 		</div>
 		<div class="main99">
 			<?php foreach ($this->getButtons() as $key => $button): ?>
-			<a type="button" class="btn btn-primary" href="<?php echo $button['url'];?>"><?php echo $button['title']?></a>
+			<a type="button" class="btn btn-primary" onclick="ajax.setUrl('<?php echo $button['url'];?>').call()"><?php echo $button['title']?></a>
 			<?php endforeach;?>
 		</div>
 	</div>

@@ -36,7 +36,7 @@ class Controller_Category extends Controller_Core_Action
 	{
 		try {
 			$this->getMessage()->getSession()->start();
-			$categoryId = (int) Ccc::getModel('Core_Request')->getParam('id');
+			$categoryId = (int) Ccc::getModel('Core_Request')->getParam('category_id');
 			if (!$categoryId) {
 				throw new Exception("Invalid Id", 1);
 				
@@ -70,7 +70,7 @@ class Controller_Category extends Controller_Core_Action
 				throw new Exception("Data not found.", 1);
 			}
 
-			if ($id = (int) Ccc::getModel('Core_Request')->getParam('id')) {
+			if ($id = (int) Ccc::getModel('Core_Request')->getParam('category_id')) {
 				$category = Ccc::getModel('Category')->load($id);
 				if (!$category) {
 					throw new Exception("Data not found.", 1);
@@ -123,7 +123,7 @@ class Controller_Category extends Controller_Core_Action
 	{
 		try {
 			Ccc::getModel('Core_Session')->start();
-			$categoryId = Ccc::getModel('Core_Request')->getParam('id');
+			$categoryId = Ccc::getModel('Core_Request')->getParam('category_id');
 			if (!$categoryId) {
 				throw new Exception("ID not found.", 1);
 			}

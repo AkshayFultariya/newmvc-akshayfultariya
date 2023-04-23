@@ -2,12 +2,19 @@
 
 class Controller_Core_Action{
 // existing-> delete-> update-> add
-	public $request = null;
-	public $adapter = null;
-	public $message = null;
-	public $urlObj = null;
-	public $view = null;
-	public $layout = null;
+	protected $request = null;
+	protected $adapter = null;
+	protected $message = null;
+	protected $urlObj = null;
+	protected $view = null;
+	protected $layout = null;
+	// session+
+
+	protected function setTitle($title)
+	{
+		$this->getLayout()->getChild('head')->setTitle($title);
+		return $this;
+	}
 
 	protected function setLayout(Block_Core_Layout $layout){
 		$this->layout = $layout;

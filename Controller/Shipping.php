@@ -3,14 +3,24 @@
 class Controller_Shipping extends Controller_Core_Action
 {
 
+	public function indexAction()
+	{
+		$layout = $this->getLayout();
+		$index = $layout->createBlock('Core_Template')->setTemplate('shipping_method/index.phtml');
+		$layout->getChild('content')->addChild('index',$index);
+		$layout->render();
+}
+
 	public function gridAction()
 	{
 		try {
-			$this->getMessage()->getSession()->start();
+		
 			$layout = $this->getLayout();
-			$grid = $layout->createBlock('Shipping_Grid');
-			$layout->getChild('content')->addChild('grid',$grid);
-			echo $layout->toHtml();
+			$grid = $layout->createBlock('Shipping_Grid')->toHtml();
+
+			echo json_encode(['html'=>$grid,'element'=>'content-html']);
+			@header("Content-type:application/json");
+			die();
 		} catch (Exception $e) {
 	    	$this->getMessage()->addMessage('Currently Shippings not avilable',Model_Core_Message :: FAILURE);
 			
@@ -23,12 +33,12 @@ class Controller_Shipping extends Controller_Core_Action
 	{
 		try {
         	$this->getMessage()->getSession()->start();
-
 			$layout = $this->getLayout();
 			$shipping = Ccc::getModel('Shipping');
-        	$edit = $layout->createBlock('Shipping_Edit')->setData(['shipping'=>$shipping]);
-			$layout->getChild('content')->addChild('edit',$edit);
-			echo $layout->toHtml();
+        	$add = $layout->createBlock('Shipping_Edit')->setData(['shipping'=>$shipping])->toHtml();
+        	echo json_encode(['html'=>$add,'element'=>'content-html']);
+			@header("content-type:application/json");
+			die();
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Shipping not showed.',Model_Core_Message :: FAILURE);
 		}
@@ -64,8 +74,7 @@ class Controller_Shipping extends Controller_Core_Action
 	public function saveAction()
 	{
 		try {
-			
-		
+
 		if (!$this->getRequest()->isPost()) {
 			throw new Exception("Invalid Id", 1);
 		}
@@ -74,6 +83,9 @@ class Controller_Shipping extends Controller_Core_Action
 		if (!$shippingData) {
 			throw new Exception("Invalid data posted", 1);
 		}
+		// echo json_encode(['html'=>$shippingData,'element'=>'content-html']);
+		// @header("content-type:application/json");
+		// die();
 
 		if ($id = $this->getRequest()->getParam('id')) {
 			$shipping = Ccc::getModel('Shipping');
@@ -112,16 +124,31 @@ class Controller_Shipping extends Controller_Core_Action
 
 				$id = $model->getResource()->getAdapter()->query($query);
 
+			// $layout = $this->getLayout();
+			// $grid = $layout->createBlock('Shipping_Grid')->toHtml();
+			// echo json_encode(['html'=>$grid,'element'=>'content-html']);
+			// @header("Content-type:application/json");
+			// 	die();
 
 		
 			}
 		}
+
 		} 
+
+		$layout = $this->getLayout();
+		$grid = $layout->createBlock('Shipping_Grid')->toHtml();
+		@header("Content-type:application/json");
+		echo json_encode(['html'=>$grid,'element'=>'content-html']);
+		// die();
+			// die();
+		// die();
+
 	}catch (Exception $e) {
 		    $this->getMessage()->addMessage('Invalid.',Model_Core_Message :: FAILURE);
 			
 		}
-		$this->redirect('shipping','grid',null,true);
+		$this->redirect(null,'grid',null,true);
 	}
 
 	
