@@ -6,11 +6,12 @@ class Block_Shipping_Grid extends Block_Core_Grid
 	{
 		parent::__construct();
 		
-		$this->getCollection();
-		$this->_prepareColumns();
-		$this->_prepareActions();
-		$this->_prepareButtons();
+		// $this->getCollection();
+		// $this->_prepareColumns();
+		// $this->_prepareActions();
+		// $this->_prepareButtons();
 		$this->setTitle('Manage Shipping Method');
+		$this->setTemplate('shipping_method/grid.phtml');
 	}
 	public function getCollection()
 	{

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	<script type="text/javascript" src="jquery-3.6.4.min.js"></script>
+	<script type="text/javascript">
+		var ajax = {
+			method : 'post',
+			url : 'google.com',
+			params : [],
+
+			setMethod:function(method){
+				this.method = method;
+				return this;
+			},
+
+			getMethod:function(){
+				return this.method;
+			},
+
+			setUrl:function(url){
+				this.url = url;
+				return this;
+			},
+
+			getUrl:function(){
+				return this.url;
+			},
+
+			setParams:function(params){
+				this.params = params;
+				return this;
+			},
+
+			getParams:function(key=null){
+				if (key === null) {
+					return this.params;
+				}
+
+				if (this.params[key] === undefined) {
+					return null;
+				}
+				return this.params[key];
+			},
+
+			call:function(){
+				$.ajax({url:"http://localhost/newmvc-akshayfultariya/index.php?c=product&a=grid"}).done(function(aaa){
+					$('#ajax').html(aaa);
+				});
+			}
+		};
+
+		
+		// var ajax = {
+		// 	name : "hello"
+		// };
+		// console.log(ajax);
+	</script>
+</head>
+<body>
+	<button type="button" onclick="ajax.call()">Product Grid</button>
+	<div id="ajax"></div>
+</body>
+</html>

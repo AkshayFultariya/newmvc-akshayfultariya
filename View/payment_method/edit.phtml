@@ -5,14 +5,14 @@ $payment = $this->getRow();
 // die();
 
 ?>
-	<form action="<?php echo $this->getUrl('payment','save');?>" method = "post">
+	<form action="<?php echo $this->getUrl('payment','save');?>" method = "post" id="payment-form">
 		<div class="content9">
 			<div class="add19">
 				EDIT PAYMENT
 			</div>	
 			<div class="add29">
-				<a type="button" class="btn btn-primary" href="<?php echo $this->getUrl('payment','grid',[],true);?>" class="add39">Cancel</a>
-				<button type="submit" class="add39">Save</button>
+				<a type="button" class="btn btn-primary" onclick="ajax.setUrl('<?php echo $this->getUrl('payment','grid',[],true);?>').call();" class="add39">Cancel</a>
+				<button type="submit" onclick="ajax.setForm('payment-form').call();" class="add39">Save</button>
 			</div>
 		</div>
 		<div class="head9">
