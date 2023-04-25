@@ -3,24 +3,22 @@
 class Controller_Customer extends Controller_Core_Action
 {
 
-	public function testAction()
+	public function indexAction()
 	{
-		$data = Ccc::getModel('Customer')->getBillingId();
-		print_r($data);
+		$layout = $this->getLayout();
+		$index = $layout->createBlock('Core_Template')->setTemplate('customer/index.phtml');
+		$layout->getChild('content')->addChild('index',$index);
+		$layout->render();
+    }
 
-
-
-		die();
-
-	}
 	public function gridAction()
 	{
 		try {
-			$this->getMessage()->getSession()->start();
 			$layout = $this->getLayout();
-			$grid = $layout->createBlock('Customer_Grid');
-			$layout->getChild('content')->addChild('grid',$grid);
-			echo $layout->toHtml();
+			$grid = $layout->createBlock('Customer_Grid')->toHtml();
+			echo json_encode(['html'=>$grid,'element'=>'content-html']);
+			@header("Content-type:application/json");
+			die();
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Currently customers not avilable',Model_Core_Message :: FAILURE);
 			
@@ -31,15 +29,14 @@ class Controller_Customer extends Controller_Core_Action
 	public function addAction()
 	{
 		try {
-        	$this->getMessage()->getSession()->start();
-
         	$layout = $this->getLayout();
 			$customer = Ccc::getModel('Customer');
 			$billingAddress = Ccc::getModel('Customer_Address');
 			$shippingAddress = Ccc::getModel('Customer_Address');
-        	$edit = $layout->createBlock('Customer_Edit')->setData(['customer'=>$customer,'billingAddress'=>$billingAddress,'shippingAddress' =>$shippingAddress]);
-			$layout->getChild('content')->addChild('edit',$edit);
-			echo $layout->toHtml();
+        	$add = $layout->createBlock('Customer_Edit')->setData(['customer'=>$customer,'billingAddress'=>$billingAddress,'shippingAddress' =>$shippingAddress])->toHtml();
+			echo json_encode(['html'=>$add,'element'=>'content-html']);
+			@header("Content-type:application/json");
+			// die();
 			
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('data not showed',Model_Core_Message :: FAILURE);
@@ -49,7 +46,6 @@ class Controller_Customer extends Controller_Core_Action
 	public function editAction()
 	{
 		try {
-			$this->getMessage()->getSession()->start();
 			$customerId = (int) Ccc::getModel('Core_Request')->getParam('id');
 			// die();
 			if (!$customerId) {
@@ -69,10 +65,11 @@ class Controller_Customer extends Controller_Core_Action
 			if (!$billingAddress) {
 				throw new Exception("Invalid Id", 1);
 			}
-			$edit = $layout->createBlock('Customer_Edit')->setData(['customer'=>$customer,'billingAddress' => $billingAddress,'shippingAddress' => $shippingAddress]);
+			$edit = $layout->createBlock('Customer_Edit')->setData(['customer'=>$customer,'billingAddress' => $billingAddress,'shippingAddress' => $shippingAddress])->toHtml();
 
-			$layout->getChild('content')->addChild('edit',$edit);
-			echo $layout->toHtml();
+			echo json_encode(['html'=>$edit,'element'=>'content-html']);
+			@header("content-type:application/json");
+			die();
 
 
 			
@@ -86,14 +83,9 @@ class Controller_Customer extends Controller_Core_Action
 
 	public function saveShippingAddress($customer)
 	{
-		// if ($this->getRequest()->getPost()) {
-		// 	// code...
-		// }
 
 		$shippingPostData = $this->getRequest()->getPost('shippingAddress');
 
-		// print_r($shippingPostData);
-// die();
 		if (!$shippingPostData) {
 			throw new Exception("Error Processing Request", 1);
 		}
@@ -104,9 +96,6 @@ class Controller_Customer extends Controller_Core_Action
 		}
 
 		$shippingAddress->setData($shippingPostData);
-			// die();
-		// print_r($shippingAddress->save());
-		// die();
 		if (!$shippingAddress->save()) {
 			throw new Exception("Error Processing Request", 1);
 		}
@@ -115,9 +104,6 @@ class Controller_Customer extends Controller_Core_Action
 
 	public function saveBillingAddress($customer)
 	{
-		// if ($this->getRequest()->getPost()) {
-		// 	// code...
-		// }
 
 		$billingPostData = $this->getRequest()->getPost('billingAddress');
 
@@ -125,7 +111,6 @@ class Controller_Customer extends Controller_Core_Action
 			throw new Exception("Error Processing Request", 1);
 		}
 		$billingAddress = $customer->getBillingAddress();
-// die();
 		if (!$billingAddress) {
 			$billingAddress = Ccc::getModel('Customer_Address');
 			$billingAddress->customer_id = $customer->customer_id;
@@ -175,12 +160,8 @@ class Controller_Customer extends Controller_Core_Action
 			if (!Ccc::getModel('Core_Request')->isPost()) {
 				throw new Exception("Invalid request.", 1);
 			}
-
 			$customer = $this->saveCustomer();
 			$shippingAddress = $this->saveShippingAddress($customer);
-			// echo "<pre>";
-			// print_r($customer);
-			// die();
 			$billingAddress = $this->saveBillingAddress($customer);
 
 			$customer->billing_address_id = $billingAddress->address_id;
@@ -188,42 +169,41 @@ class Controller_Customer extends Controller_Core_Action
 
 			unset($customer->updated_at);
 			$customer = $customer->save();
-			// var_dump($customer);
-			// die();
-			
-			
 			if (!$customer) {
 				throw new Exception("customer data not saved.", 1);
 			}
 		
 			else{
+				$attributeData = $this->getRequest()->getPost('attribute');
+				if ($attributeData) {
+					$queries = [];
+					foreach ($attributeData as $backendType => $value) {
+						foreach ($value as $attributeId => $v) {
+							if (is_array($v)) {
+								$v = implode(",", $v);
+							}
 
-		$attributeData = $this->getRequest()->getPost('attribute');
-		// echo "<pre>";
-		// print_r($attributeData);
-		// die();
+							$model = Ccc::getModel('Core_Table');
+							$resource = $model->getResource()->setResourceName("customer_{$backendType}")->setPrimaryKey('value_id');
+							$query = "INSERT INTO `customer_{$backendType}` (`customer_id`,`attribute_id`,`value`) VALUES ('{$customer->getId()}','{$attributeId}','{$v}') ON DUPLICATE KEY UPDATE `value` = '{$v}'";
 
-		$queries = [];
-		foreach ($attributeData as $backendType => $value) {
-
-			foreach ($value as $attributeId => $v) {
-				if (is_array($v)) {
-					$v = implode(",", $v);
-				}
-
-				$model = Ccc::getModel('Core_Table');
-				$resource = $model->getResource()->setResourceName("customer_{$backendType}")->setPrimaryKey('value_id');
-				$query = "INSERT INTO `customer_{$backendType}` (`customer_id`,`attribute_id`,`value`) VALUES ('{$customer->getId()}','{$attributeId}','{$v}') ON DUPLICATE KEY UPDATE `value` = '{$v}'";
-
-				$id = $model->getResource()->getAdapter()->query($query);
+							print_r('sdsd');
+							$id = $model->getResource()->getAdapter()->query($query);
+						}
+					}
 				}
 			}
-		}
+		
+			$layout = $this->getLayout();
+			$grid = $layout->createBlock('Customer_Grid')->toHtml();
+			echo json_encode(['html'=>$grid,'element'=>'content-html']);
+			@header("Content-type:application/json");
+
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage($e->getMessage(), Model_Core_Message::FAILURE);
 		}
 		
-		$this->redirect('customer', 'grid', [], true);
+		// $this->redirect('customer', 'grid', [], true);
 	}
 
 	public function deleteAction()
@@ -244,11 +224,16 @@ class Controller_Customer extends Controller_Core_Action
 			}
 		$customer->delete();
 		$this->getMessage()->addMessage('Customer updeted sucessfully.',Model_Core_Message :: SUCCESS);
+		$layout = $this->getLayout();
+		$grid = $layout->createBlock('Customer_Grid')->toHtml();
+		@header("Content-type:application/json");
+		echo json_encode(['html'=>$grid,'element'=>'content-html']);
+		// die();
 
 		}catch(Exception $e){
 			$this->getMessage()->addMessage('data not deleted',Model_Core_Message :: FAILURE);
 		}
-		$this->redirect('customer','grid',null,true);
+		// $this->redirect('customer','grid',null,true);
 	}
 }
 

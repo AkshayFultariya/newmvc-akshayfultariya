@@ -2,15 +2,21 @@
 
 class Controller_Vendor extends Controller_Core_Action
 {
+	public function indexAction()
+	{
+		$layout = $this->getLayout();
+		$index = $layout->createBlock('Core_Template')->setTemplate('vendor/index.phtml');
+		$layout->getChild('content')->addChild('index',$index);
+		$layout->render();
+    }
+
 	public function gridAction()
 	{
 		try {
-			$this->getMessage()->getSession()->start();
-
 			$layout = $this->getLayout();
-			$grid = $layout->createBlock('Vendor_Grid');
-			$layout->getChild('content')->addChild('grid',$grid);
-			echo $layout->toHtml();
+			$grid = $layout->createBlock('Vendor_Grid')->toHtml();
+			echo json_encode(['html'=>$grid,'element'=>'content-html']);
+			@header("Content-type:application/json");
 			
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Currently vendors not avilable',Model_Core_Message :: FAILURE);
@@ -21,14 +27,12 @@ class Controller_Vendor extends Controller_Core_Action
 	public function addAction()
 	{
 		try {
-        	$this->getMessage()->getSession()->start();
-
         	$layout = $this->getLayout();
 			$vendor = Ccc::getModel('Vendor');
 			$address = Ccc::getModel('Vendor_Address');
-        	$edit = $layout->createBlock('Vendor_Edit')->setData(['vendor'=>$vendor,'address'=>$address]);
-			$layout->getChild('content')->addChild('edit',$edit);
-			echo $layout->toHtml();
+        	$add = $layout->createBlock('Vendor_Edit')->setData(['vendor'=>$vendor,'address'=>$address])->toHtml();
+			echo json_encode(['html'=>$add,'element'=>'content-html']);
+			@header("Content-type:application/json");
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Currently vendors not avilable',Model_Core_Message :: FAILURE);
 		}
@@ -37,7 +41,6 @@ class Controller_Vendor extends Controller_Core_Action
 	public function editAction()
 	{
 		try {
-			$this->getMessage()->getSession()->start();
 			$vendorId = (int) Ccc::getModel('Core_Request')->getParam('id');
 			if (!$vendorId) {
 				throw new Exception("Invalid Id", 1);
@@ -52,10 +55,10 @@ class Controller_Vendor extends Controller_Core_Action
 			if (!$address) {
 				throw new Exception("Invalid Id", 1);
 			}
-			$edit = $layout->createBlock('Vendor_Edit')->setData(['vendor'=>$vendor,'address' => $address]);
+			$edit = $layout->createBlock('Vendor_Edit')->setData(['vendor'=>$vendor,'address' => $address])->toHtml();
 
-			$layout->getChild('content')->addChild('edit',$edit);
-			echo $layout->toHtml();
+			echo json_encode(['html'=>$edit,'element'=>'content-html']);
+			@header("content-type:application/json");
 		} catch (Exception $e) {
 			 $this->getMessage()->addMessage('data not showed',Model_Core_Message :: FAILURE);
 		}
@@ -117,9 +120,6 @@ class Controller_Vendor extends Controller_Core_Action
 			else{
 
 		$attributeData = $this->getRequest()->getPost('attribute');
-		// echo "<pre>";
-		// print_r($attributeData);
-		// die();
 
 		$queries = [];
 		foreach ($attributeData as $backendType => $value) {
@@ -138,12 +138,16 @@ class Controller_Vendor extends Controller_Core_Action
 			}
 		}
 	}
-}
+			$layout = $this->getLayout();
+			$grid = $layout->createBlock('Vendor_Grid')->toHtml();
+			echo json_encode(['html'=>$grid,'element'=>'content-html']);
+			@header("Content-type:application/json");
+			die();
+			$this->getMessage()->addMessage('Vendor add/edit sucessfully',Model_Core_Message :: SUCCESS);
+		}
 		 catch (Exception $e) {
 			$this->getMessage()->addMessage($e->getMessage(), Model_Core_Message::FAILURE);
 		}
-		
-		$this->redirect('vendor', 'grid', [], true);
 	}
 
 	public function deleteAction()
@@ -163,10 +167,15 @@ class Controller_Vendor extends Controller_Core_Action
 
 			$this->getMessage()->addMessage('Vendor deleted sucessfully.',Model_Core_Message :: SUCCESS);
 
+			$layout = $this->getLayout();
+			$grid = $layout->createBlock('Vendor_Grid')->toHtml();
+			@header("Content-type:application/json");
+			echo json_encode(['html'=>$grid,'element'=>'content-html']);
+			die();
+
 		}catch(Exception $e){
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message :: FAILURE);
 		}
-		$this->redirect('vendor','grid',null,true);
 	}
 
 }

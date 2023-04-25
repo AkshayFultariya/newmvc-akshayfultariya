@@ -1,11 +1,6 @@
 <?php
 
 $item = $this->getRow();
-// $attributes = $this->getAttributes();
-// echo "<pre>";
-// print_r($attributes);
-// die();
-
 
 ?>
 
@@ -17,8 +12,8 @@ $item = $this->getRow();
 	<title></title>
 </head>
 <body>
-	<form action="<?php echo $this->getUrl('item','save');?>" method = "post">
-		<button type="submit" name="submit" value="save" class="add39">Save</button>			
+	<form action="<?php echo $this->getUrl('item','save');?>" method = "post" id = "item-form">
+		<button type="button" class="btn btn-primary"  onclick="ajax.setUrl('<?php echo $this->getUrl('item','save')?>').setForm('item-form').call();">Save</button>			
 
 
 		<tr>

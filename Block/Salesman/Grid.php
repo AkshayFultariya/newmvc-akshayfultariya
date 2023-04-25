@@ -5,11 +5,12 @@ class Block_Salesman_Grid extends Block_Core_Grid
 	public function __construct()
 	{
 		parent::__construct();
-		$this->getCollection();
-		$this->_prepareColumns();
-		$this->_prepareActions();
-		$this->_prepareButtons();
-		$this->setTitle('Manage Salesman Method');
+		// $this->getCollection();
+		// $this->_prepareColumns();
+		// $this->_prepareActions();
+		// $this->_prepareButtons();
+		// $this->setTitle('Manage Salesman Method');
+		$this->setTemplate('salesman/grid.phtml');
 	}
 	public function getCollection()
 	{

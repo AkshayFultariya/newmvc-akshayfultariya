@@ -1,18 +1,16 @@
 <?php
 
 $shippingMethod = $this->getRow();
-// print_r($shippingMethod);
-// die();
 
 ?>
-	<form action="<?php echo $this->getUrl(null,"save");?>" method = "post" id="shipping-form">
+	<form action="<?php echo $this->getUrl('shipping',"save");?>" method = "post" id="shipping-form">
 		<div class="content9">
 			<div class="add19">
 				EDIT SHIPPING
 			</div>
 			<div class="add29">
 				<a type="button" class="btn btn-primary" onclick="ajax.setUrl('<?php echo $this->getUrl('shipping','grid',[],true);?>').call();" class="add39">Cancel</a>
-				<button type="submit" onclick="ajax.setForm('shipping-form').call();" class="add39">Save</button>
+				<button type="button" class="btn btn-primary"  onclick="ajax.setUrl('<?php echo $this->getUrl('shipping','save')?>').setForm('shipping-form').call();">Save</button>
 			</div>
 		</div>
 		<div class="head9">
@@ -42,13 +40,6 @@ $shippingMethod = $this->getRow();
 
 	</td>
 	</tr>
-	<?php foreach ($shippingMethod->getattributes() as $key => $attribute): ?>
-		<tr>
-			<td><?php echo $attribute->name;?></td>
-			<td>
-				<?php $this->getLayout()->createBlock('Eav_Attribute_Inputtype')->setAttributes($attribute)->setRow($shippingMethod)->render(); ?>
-			</td>
-		</tr>
-	<?php endforeach;?>
+	
 		</table>
 	</form>

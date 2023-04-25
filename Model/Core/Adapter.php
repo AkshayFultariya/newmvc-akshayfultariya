@@ -50,10 +50,10 @@ class Model_Core_Adapter
 	public function fetchRow($query){
 		$connect = $this->connect();
 		$result = mysqli_query($connect,$query);
-		if ($result->num_rows == 0) {
-			return 	false;
-		}
+		if ($result->num_rows) {
 			return $result->fetch_assoc();
+		}
+			return null;
 	}
 
 	public function fetchPairs($query)

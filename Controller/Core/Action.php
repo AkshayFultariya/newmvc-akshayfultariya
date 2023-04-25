@@ -3,12 +3,27 @@
 class Controller_Core_Action{
 // existing-> delete-> update-> add
 	protected $request = null;
+	protected $response = null;
 	protected $adapter = null;
 	protected $message = null;
 	protected $urlObj = null;
 	protected $view = null;
 	protected $layout = null;
 	// session+
+
+	protected function setResponse(Model_Core_Response $response){
+		$this->response = $response;
+		return $this;
+	}
+
+	public function getResponse(){
+		if ($this->response) {
+			return $this->response;
+		}
+		$response = new Model_Core_Response();
+		$this->setResponse($response);
+		return $response;
+	}
 
 	protected function setTitle($title)
 	{

@@ -5,14 +5,14 @@ $salesman = $s[0];
 $address = $s[1];
 
 ?>
-   <form action="<?php echo $this->getUrl('salesman','save');?>" method= "post">
+   <form action="<?php echo $this->getUrl('salesman','save');?>" method= "post" id = "salesman-form">
    	<div class="content9">
    		<div class="add19">
    			EDIT SALESMAN
    		</div>
    		<div class="add29">
-   			<a type="button" class="btn btn-primary" href="<?php echo $this->getUrl('salesman','grid',[],true);?>" class="add39">Cancel</a>
-   			<button type="submit" class="add39">Save</button>
+   			<a type="button" class="btn btn-primary" onclick="ajax.setUrl('<?php echo $this->getUrl('salesman','grid',[],true);?>').call();" class="add39">Cancel</a>
+				<button type="button" class="btn btn-primary"  onclick="ajax.setUrl('<?php echo $this->getUrl('salesman','save')?>').setForm('salesman-form').call();">Save</button>
    		</div>
    	</div>
    	<div class="head9">

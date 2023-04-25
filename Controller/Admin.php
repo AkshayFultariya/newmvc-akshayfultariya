@@ -2,15 +2,22 @@
 
 class Controller_Admin extends Controller_Core_Action
 {
+	public function indexAction()
+	{
+		$layout = $this->getLayout();
+		$index = $layout->createBlock('Core_Template')->setTemplate('admin/index.phtml');
+		$layout->getChild('content')->addChild('index',$index);
+		$layout->render();
+	}
+
 	public function gridAction()
 	{
-		// echo '<pre>';
-		try {
-			$this->getMessage()->getSession()->start();
+		try{
 			$layout = $this->getLayout();
-			$grid = $layout->createBlock('Admin_Grid');
-			$layout->getChild('content')->addChild('content',$grid);
-			echo $layout->toHtml();
+			$grid = $layout->createBlock('Admin_Grid')->toHtml();
+			echo json_encode(['html'=>$grid,'element'=>'content-html']);
+			@header("Content-type:application/json");
+			die();
 			
 		} catch (Exception $e) {
 			
@@ -22,13 +29,12 @@ class Controller_Admin extends Controller_Core_Action
 	public function addAction()
 	{
 		try{
-			$this->getMessage()->getSession()->start();
-
 			$layout = $this->getLayout();
 			$admin = Ccc::getModel('admin');
-        	$edit = $layout->createBlock('Admin_Edit')->setData(['admin'=>$admin]);
-			$layout->getChild('content')->addChild('edit',$edit);
-			echo $layout->toHtml();
+        	$add = $layout->createBlock('Admin_Edit')->setData(['admin'=>$admin])->toHtml();
+			echo json_encode(['html'=>$add,'element'=>'content-html']);
+			@header("Content-type:application/json");
+			die();
 		
 	}
 		catch (Exception $e) {
@@ -39,7 +45,6 @@ class Controller_Admin extends Controller_Core_Action
 	public function editAction()
 	{
 		try{
-			$this->getMessage()->getSession()->start();
 			$adminId = (int) Ccc::getModel('Core_Request')->getParam('id');
 			if (!$adminId) {
 				throw new Exception("Invalid Id", 1);
@@ -51,10 +56,11 @@ class Controller_Admin extends Controller_Core_Action
 				throw new Exception("Invalid Id", 1);
 				
 			}
-			$edit = $layout->createBlock('Admin_Edit')->setData(['admin'=>$admin]);
+			$edit = $layout->createBlock('Admin_Edit')->setData(['admin'=>$admin])->toHtml();
 
-			$layout->getChild('content')->addChild('edit',$edit);
-			echo $layout->toHtml();
+			echo json_encode(['html'=>$edit,'element'=>'content-html']);
+			@header("content-type:application/json");
+			die();
 		
 	}
 		catch (Exception $e) {
@@ -121,6 +127,11 @@ class Controller_Admin extends Controller_Core_Action
 				}
 			}
 		}
+		$layout = $this->getLayout();
+		$grid = $layout->createBlock('Admin_Grid')->toHtml();
+		@header("Content-type:application/json");
+		echo json_encode(['html'=>$grid,'element'=>'content-html']);
+		die();
 		} catch (Exception $e) {
 			
 		}
@@ -143,6 +154,12 @@ class Controller_Admin extends Controller_Core_Action
 		$admin->delete();
 
 		$this->redirect('admin','grid',null,true);
+
+		$layout = $this->getLayout();
+		$grid = $layout->createBlock('Admin_Grid')->toHtml();
+		@header("Content-type:application/json");
+		echo json_encode(['html'=>$grid,'element'=>'content-html']);
+		die();
 
 	}catch(Exception $e){
 

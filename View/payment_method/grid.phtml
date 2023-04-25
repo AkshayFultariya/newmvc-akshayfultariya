@@ -38,7 +38,10 @@ $rows = $this->getCollection()->getData();
 		 		<td> <?php echo $this->getColumnValue($row,$key); ?></td>
 			<?php endforeach;?>
 			<?php foreach ($this->getActions() as $key => $action): ?>
-		 		<td><a href="<?php $method = $action['method']; echo $this->$method($row,$key);?>"><?php echo $action['title']?></td>
+		 		
+		 		<td>
+		 			<input name="add" value="<?php echo $action['title'];?>" type="button" onclick="ajax.setUrl('<?php $method = $action['method']; echo $this->$method($row,$key);?>').call()">
+		 		</td>	
 			<?php endforeach;?>
 		 		</tr>
 			

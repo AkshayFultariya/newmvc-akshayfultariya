@@ -12,7 +12,7 @@ $payment = $this->getRow();
 			</div>	
 			<div class="add29">
 				<a type="button" class="btn btn-primary" onclick="ajax.setUrl('<?php echo $this->getUrl('payment','grid',[],true);?>').call();" class="add39">Cancel</a>
-				<button type="submit" onclick="ajax.setForm('payment-form').call();" class="add39">Save</button>
+				<button type="button" class="btn btn-primary"  onclick="ajax.setUrl('<?php echo $this->getUrl('payment','save')?>').setForm('payment-form').call();">Save</button>
 			</div>
 		</div>
 		<div class="head9">

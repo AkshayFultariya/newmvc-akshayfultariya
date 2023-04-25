@@ -79,26 +79,21 @@ class Model_Customer extends Model_Core_Table{
    public function getBillingAddress()
    {
       $customerAddress = Ccc::getModel('Customer_Address');
-      //  echo "<pre>";
-      // die();
-      // print_r($this);
-      // die();
-      $query = "SELECT * FROM `{$customerAddress->getResourceName()}` WHERE `{$customerAddress->getPrimaryKey()}` = {'$this->billing_address_id'}";
-     return $customerAddress->fetchRow($query);
-      // if ($a) {
-      //    $this->data = $a;
-      // }
-      // return $this;
+      if ($this->billing_address_id) {
+         $query = "SELECT * FROM `{$customerAddress->getResourceName()}` WHERE `{$customerAddress->getPrimaryKey()}` = {'$this->billing_address_id'}";
+         return $customerAddress->fetchRow($query);
+      }
+      return null;
    }
 
    public function getShippingAddress()
    {
       $customerAddress = Ccc::getModel('Customer_Address');
-      $query = "SELECT * FROM `{$customerAddress->getResourceName()}` WHERE `{$customerAddress->getPrimaryKey()}` = {'$this->shipping_address_id'}";
-      // echo "<pre>";
-      // print_r($customerAddress->fetchAll($query));
-      // die();
-      return $customerAddress->fetchRow($query);
+      if ($this->shipping_address_id) {
+         $query = "SELECT * FROM `{$customerAddress->getResourceName()}` WHERE `{$customerAddress->getPrimaryKey()}` = {'$this->shipping_address_id'}";
+         return $customerAddress->fetchRow($query);
+      }
+      return null;
    }
 
    public function getAddresses()

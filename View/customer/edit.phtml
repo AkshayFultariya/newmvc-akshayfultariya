@@ -11,14 +11,14 @@ $billingAddress = $this->getBillingAddress();
 $shippingAddress = $this->getShippingAddress();
 
 ?>
-	<form action="<?php echo $this->getUrl('customer','save');?>" method="post">
+	<form action="<?php echo $this->getUrl('customer','save');?>" method="post" id="customer-form">
 		<div class="content9">
 			<div class="add19">
 				EDIT CUSTOMER				
 			</div>
 			<div class="add29">
-				<a type="button" class="btn btn-primary" href="<?php echo $this->getUrl('customer','grid',[],true);?>" class="add39">Cancel</a>
-				<button type="submit" class="add39">Save</button>
+				<a type="button" class="btn btn-primary" onclick="ajax.setUrl('<?php echo $this->getUrl('customer','grid',[],true);?>').call();" class="add39">Cancel</a>
+				<button type="button" class="btn btn-primary"  onclick="ajax.setUrl('<?php echo $this->getUrl('customer','save')?>').setForm('customer-form').call();">Save</button>
 			</div>
 		</div>
 		<div class="head9">
