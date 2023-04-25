@@ -1,15 +1,7 @@
-// <!DOCTYPE html>
-// <html>
-// <head>
-// 	<meta charset="utf-8">
-// 	<meta name="viewport" content="width=device-width, initial-scale=1">
-// 	<title></title>
-// 	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-// 	<script type="text/javascript">
 		var ajax = {
 			form : null,
-			method : "get",
-			url : null,
+			method : "post",
+			url : '',
 			params : {},
 
 
@@ -20,7 +12,7 @@
 			},
 
 			setForm:function(formId){
-				this.form = ("#"+formId);
+				this.form = $("#"+formId);
 				this.prepareRequestParams();
 				return this;
 			},
@@ -86,7 +78,7 @@
 					dataType:"json",
 					data : this.getParams(),
 				}).done(function(responce){
-					$('#'+responce.element).html(responce.html);
+					$('#'+ responce.element).html(responce.html);
 				});
 			},
 

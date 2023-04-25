@@ -6,7 +6,7 @@ $vendor = $v[0];
 $address = $v[1];
 
 ?>
-	<form action="<?php echo $this->getUrl('vendor','save');?>" method="post">
+	<form action="<?php echo $this->getUrl('vendor','save');?>" method="post" id = "vendor-form">
 		<div class="content9">
 			<div>
 			EDIT VENDOR
@@ -15,7 +15,7 @@ $address = $v[1];
 			<a class="btn btn-primary" href="<?php echo $this->getUrl('vendor','grid',[],true);?>" class="add39">
 				Cancel
 			</a>
-			<button type="submit" class="add39">save</button>
+			<button type="button" class="btn btn-primary"  onclick="ajax.setUrl('<?php echo $this->getUrl('vendor','save')?>').setForm('vendor-form').call();">Save</button>
 		</div>
 	</div>
 	<div class="head9">

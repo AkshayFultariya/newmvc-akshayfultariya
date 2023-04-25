@@ -14,7 +14,6 @@ class Controller_Payment extends Controller_Core_Action
 	{
 		try {
 
-			$this->getMessage()->getSession()->start();
 			$layout = $this->getLayout();
 			$grid = $layout->createBlock('Payment_Grid')->toHtml();
 			echo json_encode(['html'=>$grid,'element'=>'content-html']);
@@ -31,7 +30,6 @@ class Controller_Payment extends Controller_Core_Action
 	public function addAction()
 	{
 		try {
-        	$this->getMessage()->getSession()->start();
 
 			$layout = $this->getLayout();
 			$payment = Ccc::getModel('payment');
@@ -48,7 +46,6 @@ class Controller_Payment extends Controller_Core_Action
 	public function editAction()
 	{
 		try {
-	        $this->getMessage()->getSession()->start();
 			$paymentId = (int) Ccc::getModel('Core_Request')->getParam('id');
 			if (!$paymentId) {
 				throw new Exception("Invalid Id", 1);
@@ -60,10 +57,11 @@ class Controller_Payment extends Controller_Core_Action
 				throw new Exception("Invalid Id", 1);
 				
 			}
-			$edit = $layout->createBlock('Payment_Edit')->setData(['payment'=>$payment]);
-
-			$layout->getChild('content')->addChild('edit',$edit);
-			echo $layout->toHtml();
+			$edit = $layout->createBlock('Payment_Edit')->setData(['payment'=>$payment])->toHtml();
+			echo json_encode(['html'=>$edit,'element'=>'content-html']);
+			@header("content-type:application/json");
+			die();
+			
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Payment not showed.',Model_Core_Message :: FAILURE);
 		}
@@ -74,58 +72,59 @@ class Controller_Payment extends Controller_Core_Action
 	{
 		try {
 			
-		
-		if (!$this->getRequest()->isPost()) {
-			throw new Exception("Invalid Id", 1);
-		}
-		$paymentData = $this->getRequest()->getPost();
+			
+			if (!$this->getRequest()->isPost()) {
+				throw new Exception("Invalid Id", 1);
+			}
+			$paymentData = $this->getRequest()->getPost();
 
-		if (!$paymentData) {
-			throw new Exception("Invalid data posted", 1);
-		}
+			if (!$paymentData) {
+				throw new Exception("Invalid data posted", 1);
+			}
 
-		if ($id = $this->getRequest()->getParam('id')) {
-			$payment = Ccc::getModel('payment');
-			$payment->load($id);
-			$payment->updated_at = date("Y-m-d H-i-s"); 
-		}
-		else{
-			$payment = Ccc::getModel('payment');
-			// $payment->entity_type_id = $payment::ENTITY_TYPE_ID;
-			$payment->created_at = date("Y-m-d H-i-s"); 
-		}
-		$payment->setData($paymentData['payment']);
-		
-		if (!$payment->save()) {
-			throw new Exception("Unable to save", 1);
-		}
-		else{
+			if ($id = $this->getRequest()->getParam('id')) {
+				$payment = Ccc::getModel('payment');
+				$payment->load($id);
+				$payment->updated_at = date("Y-m-d H-i-s"); 
+			}
+			else{
+				$payment = Ccc::getModel('payment');
+				// $payment->entity_type_id = $payment::ENTITY_TYPE_ID;
+				$payment->created_at = date("Y-m-d H-i-s"); 
+			}
+			$payment->setData($paymentData['payment']);
+			
+			if (!$payment->save()) {
+				throw new Exception("Unable to save", 1);
+			}
+			else{
 
-		$attributeData = $this->getRequest()->getPost('attribute');
-		// echo "<pre>";
-		// print_r($attributeData);
-		// die();
+			$attributeData = $this->getRequest()->getPost('attribute');
+			// echo "<pre>";
+			// print_r($attributeData);
+			// die();
 
-		$queries = [];
-		foreach ($attributeData as $backendType => $value) {
+			$queries = [];
+			foreach ($attributeData as $backendType => $value) {
 
-			foreach ($value as $attributeId => $v) {
-				if (is_array($v)) {
-					$v = implode(",", $v);
-				}
+				foreach ($value as $attributeId => $v) {
+					if (is_array($v)) {
+						$v = implode(",", $v);
+					}
 
-				$model = Ccc::getModel('Core_Table');
-				$resource = $model->getResource()->setResourceName("payment_{$backendType}")->setPrimaryKey('value_id');
-				$query = "INSERT INTO `payment_{$backendType}` (`payment_method_id`,`attribute_id`,`value`) VALUES ('{$payment->getId()}','{$attributeId}','{$v}') ON DUPLICATE KEY UPDATE `value` = '{$v}'";
+					$model = Ccc::getModel('Core_Table');
+					$resource = $model->getResource()->setResourceName("payment_{$backendType}")->setPrimaryKey('value_id');
+					$query = "INSERT INTO `payment_{$backendType}` (`payment_method_id`,`attribute_id`,`value`) VALUES ('{$payment->getId()}','{$attributeId}','{$v}') ON DUPLICATE KEY UPDATE `value` = '{$v}'";
 
-				$id = $model->getResource()->getAdapter()->query($query);
+					$id = $model->getResource()->getAdapter()->query($query);
+					}
 				}
 			}
-		}
-		$layout = $this->getLayout();
-		$grid = $layout->createBlock('Payment_Grid')->toHtml();
-		@header("Content-type:application/json");
-		echo json_encode(['html'=>$grid,'element'=>'content-html']);
+			$layout = $this->getLayout();
+			$grid = $layout->createBlock('Payment_Grid')->toHtml();
+			@header("Content-type:application/json");
+			echo json_encode(['html'=>$grid,'element'=>'content-html']);
+			die();
 		}  catch (Exception $e) {
 		    $this->getMessage()->addMessage('Invalid.',Model_Core_Message :: FAILURE);
 			
@@ -149,6 +148,12 @@ class Controller_Payment extends Controller_Core_Action
 
 			$payment->delete();
 			$this->getMessage()->addMessage('Payment deleted sucessfully.',Model_Core_Message :: SUCCESS);
+
+			$layout = $this->getLayout();
+			$grid = $layout->createBlock('Payment_Grid')->toHtml();
+			@header("Content-type:application/json");
+			echo json_encode(['html'=>$grid,'element'=>'content-html']);
+			die();
 
 		}catch(Exception $e){
 			$this->getMessage()->addMessage('Payment not deleted.',Model_Core_Message :: FAILURE);

@@ -4,15 +4,14 @@ $product = $this->getRow();
 // die();
 ?>
 
-	<form action="<?php echo $this->getUrl('product','save');?>" method="post">
+	<form action="<?php echo $this->getUrl('product','save');?>" method="post" id = "product-form">
 		<div class="content9">
 			<div class="add19">
 				EDIT PRODUCT
 			</div>
 			<div class="add29">
-				<a 
-			type="button" class="btn btn-primary"	href="<?php echo $this->getUrl('product','grid',[],true);?>" class="add39">Cancel</a>
-				<button type="submit" name="submit" value="save" class="add39">Save</button>			
+				<a type="button" class="btn btn-primary" onclick="ajax.setUrl('<?php echo $this->getUrl('product','grid',[],true);?>').call();" class="add39">Cancel</a>
+				<button type="button" class="btn btn-primary"  onclick="ajax.setUrl('<?php echo $this->getUrl('vendor','save')?>').setForm('product-form').call();">Save</button>			
 			</div>
 		</div>
 	<div class="head9">

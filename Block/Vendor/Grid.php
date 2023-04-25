@@ -5,10 +5,11 @@ class Block_Vendor_Grid extends Block_Core_Grid
 	public function __construct()
 	{
 		parent::__construct();
-		$this->getCollection();
-		$this->_prepareColumns();
-		$this->_prepareActions();
-		$this->_prepareButtons();
+		// $this->getCollection();
+		// $this->_prepareColumns();
+		// $this->_prepareActions();
+		// $this->_prepareButtons();
+		$this->setTemplate('vendor/grid.phtml');
 		$this->setTitle('Manage Vendor Method');
 	}
 	public function getCollection()

@@ -5,12 +5,12 @@ class Block_Category_Grid extends Block_Core_Grid
 	public function __construct()
 	{
 		parent::__construct();
-		$this->setTemplate('category/grid.phtml');
-		// $this->getCollection();
-		// $this->_prepareColumns();
-		// $this->_prepareActions();
-		// $this->_prepareButtons();
-		// $this->setTitle('Manage Customer Method');
+		// $this->setTemplate('category/grid.phtml');
+		$this->getCollection();
+		$this->_prepareColumns();
+		$this->_prepareActions();
+		$this->_prepareButtons();
+		$this->setTitle('Manage Customer Method');
 	}
 	public function getCollection()
 	{

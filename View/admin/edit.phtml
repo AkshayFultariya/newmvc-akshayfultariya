@@ -2,7 +2,7 @@
 
 $admin = $this->getRow();
 ?>
-<form method="post" action="<?php echo $this->getUrl('admin','save')?>">
+<form method="post" action="<?php echo $this->getUrl('admin','save')?>" id="admin-form">
 <table width="100%" border="1px">
 	<tr>
 		<td>Email</td>
@@ -32,8 +32,9 @@ $admin = $this->getRow();
 			</td>
 		</tr>
 	<?php endforeach;?>	
-	<tr>
-		<td><input type="submit" name="submit" value="Save"></td>
-	</tr>
+	<div class="add29">
+				<a type="button" class="btn btn-primary" onclick="ajax.setUrl('<?php echo $this->getUrl('admin','grid',[],true);?>').call();" class="add39">Cancel</a>
+				<button type="button" class="btn btn-primary"  onclick="ajax.setUrl('<?php echo $this->getUrl('admin','save')?>').setForm('admin-form').call();">Save</button>
+			</div>
 </table>
 </form>

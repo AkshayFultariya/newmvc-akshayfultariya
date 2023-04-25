@@ -2,13 +2,22 @@
 
 class Controller_Item extends Controller_Core_Action
 {
+	public function indexAction()
+	{
+		$layout = $this->getLayout();
+		$index = $layout->createBlock('Core_Template')->setTemplate('item/index.phtml');
+		$layout->getChild('content')->addChild('index',$index);
+		$layout->render();
+    }
+
 	public function gridAction()
 	{
 		try {
 			$layout = $this->getLayout();
-			$grid = $layout->createBlock('Item_Grid');
-			$layout->getChild('content')->addChild('grid',$grid);
-			echo $layout->toHtml();
+			$grid = $layout->createBlock('Item_Grid')->toHtml();
+			echo json_encode(['html'=>$grid,'element'=>'content-html']);
+			@header("Content-type:application/json");
+			die();
 			
 		} catch (Exception $e) {
 			
@@ -20,9 +29,10 @@ class Controller_Item extends Controller_Core_Action
 		try {
 			$layout = $this->getLayout();
 			$item = Ccc::getModel('Item');
-			$edit = $layout->createBlock('Item_Edit')->setData(['item'=>$item]);
-			$layout->getChild('content')->addChild('edit',$edit);
-			echo $layout->toHtml();
+			$add = $layout->createBlock('Item_Edit')->setData(['item'=>$item])->toHtml();
+			echo json_encode(['html'=>$add,'element'=>'content-html']);
+			@header("Content-type:application/json");
+			die();
 		} catch (Exception $e) {
 			
 		}
@@ -43,10 +53,11 @@ class Controller_Item extends Controller_Core_Action
 				throw new Exception("Invalid Id", 1);
 				
 			}
-			$edit = $layout->createBlock('Item_Edit')->setData(['item'=>$item]);
+			$edit = $layout->createBlock('Item_Edit')->setData(['item'=>$item])->toHtml();
 
-			$layout->getChild('content')->addChild('edit',$edit);
-			echo $layout->toHtml();
+			echo json_encode(['html'=>$edit,'element'=>'content-html']);
+			@header("content-type:application/json");
+			die();
 
 	}
 
@@ -115,6 +126,11 @@ class Controller_Item extends Controller_Core_Action
 				}
 			}
 		}
+			$layout = $this->getLayout();
+			$grid = $layout->createBlock('Item_Grid')->toHtml();
+			echo json_encode(['html'=>$grid,'element'=>'content-html']);
+			@header("Content-type:application/json");
+			die();
 		} catch (Exception $e) {
 			
 		}

@@ -3,14 +3,22 @@
 class Controller_Product extends Controller_Core_Action
 {
 
+	public function indexAction()
+	{
+		$layout = $this->getLayout();
+		$index = $layout->createBlock('Core_Template')->setTemplate('product/index.phtml');
+		$layout->getChild('content')->addChild('index',$index);
+		$layout->render();
+    }
 
 	public function gridAction()
 	{
 		try {
 			$layout = $this->getLayout();
-			$grid = $layout->createBlock('Product_Grid');
-			$layout->getChild('content')->addChild('grid',$grid);
-			echo $layout->toHtml();
+			$grid = $layout->createBlock('Product_Grid')->toHtml();
+			echo json_encode(['html'=>$grid,'element'=>'content-html']);
+			@header("Content-type:application/json");
+			// die();
 		} catch (Exception $e) {
 	    	$this->getMessage()->addMessage('Currently Products not avilable',Model_Core_Message :: FAILURE);
 			
@@ -25,9 +33,10 @@ class Controller_Product extends Controller_Core_Action
 
 			$layout = $this->getLayout();
 			$product = Ccc::getModel('Product');
-        	$edit = $layout->createBlock('Product_Edit')->setData(['product'=>$product]);
-			$layout->getChild('content')->addChild('edit',$edit);
-			echo $layout->toHtml();
+        	$add = $layout->createBlock('Product_Edit')->setData(['product'=>$product])->toHtml();
+			echo json_encode(['html'=>$add,'element'=>'content-html']);
+			@header("Content-type:application/json");
+			// die();
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Product not showed.',Model_Core_Message :: FAILURE);
 		}
@@ -49,10 +58,11 @@ class Controller_Product extends Controller_Core_Action
 				throw new Exception("Invalid Id", 1);
 				
 			}
-			$edit = $layout->createBlock('Product_Edit')->setData(['product'=>$product]);
+			$edit = $layout->createBlock('Product_Edit')->setData(['product'=>$product])->toHtml();
 
-			$layout->getChild('content')->addChild('edit',$edit);
-			echo $layout->toHtml();
+			echo json_encode(['html'=>$edit,'element'=>'content-html']);
+			@header("content-type:application/json");
+			die();
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Product not showed.',Model_Core_Message :: FAILURE);
 		}
@@ -92,9 +102,6 @@ class Controller_Product extends Controller_Core_Action
 		else{
 
 		$attributeData = $this->getRequest()->getPost('attribute');
-		// echo "<pre>";
-		// print_r($attributeData);
-		// die();
 
 		$queries = [];
 		foreach ($attributeData as $backendType => $value) {
@@ -111,12 +118,17 @@ class Controller_Product extends Controller_Core_Action
 				$id = $model->getResource()->getAdapter()->query($query);
 				}
 			}
-		}
+		}	$layout = $this->getLayout();
+			$grid = $layout->createBlock('Product_Grid')->toHtml();
+			echo json_encode(['html'=>$grid,'element'=>'content-html']);
+			@header("Content-type:application/json");
+			// die();
+			$this->getMessage()->addMessage('Vendor add/edit sucessfully',Model_Core_Message :: SUCCESS);
 		} catch (Exception $e) {
 		    $this->getMessage()->addMessage($e->getMessage(),Model_Core_Message :: FAILURE);
 			
 		}
-		$this->redirect('product','grid',null,true);
+		// $this->redirect('product','grid',null,true);
 	}
 
 	public function deleteAction()
@@ -136,12 +148,15 @@ class Controller_Product extends Controller_Core_Action
 		$product->delete();
 
 	    $this->getMessage()->addMessage('Product deleted sucessfully.',Model_Core_Message :: SUCCESS);
-
+	    $layout = $this->getLayout();
+		$grid = $layout->createBlock('Product_Grid')->toHtml();
+		echo json_encode(['html'=>$grid,'element'=>'content-html']);
+		@header("Content-type:application/json");
+		// die();
 
 	}catch(Exception $e){
 		$this->getMessage()->addMessage('Product not deleted.',Model_Core_Message :: FAILURE);
 	}
-		$this->redirect('product','grid',null,true);
 	}
 
 

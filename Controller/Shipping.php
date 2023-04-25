@@ -9,7 +9,7 @@ class Controller_Shipping extends Controller_Core_Action
 		$index = $layout->createBlock('Core_Template')->setTemplate('shipping_method/index.phtml');
 		$layout->getChild('content')->addChild('index',$index);
 		$layout->render();
-}
+	}
 
 	public function gridAction()
 	{
@@ -32,7 +32,6 @@ class Controller_Shipping extends Controller_Core_Action
 	public function addAction()
 	{
 		try {
-        	$this->getMessage()->getSession()->start();
 			$layout = $this->getLayout();
 			$shipping = Ccc::getModel('Shipping');
         	$add = $layout->createBlock('Shipping_Edit')->setData(['shipping'=>$shipping])->toHtml();
@@ -48,7 +47,6 @@ class Controller_Shipping extends Controller_Core_Action
 	public function editAction()
 	{
 		try {
-	        $this->getMessage()->getSession()->start();
 			$shippingId = (int) Ccc::getModel('Core_Request')->getParam('id');
 			if (!$shippingId) {
 				throw new Exception("Invalid Id", 1);
@@ -60,10 +58,10 @@ class Controller_Shipping extends Controller_Core_Action
 				throw new Exception("Invalid Id", 1);
 				
 			}
-			$edit = $layout->createBlock('shipping_Edit')->setData(['shipping'=>$shipping]);
-
-			$layout->getChild('content')->addChild('edit',$edit);
-			echo $layout->toHtml();
+			$edit = $layout->createBlock('shipping_Edit')->setData(['shipping'=>$shipping])->toHtml();
+			echo json_encode(['html'=>$edit,'element'=>'content-html']);
+			@header("content-type:application/json");
+			die();
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Shipping not showed.',Model_Core_Message :: FAILURE);
 		}
@@ -103,44 +101,44 @@ class Controller_Shipping extends Controller_Core_Action
 		if (!$shipping->save()) {
 			throw new Exception("Unable to save", 1);
 		}
-		else{
+		// else{
 
-		$attributeData = $this->getRequest()->getPost('attribute');
-		// echo "<pre>";
-		// print_r($attributeData);
-		// die();
+		// $attributeData = $this->getRequest()->getPost('attribute');
+		// // echo "<pre>";
+		// // print_r($attributeData);
+		// // die();
 
-		$queries = [];
-		foreach ($attributeData as $backendType => $value) {
+		// $queries = [];
+		// foreach ($attributeData as $backendType => $value) {
 
-			foreach ($value as $attributeId => $v) {
-				if (is_array($v)) {
-					$v = implode(",", $v);
-				}
+		// 	foreach ($value as $attributeId => $v) {
+		// 		if (is_array($v)) {
+		// 			$v = implode(",", $v);
+		// 		}
 
-				$model = Ccc::getModel('Core_Table');
-				$resource = $model->getResource()->setResourceName("shipping_{$backendType}")->setPrimaryKey('value_id');
-				$query = "INSERT INTO `shipping_{$backendType}` (`shipping_id`,`attribute_id`,`value`) VALUES ('{$shipping->getId()}','{$attributeId}','{$v}') ON DUPLICATE KEY UPDATE `value` = '{$v}'";
+		// 		$model = Ccc::getModel('Core_Table');
+		// 		$resource = $model->getResource()->setResourceName("shipping_{$backendType}")->setPrimaryKey('value_id');
+		// 		$query = "INSERT INTO `shipping_{$backendType}` (`shipping_id`,`attribute_id`,`value`) VALUES ('{$shipping->getId()}','{$attributeId}','{$v}') ON DUPLICATE KEY UPDATE `value` = '{$v}'";
 
-				$id = $model->getResource()->getAdapter()->query($query);
+		// 		$id = $model->getResource()->getAdapter()->query($query);
 
-			// $layout = $this->getLayout();
-			// $grid = $layout->createBlock('Shipping_Grid')->toHtml();
-			// echo json_encode(['html'=>$grid,'element'=>'content-html']);
-			// @header("Content-type:application/json");
-			// 	die();
+		// 	// $layout = $this->getLayout();
+		// 	// $grid = $layout->createBlock('Shipping_Grid')->toHtml();
+		// 	// echo json_encode(['html'=>$grid,'element'=>'content-html']);
+		// 	// @header("Content-type:application/json");
+		// 	// 	die();
 
 		
-			}
-		}
+		// 	}
+		// }
 
-		} 
+		// } 
 
 		$layout = $this->getLayout();
 		$grid = $layout->createBlock('Shipping_Grid')->toHtml();
 		@header("Content-type:application/json");
 		echo json_encode(['html'=>$grid,'element'=>'content-html']);
-		// die();
+		die();
 			// die();
 		// die();
 
@@ -175,6 +173,12 @@ class Controller_Shipping extends Controller_Core_Action
 		$this->redirect('shipping','grid',null,true);
 
 		$this->getMessage()->addMessage('Shipping deleted sucessfully.',Model_Core_Message :: SUCCESS);
+
+		$layout = $this->getLayout();
+		$grid = $layout->createBlock('Shipping_Grid')->toHtml();
+		@header("Content-type:application/json");
+		echo json_encode(['html'=>$grid,'element'=>'content-html']);
+		die();
 
 	}catch(Exception $e){
 		$this->getMessage()->addMessage('Shipping not deleted.',Model_Core_Message :: FAILURE);

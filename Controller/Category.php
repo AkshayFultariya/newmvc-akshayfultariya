@@ -5,8 +5,6 @@ class Controller_Category extends Controller_Core_Action
 	public function gridAction()
 	{
 		try {
-			Ccc::getModel('Core_Session')->start();
-
 			$layout = $this->getLayout();
 			$grid = $layout->createBlock('Category_Grid');
 			$layout->getChild('content')->addChild('grid',$grid);
