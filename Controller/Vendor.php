@@ -15,12 +15,10 @@ class Controller_Vendor extends Controller_Core_Action
 		try {
 			$layout = $this->getLayout();
 			$grid = $layout->createBlock('Vendor_Grid')->toHtml();
-			echo json_encode(['html'=>$grid,'element'=>'content-html']);
-			@header("Content-type:application/json");
+			$this->getResponse()->jsonResponse(['html'=>$grid,'element'=>'content-html']);
 			
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Currently vendors not avilable',Model_Core_Message :: FAILURE);
-			
 		}
 	}
 
@@ -31,8 +29,7 @@ class Controller_Vendor extends Controller_Core_Action
 			$vendor = Ccc::getModel('Vendor');
 			$address = Ccc::getModel('Vendor_Address');
         	$add = $layout->createBlock('Vendor_Edit')->setData(['vendor'=>$vendor,'address'=>$address])->toHtml();
-			echo json_encode(['html'=>$add,'element'=>'content-html']);
-			@header("Content-type:application/json");
+			$this->getResponse()->jsonResponse(['html'=>$add,'element'=>'content-html']);
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Currently vendors not avilable',Model_Core_Message :: FAILURE);
 		}
@@ -57,8 +54,7 @@ class Controller_Vendor extends Controller_Core_Action
 			}
 			$edit = $layout->createBlock('Vendor_Edit')->setData(['vendor'=>$vendor,'address' => $address])->toHtml();
 
-			echo json_encode(['html'=>$edit,'element'=>'content-html']);
-			@header("content-type:application/json");
+			$this->getResponse()->jsonResponse(['html'=>$edit,'element'=>'content-html']);
 		} catch (Exception $e) {
 			 $this->getMessage()->addMessage('data not showed',Model_Core_Message :: FAILURE);
 		}
@@ -140,9 +136,7 @@ class Controller_Vendor extends Controller_Core_Action
 	}
 			$layout = $this->getLayout();
 			$grid = $layout->createBlock('Vendor_Grid')->toHtml();
-			echo json_encode(['html'=>$grid,'element'=>'content-html']);
-			@header("Content-type:application/json");
-			die();
+			$this->getResponse()->jsonResponse(['html'=>$grid,'element'=>'content-html']);
 			$this->getMessage()->addMessage('Vendor add/edit sucessfully',Model_Core_Message :: SUCCESS);
 		}
 		 catch (Exception $e) {
@@ -169,9 +163,7 @@ class Controller_Vendor extends Controller_Core_Action
 
 			$layout = $this->getLayout();
 			$grid = $layout->createBlock('Vendor_Grid')->toHtml();
-			@header("Content-type:application/json");
-			echo json_encode(['html'=>$grid,'element'=>'content-html']);
-			die();
+			$this->getResponse()->jsonResponse(['html'=>$grid,'element'=>'content-html']);
 
 		}catch(Exception $e){
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message :: FAILURE);

@@ -16,9 +16,7 @@ class Controller_Payment extends Controller_Core_Action
 
 			$layout = $this->getLayout();
 			$grid = $layout->createBlock('Payment_Grid')->toHtml();
-			echo json_encode(['html'=>$grid,'element'=>'content-html']);
-			@header("Content-type:application/json");
-			die();
+			$this->getResponse()->jsonResponse(['html'=>$grid,'element'=>'content-html']);
 
 		} catch (Exception $e) {
 		    $this->getMessage()->addMessage('Payments not avilable',Model_Core_Message :: FAILURE);
@@ -34,9 +32,7 @@ class Controller_Payment extends Controller_Core_Action
 			$layout = $this->getLayout();
 			$payment = Ccc::getModel('payment');
         	$add = $layout->createBlock('Payment_Edit')->setData(['payment'=>$payment])->toHtml();
-			echo json_encode(['html'=>$add,'element'=>'content-html']);
-			@header("content-type:application/json");
-			die();
+			$this->getResponse()->jsonResponse(['html'=>$add,'element'=>'content-html']);
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Payment not showed.',Model_Core_Message :: FAILURE);
 		}
@@ -58,9 +54,7 @@ class Controller_Payment extends Controller_Core_Action
 				
 			}
 			$edit = $layout->createBlock('Payment_Edit')->setData(['payment'=>$payment])->toHtml();
-			echo json_encode(['html'=>$edit,'element'=>'content-html']);
-			@header("content-type:application/json");
-			die();
+			$this->getResponse()->jsonResponse(['html'=>$edit,'element'=>'content-html']);
 			
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Payment not showed.',Model_Core_Message :: FAILURE);
@@ -122,14 +116,11 @@ class Controller_Payment extends Controller_Core_Action
 			}
 			$layout = $this->getLayout();
 			$grid = $layout->createBlock('Payment_Grid')->toHtml();
-			@header("Content-type:application/json");
-			echo json_encode(['html'=>$grid,'element'=>'content-html']);
-			die();
+			$this->getResponse()->jsonResponse(['html'=>$grid,'element'=>'content-html']);
 		}  catch (Exception $e) {
 		    $this->getMessage()->addMessage('Invalid.',Model_Core_Message :: FAILURE);
 			
 		}
-		$this->redirect('payment','grid',null,true);
 	}
 
 	public function deleteAction()
@@ -151,14 +142,11 @@ class Controller_Payment extends Controller_Core_Action
 
 			$layout = $this->getLayout();
 			$grid = $layout->createBlock('Payment_Grid')->toHtml();
-			@header("Content-type:application/json");
-			echo json_encode(['html'=>$grid,'element'=>'content-html']);
-			die();
+			$this->getResponse()->jsonResponse(['html'=>$grid,'element'=>'content-html']);
 
 		}catch(Exception $e){
 			$this->getMessage()->addMessage('Payment not deleted.',Model_Core_Message :: FAILURE);
 		}
-			$this->redirect('payment','grid',null,true);
 	}
 
 
