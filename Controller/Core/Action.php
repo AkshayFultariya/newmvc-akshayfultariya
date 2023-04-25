@@ -21,6 +21,7 @@ class Controller_Core_Action{
 			return $this->response;
 		}
 		$response = new Model_Core_Response();
+		$response->setController($this) 	;
 		$this->setResponse($response);
 		return $response;
 	}
@@ -134,9 +135,9 @@ class Controller_Core_Action{
 	}
 	
 
-	public function render()
+	public function renderLayout()
 	{
-		$this->getView()->render();
+		$this->getResponse()->setBody($this->getLayout()->toHtml());
 	}
 
 	public function errorAction($action)
