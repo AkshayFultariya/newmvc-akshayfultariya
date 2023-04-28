@@ -7,15 +7,20 @@ class Controller_Payment extends Controller_Core_Action
 		$layout = $this->getLayout();
 		$index = $layout->createBlock('Core_Template')->setTemplate('payment_method/index.phtml');
 		$layout->getChild('content')->addChild('index',$index);
-		$layout->render();
+		$this->renderLayout();
     }
 
 	public function gridAction()
 	{
 		try {
 
-			$layout = $this->getLayout();
-			$grid = $layout->createBlock('Payment_Grid')->toHtml();
+			$grid = $this->getLayout()->createBlock('Payment_Grid');
+			if ($this->getRequest()->isPost()) {
+				if ($recordPerPage = (int) $this->getRequest()->getPost('selectRecordPerPage')) {
+					$grid->getPager()->setRecordPerPage($recordPerPage);
+				}
+			}
+			$grid = $grid->toHtml();
 			$this->getResponse()->jsonResponse(['html'=>$grid,'element'=>'content-html']);
 
 		} catch (Exception $e) {
@@ -94,9 +99,6 @@ class Controller_Payment extends Controller_Core_Action
 			else{
 
 			$attributeData = $this->getRequest()->getPost('attribute');
-			// echo "<pre>";
-			// print_r($attributeData);
-			// die();
 
 			$queries = [];
 			foreach ($attributeData as $backendType => $value) {

@@ -1,0 +1,21 @@
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
+    <button class="page-item page-link" type ="button" <?php if ($this->getPager()->start == 0 ){
+    	echo "style='pointer-events : none'";
+    } ?>
+    onclick="ajax.setUrl('<?php echo $this->getUrl(null,null,['p' => $this->getPager()->start],true) ?>').call()">Start</button>
+    <button class="page-item page-link" type ="button" <?php if ($this->getPager()->previous == 0 ){
+    	echo "style='pointer-events:none'";
+    } ?> 
+    	onclick="ajax.setUrl('<?php echo $this->getUrl(null,null,['p' => $this->getPager()->previous]),true ?>').call()">Previous</button>
+    <button class="page-item page-link" type ="button" onclick="ajax.setUrl('<?php echo $this->getUrl(null,null,['p' => $this->getPager()->currentPage]),true ?>').call()"><?php echo $this->getPager()->currentPage ?></button>
+    <button class="page-item page-link" type ="button" <?php if ($this->getPager()->getNumberOfPages() == $this->getPager()->currentPage ){
+    	echo "style='pointer-events:none'";
+    } ?> 
+     onclick="ajax.setUrl('<?php echo $this->getUrl(null,null,['p' => $this->getPager()->next]),true ?>').call()">Next</button>
+    <button class="page-item page-link" type ="button" <?php if ($this->getPager()->getNumberOfPages() == $this->getPager()->currentPage ){
+    	echo "style='pointer-events:none'";
+    } ?> 
+     onclick="ajax.setUrl('<?php echo $this->getUrl(null,null,['p' => $this->getPager()->end]),true ?>').call()">end</button>
+  </ul>
+</nav>

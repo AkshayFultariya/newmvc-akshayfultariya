@@ -6,15 +6,21 @@ class Block_Item_Grid extends Block_Core_Grid
 	public function __construct()
 	{
 		parent::__construct();
-		// $this->getCollection();
-		// $this->_prepareColumns();
-		// $this->_prepareActions();
-		// $this->_prepareButtons();
-		$this->setTemplate('item/grid.phtml');
+		$this->getCollection();
+		$this->_prepareColumns();
+		$this->_prepareActions();
+		$this->_prepareButtons();
+		// $this->setTemplate('item/grid.phtml');
 	}
 	public function getCollection()
 	{
-		$query = "SELECT * FROM `item` ORDER BY `entity_id` DESC";
+		$query = "SELECT count(`entity_id`) FROM `item`";
+		$totalRecord = Ccc::getModel('Core_Adapter')->fetchOne($query);
+
+		$this->getPager()->setTotalRecords($totalRecord)->calculate();
+		// $pager = Ccc::getModel('Core_Pager');
+
+		$query = "SELECT * FROM `item` LIMIT {$this->getPager()->startLimit},{$this->getPager()->recordPerPage}";
 		$items = Ccc::getModel('Item')->fetchAll($query);
 		return $items;
 	}

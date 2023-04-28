@@ -7,14 +7,19 @@ class Controller_Vendor extends Controller_Core_Action
 		$layout = $this->getLayout();
 		$index = $layout->createBlock('Core_Template')->setTemplate('vendor/index.phtml');
 		$layout->getChild('content')->addChild('index',$index);
-		$layout->render();
+		$this->renderLayout();
     }
 
 	public function gridAction()
 	{
 		try {
-			$layout = $this->getLayout();
-			$grid = $layout->createBlock('Vendor_Grid')->toHtml();
+			$grid = $this->getLayout()->createBlock('Vendor_Grid');
+			if ($this->getRequest()->isPost()) {
+				if ($recordPerPage = (int) $this->getRequest()->getPost('selectRecordPerPage')) {
+					$grid->getPager()->setRecordPerPage($recordPerPage);
+				}
+			}
+			$grid = $grid->toHtml();
 			$this->getResponse()->jsonResponse(['html'=>$grid,'element'=>'content-html']);
 			
 		} catch (Exception $e) {

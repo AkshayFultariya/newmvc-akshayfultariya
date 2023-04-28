@@ -7,17 +7,20 @@ class Controller_Item extends Controller_Core_Action
 		$layout = $this->getLayout();
 		$index = $layout->createBlock('Core_Template')->setTemplate('item/index.phtml');
 		$layout->getChild('content')->addChild('index',$index);
-		$layout->render();
+		$this->renderLayout();
     }
 
 	public function gridAction()
 	{
 		try {
-			$layout = $this->getLayout();
-			$grid = $layout->createBlock('Item_Grid')->toHtml();
-			echo json_encode(['html'=>$grid,'element'=>'content-html']);
-			@header("Content-type:application/json");
-			die();
+			$grid = $this->getLayout()->createBlock('Item_Grid');
+			if ($this->getRequest()->isPost()) {
+				if ($recordPerPage = (int) $this->getRequest()->getPost('selectRecordPerPage')) {
+					$grid->getPager()->setRecordPerPage($recordPerPage);
+				}
+			}
+			$grid = $grid->toHtml();
+			$this->getResponse()->jsonResponse(['html'=>$grid,'element'=>'content-html']);
 			
 		} catch (Exception $e) {
 			
@@ -30,9 +33,7 @@ class Controller_Item extends Controller_Core_Action
 			$layout = $this->getLayout();
 			$item = Ccc::getModel('Item');
 			$add = $layout->createBlock('Item_Edit')->setData(['item'=>$item])->toHtml();
-			echo json_encode(['html'=>$add,'element'=>'content-html']);
-			@header("Content-type:application/json");
-			die();
+			$this->getResponse()->jsonResponse(['html'=>$add,'element'=>'content-html']);
 		} catch (Exception $e) {
 			
 		}
@@ -55,9 +56,7 @@ class Controller_Item extends Controller_Core_Action
 			}
 			$edit = $layout->createBlock('Item_Edit')->setData(['item'=>$item])->toHtml();
 
-			echo json_encode(['html'=>$edit,'element'=>'content-html']);
-			@header("content-type:application/json");
-			die();
+			$this->getResponse()->jsonResponse(['html'=>$edit,'element'=>'content-html']);
 
 	}
 
@@ -94,9 +93,6 @@ class Controller_Item extends Controller_Core_Action
 		else{
 
 		$attributeData = $this->getRequest()->getPost('attribute');
-		// echo "<pre>";
-		// print_r($attributeData);
-		// die();
 
 		$queries = [];
 		foreach ($attributeData as $backendType => $value) {
@@ -111,30 +107,15 @@ class Controller_Item extends Controller_Core_Action
 				$query = "INSERT INTO `item_{$backendType}` (`entity_id`,`attribute_id`,`value`) VALUES ('{$item->getId()}','{$attributeId}','{$v}') ON DUPLICATE KEY UPDATE `value` = '{$v}'";
 
 				$id = $model->getResource()->getAdapter()->query($query);
-				// if ($id) {
-				// 	$sql = "SELECT * FROM `item_{$backend_type}` WHERE `entity_id` = `{$id}` AND `attribute_id` = `{$attributeId}`";
-				// 	$model->fetchRow($sql);
-				// }
-				// else{
-				// 	$model->entity_id = $item->getId();
-				//     $model->attribute_id = $attributeId;
-				// }
-				
-				// $model->value = $v;
-				// if (!$item->save()) {
-				// 	throw new Exception("Unable to save", 1);
 				}
 			}
 		}
 			$layout = $this->getLayout();
 			$grid = $layout->createBlock('Item_Grid')->toHtml();
-			echo json_encode(['html'=>$grid,'element'=>'content-html']);
-			@header("Content-type:application/json");
-			die();
+			$this->getResponse()->jsonResponse(['html'=>$grid,'element'=>'content-html']);
 		} catch (Exception $e) {
 			
 		}
-		$this->redirect('item','grid',null,true);
 	}
 
 } 

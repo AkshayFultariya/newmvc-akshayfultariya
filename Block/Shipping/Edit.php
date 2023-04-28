@@ -19,6 +19,11 @@ class Block_Shipping_Edit extends Block_Core_Template
 		$attributes = Ccc::getModel('Shipping')->getAttributes();
 		return $attributes;
 	}
+
+	// public function calculate()
+	// {
+	// 	$
+	// }
 	
 }
 

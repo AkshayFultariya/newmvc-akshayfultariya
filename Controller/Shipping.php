@@ -13,9 +13,15 @@ class Controller_Shipping extends Controller_Core_Action
 
 	public function gridAction()
 	{
+
 		try {
-			$layout = $this->getLayout();
-			$grid = $layout->createBlock('Shipping_Grid')->toHtml();
+			$grid = $this->getLayout()->createBlock('Shipping_Grid');
+			if ($this->getRequest()->isPost()) {
+				if ($recordPerPage = (int) $this->getRequest()->getPost('selectRecordPerPage')) {
+					$grid->getPager()->setRecordPerPage($recordPerPage);
+				}
+			}
+			$grid = $grid->toHtml();
 			$this->getResponse()->jsonResponse(['html'=>$grid,'element'=>'content-html']);
 		} catch (Exception $e) {
 	    	$this->getMessage()->addMessage('Currently Shippings not avilable',Model_Core_Message :: FAILURE);
@@ -29,10 +35,7 @@ class Controller_Shipping extends Controller_Core_Action
 			$layout = $this->getLayout();
 			$shipping = Ccc::getModel('Shipping');
         	$add = $layout->createBlock('Shipping_Edit')->setData(['shipping'=>$shipping])->toHtml();
-        	// echo json_encode(['html'=>$add,'element'=>'content-html']);
-			// @header("content-type:application/json");
 			$this->getResponse()->jsonResponse(['html'=>$add,'element'=>'content-html']);
-			// die();
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Shipping not showed.',Model_Core_Message :: FAILURE);
 		}
@@ -55,7 +58,6 @@ class Controller_Shipping extends Controller_Core_Action
 			}
 			$edit = $layout->createBlock('shipping_Edit')->setData(['shipping'=>$shipping])->toHtml();
 			$this->getResponse()->jsonResponse(['html'=>$edit,'element'=>'content-html']);
-			// die();
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Shipping not showed.',Model_Core_Message :: FAILURE);
 		}
@@ -65,7 +67,7 @@ class Controller_Shipping extends Controller_Core_Action
 	public function saveAction()
 	{
 		try {
-
+		
 		if (!$this->getRequest()->isPost()) {
 			throw new Exception("Invalid Id", 1);
 		}
@@ -105,8 +107,7 @@ class Controller_Shipping extends Controller_Core_Action
 	
 
 	public function deleteAction()
-
-		{
+	{
 		try {
 			$this->getMessage()->getSession()->start();
 			if (!($id = (int) $this->getRequest()->getParam('id'))) {
@@ -129,9 +130,9 @@ class Controller_Shipping extends Controller_Core_Action
 		$grid = $layout->createBlock('Shipping_Grid')->toHtml();
 		$this->getResponse()->jsonResponse(['html'=>$grid,'element'=>'content-html']);
 
-	}catch(Exception $e){
-		$this->getMessage()->addMessage('Shipping not deleted.',Model_Core_Message :: FAILURE);
-	}
+		}catch(Exception $e){
+			$this->getMessage()->addMessage('Shipping not deleted.',Model_Core_Message :: FAILURE);
+		}
 	}
 }
 

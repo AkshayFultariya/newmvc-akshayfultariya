@@ -5,16 +5,22 @@ class Block_Customer_Grid extends Block_Core_Grid
 	public function __construct()
 	{
 		parent::__construct();
-		// $this->getCollection();
-		// $this->_prepareColumns();
-		// $this->_prepareActions();
-		// $this->_prepareButtons();
-		$this->setTemplate('customer/grid.phtml');
+		$this->getCollection();
+		$this->_prepareColumns();
+		$this->_prepareActions();
+		$this->_prepareButtons();
+		// $this->setTemplate('customer/grid.phtml');
 		$this->setTitle('Manage Customer Method');
 	}
 	public function getCollection()
 	{
-		$query = "SELECT * FROM `customer` ORDER BY `customer_id` DESC";
+		$query = "SELECT count(`customer_id`) FROM `customer`";
+		$totalRecord = Ccc::getModel('Core_Adapter')->fetchOne($query);
+
+		$this->getPager()->setTotalRecords($totalRecord)->calculate();
+		// $pager = Ccc::getModel('Core_Pager');
+
+		$query = "SELECT * FROM `customer` LIMIT {$this->getPager()->startLimit},{$this->getPager()->recordPerPage}";
 		$customers = Ccc::getModel('Customer')->fetchAll($query);
 		return $customers;
 	}

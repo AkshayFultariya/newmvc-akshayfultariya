@@ -8,6 +8,9 @@ $rows = $this->getCollection()->getData();
 }
 
 ?>
+
+<div class="m-2 mx-2"><a class="btn btn-dark pull-right" href="View/product/upload.phtml">Import</a></div>
+
 	<div class="title9">
 		<div class="main9">
 			<?php echo $this->getTitle();?>
@@ -40,11 +43,47 @@ $rows = $this->getCollection()->getData();
 			<?php foreach ($this->getActions() as $key => $action): ?>
 		 		
 		 		<td>
-		 			<input name="add" value="<?php echo $action['title'];?>" type="button" onclick="ajax.setUrl('<?php $method = $action['method']; echo $this->$method($row,$key);?>').call()">
+		 			<input name="add" value="<?php echo $action['title'];?>" type="button" onclick="ajax.setUrl('<?php $method = $action['method']; echo $this->$method($row,$key);?>').call()" name="">
 		 		</td>	
 			<?php endforeach;?>
 		 		</tr>
 			
 		<?php endforeach ?>
 		<?php endif;?>
+
+<?php $pager = $this->getPager();?>
+<nav aria-label="...">
+  <ul class="pagination">
+  	<li class="page-item " <?php if ($pager->getStart() == 0) {
+      	echo "style='pointer-events:none'";
+      } ?>>
+      <button type="button" class="page-link" onclick="ajax.setUrl('<?php echo $this->getUrl(null, 'grid', ['p' => $pager->getStart()],true) ?>').call()">Start</button>
+    </li>
+
+    <li class="page-item ">
+      <button type="button" class="page-link" <?php if ($pager->getPrevious() == 0) {
+      	echo "style='pointer-events:none'";
+      } ?> onclick="ajax.setUrl('<?php echo $this->getUrl(null, 'grid', ['p' => $pager->getPrevious()], true) ?>').call()">Previous</button>
+    </li>
+   
+    <li class="page-item active">
+      <button type="button" class="page-link" onclick="ajax.setUrl('<?php echo $this->getUrl(null, 'grid', ['p' => $pager->getCurrentPage()], true) ?>').call()"><span class="sr-only"><?php echo  $pager->getCurrentPage(); ?></span></button>
+    </li>
+    
+    <li class="page-item">
+      <button type="button" class="page-link" <?php if ($pager->getNext() == 0) {
+      	echo "style='pointer-events:none'";
+      } ?> onclick="ajax.setUrl('<?php echo $this->getUrl(null, 'grid', ['p' => $pager->getNext()], true) ?>').call()">Next</button>
+    </li>
+
+    <li class="page-item" >
+      <button type="button" class="page-link" <?php if ($pager->getEnd() == 0) {
+      	echo "style='pointer-events:none'";
+      } ?>  onclick="ajax.setUrl('<?php echo $this->getUrl(null, 'grid', ['p' => $pager->getEnd()], true) ?>').call()">End</button>
+    </li>
+  </ul>
+</nav>
+
 	</table>
+
+

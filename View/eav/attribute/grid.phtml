@@ -49,4 +49,16 @@ $attributes = $this->getCollection();
    	     	
    	     <?php endforeach; ?>
            <?php endif; ?>
+
+   
+
+           <nav aria-label="Page navigation example">
+  <ul class="pagination">
+    <li class="page-item"><a class="page-link" href="<?php echo $this->getUrl(null,'grid',['p' => $this->getPager()->start]) ?>">Start</a></li>
+    <li class="page-item"><a class="page-link" href="<?php echo $this->getUrl(null,'grid',['p' => $this->getPager()->previous]) ?>">Previous</a></li>
+    <li class="page-item"><a class="page-link" href="<?php echo $this->getUrl(null,'grid',['p' => $this->getPager()->currentPage]) ?>">Current</a></li>
+    <li class="page-item"><a class="page-link" href="<?php echo $this->getUrl(null,'grid',['p' => $this->getPager()->next]) ?>">Next</a></li>
+    <li class="page-item"><a class="page-link" href="<?php echo $this->getUrl(null,'grid',['p' => $this->getPager()->end]) ?>">end</a></li>
+  </ul>
+</nav>
    </table>
