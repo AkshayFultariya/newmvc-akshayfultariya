@@ -11,7 +11,12 @@ class Block_Eav_Attribute_Grid extends Block_Core_Template
 
 	public function getCollection()
 	{
-		$query = "SELECT * FROM `eav_attribute`";
+		$query = "SELECT count(`attribute_id`) FROM `eav_attribute`";
+		$totalRecord = Ccc::getModel('Core_Adapter')->fetchOne($query);
+
+		$this->getPager()->setTotalRecords($totalRecord)->calculate();
+
+		$query = "SELECT * FROM `eav_attribute` LIMIT {$this->getPager()->startLimit},{$this->getPager()->recordPerPage}";
 		$data = Ccc::getModel('Eav_Attribute')->fetchAll($query);
 		return $data;
 	}

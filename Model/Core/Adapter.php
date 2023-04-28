@@ -50,6 +50,8 @@ class Model_Core_Adapter
 	public function fetchRow($query){
 		$connect = $this->connect();
 		$result = mysqli_query($connect,$query);
+		// print_r($result);
+		// die();
 		if ($result->num_rows) {
 			return $result->fetch_assoc();
 		}

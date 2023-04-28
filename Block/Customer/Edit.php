@@ -48,6 +48,7 @@ class Block_Customer_Edit extends Block_Core_Template
 		$billingAddress = Ccc::getModel('Customer_Address');
 		$query = "SELECT * FROM `{$billingAddress->getResourceName()}` WHERE `{$billingAddress->getPrimaryKey()}` = '{$billingId}'";
 
+		// print_r($billingAddress->fetchRow($query));
 		return $billingAddress->fetchRow($query);
 	}
 

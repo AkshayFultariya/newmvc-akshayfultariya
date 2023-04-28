@@ -7,18 +7,20 @@ class Controller_Admin extends Controller_Core_Action
 		$layout = $this->getLayout();
 		$index = $layout->createBlock('Core_Template')->setTemplate('admin/index.phtml');
 		$layout->getChild('content')->addChild('index',$index);
-		$layout->render();
+		$this->renderLayout();
 	}
 
 	public function gridAction()
 	{
 		try{
-			$layout = $this->getLayout();
-			$grid = $layout->createBlock('Admin_Grid')->toHtml();
-			echo json_encode(['html'=>$grid,'element'=>'content-html']);
-			@header("Content-type:application/json");
-			die();
-			
+			$grid = $this->getLayout()->createBlock('Admin_Grid');
+			if ($this->getRequest()->isPost()) {
+				if ($recordPerPage = (int) $this->getRequest()->getPost('selectRecordPerPage')) {
+					$grid->getPager()->setRecordPerPage($recordPerPage);
+				}
+			}
+			$grid = $grid->toHtml();
+			$this->getResponse()->jsonResponse(['html'=>$grid,'element'=>'content-html']);			
 		} catch (Exception $e) {
 			
 		}
@@ -32,9 +34,7 @@ class Controller_Admin extends Controller_Core_Action
 			$layout = $this->getLayout();
 			$admin = Ccc::getModel('admin');
         	$add = $layout->createBlock('Admin_Edit')->setData(['admin'=>$admin])->toHtml();
-			echo json_encode(['html'=>$add,'element'=>'content-html']);
-			@header("Content-type:application/json");
-			die();
+			$this->getResponse()->jsonResponse(['html'=>$add,'element'=>'content-html']);
 		
 	}
 		catch (Exception $e) {
@@ -58,10 +58,7 @@ class Controller_Admin extends Controller_Core_Action
 			}
 			$edit = $layout->createBlock('Admin_Edit')->setData(['admin'=>$admin])->toHtml();
 
-			echo json_encode(['html'=>$edit,'element'=>'content-html']);
-			@header("content-type:application/json");
-			die();
-		
+			$this->getResponse()->jsonResponse(['html'=>$edit,'element'=>'content-html']);		
 	}
 		catch (Exception $e) {
 			$this->getMessage()->addMessage('Admin not showed.',Model_Core_Message :: FAILURE);
@@ -129,13 +126,10 @@ class Controller_Admin extends Controller_Core_Action
 		}
 		$layout = $this->getLayout();
 		$grid = $layout->createBlock('Admin_Grid')->toHtml();
-		@header("Content-type:application/json");
-		echo json_encode(['html'=>$grid,'element'=>'content-html']);
-		die();
+		$this->getResponse()->jsonResponse(['html'=>$grid,'element'=>'content-html']);
 		} catch (Exception $e) {
 			
 		}
-		$this->redirect('admin','grid',null,true);
 	}
 
 	public function deleteAction()
@@ -157,9 +151,7 @@ class Controller_Admin extends Controller_Core_Action
 
 		$layout = $this->getLayout();
 		$grid = $layout->createBlock('Admin_Grid')->toHtml();
-		@header("Content-type:application/json");
-		echo json_encode(['html'=>$grid,'element'=>'content-html']);
-		die();
+		$this->getResponse()->jsonResponse(['html'=>$grid,'element'=>'content-html']);
 
 	}catch(Exception $e){
 

@@ -8,18 +8,21 @@ class Controller_Salesman extends Controller_Core_Action
 		$layout = $this->getLayout();
 		$index = $layout->createBlock('Core_Template')->setTemplate('salesman/index.phtml');
 		$layout->getChild('content')->addChild('index',$index);
-		$layout->render();
+		// $layout->render();
+		$this->renderLayout();
     }
 
 	public function gridAction()
 	{
 		try {
-			$layout = $this->getLayout();
-			$grid = $layout->createBlock('Salesman_Grid')->toHtml();
-			echo json_encode(['html'=>$grid,'element'=>'content-html']);
-			@header("Content-type:application/json");
-
-			
+			$grid = $this->getLayout()->createBlock('Salesman_Grid');
+			if ($this->getRequest()->isPost()) {
+				if ($recordPerPage = (int) $this->getRequest()->getPost('selectRecordPerPage')) {
+					$grid->getPager()->setRecordPerPage($recordPerPage);
+				}
+			}
+			$grid = $grid->toHtml();
+			$this->getResponse()->jsonResponse(['html'=>$grid,'element'=>'content-html']);
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage('Currently salesmen not avilable',Model_Core_Message :: FAILURE);
 		}
@@ -32,8 +35,7 @@ class Controller_Salesman extends Controller_Core_Action
 			$salesman = Ccc::getModel('Salesman');
 			$address = Ccc::getModel('Salesman_Address');
         	$add = $layout->createBlock('Salesman_Edit')->setData(['salesman'=>$salesman,'address'=>$address])->toHtml();
-			echo json_encode(['html'=>$add,'element'=>'content-html']);
-			@header("Content-type:application/json");
+			$this->getResponse()->jsonResponse(['html'=>$add,'element'=>'content-html']);
 			} catch (Exception $e) {
 				$this->getMessage()->addMessage('Currently salesmen not avilable',Model_Core_Message :: FAILURE);
 			}
@@ -59,8 +61,7 @@ class Controller_Salesman extends Controller_Core_Action
 			}
 			$edit = $layout->createBlock('Salesman_Edit')->setData(['salesman'=>$salesman,'address' => $address])->toHtml();
 
-			echo json_encode(['html'=>$edit,'element'=>'content-html']);
-			@header("content-type:application/json");
+			$this->getResponse()->jsonResponse(['html'=>$edit,'element'=>'content-html']);
 				
 			} catch (Exception $e) {
 				 $this->getMessage()->addMessage('data not showed',Model_Core_Message :: FAILURE);
@@ -140,13 +141,11 @@ class Controller_Salesman extends Controller_Core_Action
 	}
 	$layout = $this->getLayout();
 	$grid = $layout->createBlock('Salesman_Grid')->toHtml();
-	echo json_encode(['html'=>$grid,'element'=>'content-html']);
-	@header("Content-type:application/json");
+	$this->getResponse()->jsonResponse(['html'=>$grid,'element'=>'content-html']);
 } catch (Exception $e) {
 			$this->getMessage()->addMessage($e->getMessage(), Model_Core_Message::FAILURE);
 		}
 		
-		$this->redirect('salesman', 'grid', [], true);
 	}
 
 	public function deleteAction()
@@ -171,8 +170,7 @@ class Controller_Salesman extends Controller_Core_Action
 			$this->getMessage()->addMessage('Salesman deleted sucessfully.',Model_Core_Message :: SUCCESS);
 		    $layout = $this->getLayout();
 			$grid = $layout->createBlock('Salesman_Grid')->toHtml();
-			echo json_encode(['html'=>$grid,'element'=>'content-html']);
-			@header("Content-type:application/json");
+			$this->getResponse()->jsonResponse(['html'=>$grid,'element'=>'content-html']);
 			}catch(Exception $e){
 				$this->getMessage()->addMessage('salesman not deleted.',Model_Core_Message :: FAILURE);
 			}

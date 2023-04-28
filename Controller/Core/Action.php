@@ -9,6 +9,7 @@ class Controller_Core_Action{
 	protected $urlObj = null;
 	protected $view = null;
 	protected $layout = null;
+	protected $pager = null;
 	// session+
 
 	protected function setResponse(Model_Core_Response $response){
@@ -44,6 +45,20 @@ class Controller_Core_Action{
 		$layout = new Block_Core_Layout();
 		$this->setLayout($layout);
 		return $layout;
+	}
+
+	protected function setPager(Model_Core_Pager $pager){
+		$this->pager = $pager;
+		return $this;
+	}
+
+	public function getPager(){
+		if ($this->pager) {
+			return $this->pager;
+		}
+		$pager = new Model_Core_Pager();
+		$this->setPager($pager);
+		return $pager;
 	}
 
 	protected function setRequest(Model_Core_Request $request){

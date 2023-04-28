@@ -6,6 +6,7 @@ class Block_Core_Template extends Model_Core_View
 {
 	protected $children = [];
 	protected $layout = null;
+	protected $pager = null;
 
 	public function __construct()
 	{
@@ -20,7 +21,28 @@ class Block_Core_Template extends Model_Core_View
 
 	public function getLayout()
 	{
-		return $this->layout;
+		if ($this->layout) {
+			return $this->layout;
+		}
+		$layout = new Block_Core_Layout();
+		$this->setLayout($layout);
+		return $layout;
+	}
+
+	public function setPager(Model_Core_Pager $pager)
+	{
+		$this->pager = $pager;
+		return $this;
+	}
+
+	public function getPager()
+	{
+		if ($this->pager) {
+			return $this->pager;
+		}
+		$pager = new Model_Core_Pager();
+		$this->setPager($pager);
+		return $pager;
 	}
 
 	public function getChildHtml($key)

@@ -12,9 +12,16 @@ class Block_Product_Grid extends Block_Core_Grid
 		$this->setTemplate('product/grid.phtml');
 		$this->setTitle('Manage Product Method');
 	}
+
 	public function getCollection()
 	{
-		$query = "SELECT * FROM `product` ORDER BY `product_id` DESC";
+		$query = "SELECT count(`product_id`) FROM `product`";
+		$totalRecord = Ccc::getModel('Core_Adapter')->fetchOne($query);
+
+		$this->getPager()->setTotalRecords($totalRecord)->calculate();
+		// $pager = Ccc::getModel('Core_Pager');
+
+		$query = "SELECT * FROM `product` LIMIT {$this->getPager()->startLimit},{$this->getPager()->recordPerPage}";
 		$products = Ccc::getModel('Product')->fetchAll($query);
 		return $products;
 	}

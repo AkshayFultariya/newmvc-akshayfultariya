@@ -6,6 +6,7 @@ class Block_Core_Grid extends Block_Core_Template
 	protected $_columns = [];
 	protected $_actions = [];
 	protected $_buttons = [];
+	protected $pager = null;
 
 	public function __construct()
 	{
@@ -22,6 +23,21 @@ class Block_Core_Grid extends Block_Core_Template
 	// 	$payments = Ccc::getModel('Payment')->fetchAll($query);
 	// 	return $payments;
 	// }
+
+	public function setPager($pager)
+	{
+		$this->pager = $pager;
+		return $this;
+	}
+
+	public function getPager(){
+		if ($this->pager) {
+			return $this->pager;
+		}
+		$pager = new Model_Core_Pager();
+		$this->setPager($pager);
+		return $pager;
+	}
 
 	public function getColumns()
 	{

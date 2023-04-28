@@ -50,6 +50,8 @@ class Model_Shipping extends Model_Core_Table{
 
       return $this->getResource()->getAdapter()->fetchOne($sql);
    }
+
+   // public function pageCalculate()
 }
 //http refrer means je url mathi aapade aaviya hoy te
 

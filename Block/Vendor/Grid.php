@@ -5,16 +5,20 @@ class Block_Vendor_Grid extends Block_Core_Grid
 	public function __construct()
 	{
 		parent::__construct();
-		// $this->getCollection();
-		// $this->_prepareColumns();
-		// $this->_prepareActions();
-		// $this->_prepareButtons();
-		$this->setTemplate('vendor/grid.phtml');
+		$this->getCollection();
+		$this->_prepareColumns();
+		$this->_prepareActions();
+		$this->_prepareButtons();
+		// $this->setTemplate('vendor/grid.phtml');
 		$this->setTitle('Manage Vendor Method');
 	}
 	public function getCollection()
 	{
-		$query = "SELECT * FROM `vendor` ORDER BY `vendor_id` DESC";
+		$query = "SELECT count(`vendor_id`) FROM `vendor`";
+		$totalRecord = Ccc::getModel('Core_Adapter')->fetchOne($query);
+
+		$this->getPager()->setTotalRecords($totalRecord)->calculate();
+		$query = "SELECT * FROM `vendor` LIMIT {$this->getPager()->startLimit},{$this->getPager()->recordPerPage}";
 		$vendors = Ccc::getModel('Vendor')->fetchAll($query);
 		return $vendors;
 	}

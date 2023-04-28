@@ -15,10 +15,19 @@ class Block_Shipping_Grid extends Block_Core_Grid
 	}
 	public function getCollection()
 	{
-		$query = "SELECT * FROM `shipping` ORDER BY `shipping_id` DESC";
+		$query = "SELECT count(`shipping_id`) FROM `shipping`";
+		$totalRecord = Ccc::getModel('Core_Adapter')->fetchOne($query);
+		// print_r($totalRecord);
+		$this->getPager()->setTotalRecords($totalRecord)->calculate();
+		// $pager = Ccc::getModel('Core_Pager');
+
+		$query = "SELECT * FROM `shipping` LIMIT {$this->getPager()->startLimit},{$this->getPager()->recordPerPage}";
 		$shippings = Ccc::getModel('Shipping')->fetchAll($query);
 		return $shippings;
 	}
+
+
+
 
 	protected function _prepareColumns()
 	{

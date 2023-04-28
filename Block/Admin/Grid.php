@@ -5,17 +5,23 @@ class Block_Admin_Grid extends Block_Core_Grid
 	public function __construct()
 	{
 		parent::__construct();
-		// $this->getCollection();
-		// $this->_prepareColumns();
-		// $this->_prepareActions();
-		// $this->_prepareButtons();
+		$this->getCollection();
+		$this->_prepareColumns();
+		$this->_prepareActions();
+		$this->_prepareButtons();
 		$this->setTitle('Manage Admin Method');
-		$this->setTemplate('payment_method/grid.phtml');
+		// $this->setTemplate('payment_method/grid.phtml');
 		
 	}
 	public function getCollection()
 	{
-		$query = "SELECT * FROM `admin` ORDER BY `admin_id` DESC";
+		$query = "SELECT count(`admin_id`) FROM `admin`";
+		$totalRecord = Ccc::getModel('Core_Adapter')->fetchOne($query);
+
+		$this->getPager()->setTotalRecords($totalRecord)->calculate();
+		// $pager = Ccc::getModel('Core_Pager');
+
+		$query = "SELECT * FROM `admin` LIMIT {$this->getPager()->startLimit},{$this->getPager()->recordPerPage}";
 		$admins = Ccc::getModel('Admin')->fetchAll($query);
 		return $admins;
 	}

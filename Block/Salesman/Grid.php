@@ -5,16 +5,22 @@ class Block_Salesman_Grid extends Block_Core_Grid
 	public function __construct()
 	{
 		parent::__construct();
-		// $this->getCollection();
-		// $this->_prepareColumns();
-		// $this->_prepareActions();
-		// $this->_prepareButtons();
-		// $this->setTitle('Manage Salesman Method');
-		$this->setTemplate('salesman/grid.phtml');
+		$this->getCollection();
+		$this->_prepareColumns();
+		$this->_prepareActions();
+		$this->_prepareButtons();
+		$this->setTitle('Manage Salesman Method');
+		// $this->setTemplate('salesman/grid.phtml');
 	}
 	public function getCollection()
 	{
-		$query = "SELECT * FROM `salesman` ORDER BY `salesman_id` DESC";
+		$query = "SELECT count(`salesman_id`) FROM `salesman`";
+		$totalRecord = Ccc::getModel('Core_Adapter')->fetchOne($query);
+
+		$this->getPager()->setTotalRecords($totalRecord)->calculate();
+		// $pager = Ccc::getModel('Core_Pager');
+
+		$query = "SELECT * FROM `salesman` LIMIT {$this->getPager()->startLimit},{$this->getPager()->recordPerPage}";
 		$salesmen = Ccc::getModel('Salesman')->fetchAll($query);
 		return $salesmen;
 	}
